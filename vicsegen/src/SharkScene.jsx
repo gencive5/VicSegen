@@ -11,12 +11,12 @@ function SpinningShark({ url }) {
     ref.current.rotation.y += 0.01; // Rotate continuously
   });
 
-  return <primitive object={scene} ref={ref} scale={2} />;
+  return <primitive object={scene} ref={ref} scale={15} />;
 }
 
 export default function SharkScene() {
   return (
-    <Canvas>
+    <Canvas camera={{ position: [0, 0, 20] }}> 
       <ambientLight intensity={0.5} />
       <directionalLight position={[5, 5, 5]} />
       <SpinningShark url="/shark.glb" />  {/* Replace with your actual file path */}
