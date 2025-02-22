@@ -3,6 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import SharkScene from "./SharkScene";
+import ExpandingTextPanel from "./ExpandingTextPanel";
 
 function App() {
   const [count, setCount] = useState(0)
@@ -14,6 +15,7 @@ function App() {
         <SharkScene />
       </div>
       <h1>Gencives</h1>
+      <ExpandingTextPanel />
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
