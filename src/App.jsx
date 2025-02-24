@@ -14,7 +14,7 @@ function App() {
        
         <SharkScene />
       </div>
-      <h1>Gencives</h1>
+      <h1>Gencivess</h1>
       <ExpandingTextPanel />
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
