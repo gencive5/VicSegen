@@ -13,7 +13,7 @@ export default function ExpandingTextPanel() {
         const textWidth = textRef.current.scrollWidth;
         const textHeight = textRef.current.scrollHeight;
 
-        if (textWidth <= containerWidth - 20 && textHeight <= containerHeight - 20) {
+        if (textWidth <= containerWidth && textHeight <= containerHeight) {
           setText((prev) => prev + "i");
         }
       }
@@ -29,23 +29,23 @@ export default function ExpandingTextPanel() {
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 p-10"
-    >
-      <p
-        ref={textRef}
-        className="text-[9vw] font-bold leading-none text-left break-words"
-        style={{
-          wordBreak: "break-word",
-          overflowWrap: "break-word",
-          whiteSpace: "pre-wrap",
-          maxWidth: "calc(100% - 20px)",
-          maxHeight: "calc(100% - 20px)",
-        }}
-      >
-        {text}
-      </p>
+    <div ref={containerRef} className="w-full h-full p-6 overflow-hidden">
+    <div className="absolute top-0 left-0 w-screen h-screen overflow-hidden z-0">
+      
+        <p
+          ref={textRef}
+          className="text-[9vw] font-bold leading-none text-left break-words"
+          style={{
+            wordBreak: "break-word",
+            overflowWrap: "break-word",
+            whiteSpace: "pre-wrap",
+            maxWidth: "90%",
+            maxHeight: "90%",
+          }}
+        >
+          {text}
+        </p>
+      </div>
     </div>
   );
 }
