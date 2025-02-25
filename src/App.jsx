@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import './styles.css';
 import SharkScene from "./SharkScene";
 import ExpandingTextPanel from "./ExpandingTextPanel";
@@ -6,14 +5,18 @@ import ExpandingTextPanel from "./ExpandingTextPanel";
 function App() {
   return (
     <div className="relative w-screen h-screen overflow-hidden">
-      {/* Expanding text as the background (lower z-index) */}
+      {/* Expanding text as the background (lowest z-index) */}
       <ExpandingTextPanel />
 
-      {/* Foreground elements */}
-      <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center z-10">
+      {/* SharkScene - Highest z-index */}
+      <div className="absolute top-0 left-0 w-full h-full z-20 pointer-events-none">
         <SharkScene />
-        <h1 className="text-5xl font-bold text-white">Gencives</h1>
       </div>
+
+      {/* Centered H1 - Below Shark but above expanding text */}
+      <h1 className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-5xl font-bold text-white z-10">
+        Gencives
+      </h1>
     </div>
   );
 }

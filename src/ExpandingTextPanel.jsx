@@ -13,8 +13,7 @@ export default function ExpandingTextPanel() {
         const textWidth = textRef.current.scrollWidth;
         const textHeight = textRef.current.scrollHeight;
 
-        if (textHeight < containerHeight) {
-          // Keep adding "i" to the text
+        if (textWidth < containerWidth || textHeight < containerHeight) {
           setText((prev) => prev + "i");
         }
       }
@@ -32,11 +31,11 @@ export default function ExpandingTextPanel() {
   return (
     <div
       ref={containerRef}
-      className="w-screen h-screen flex items-center justify-center p-4 overflow-hidden"
+      className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 flex items-center justify-center"
     >
       <p
         ref={textRef}
-        className="text-[10vw] font-bold leading-none text-center break-words"
+        className="text-[10vw] font-bold leading-none text-center break-words overflow-hidden"
         style={{ wordBreak: "break-word", overflowWrap: "break-word" }}
       >
         {text}
