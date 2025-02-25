@@ -31,12 +31,16 @@ export default function ExpandingTextPanel() {
   return (
     <div
       ref={containerRef}
-      className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 flex items-center justify-center"
+      className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 p-4"
     >
       <p
         ref={textRef}
-        className="text-[10vw] font-bold leading-none text-center break-words overflow-hidden"
-        style={{ wordBreak: "break-word", overflowWrap: "break-word" }}
+        className="text-[10vw] font-bold leading-none text-left break-words overflow-hidden"
+        style={{
+          wordBreak: "break-word",
+          overflowWrap: "break-word",
+          whiteSpace: "pre-wrap",
+        }}
       >
         {text}
       </p>
