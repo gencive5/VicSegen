@@ -1,32 +1,21 @@
-import { useState } from 'react'
-import './styles.css'
+import { useState } from 'react';
+import './styles.css';
 import SharkScene from "./SharkScene";
 import ExpandingTextPanel from "./ExpandingTextPanel";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-       
-        <SharkScene />
-      </div>
-      <h1>Gencives</h1>
+    <div className="relative w-screen h-screen overflow-hidden">
+      {/* Expanding text as the background (lower z-index) */}
       <ExpandingTextPanel />
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          Count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+
+      {/* Foreground elements */}
+      <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center z-10">
+        <SharkScene />
+        <h1 className="text-5xl font-bold text-white">Gencives</h1>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
