@@ -39,8 +39,8 @@ export default function ExpandingTextPanel() {
             wordBreak: "break-word",
             overflowWrap: "break-word",
             whiteSpace: "pre-wrap",
-            maxWidth: "90%",
-            maxHeight: "90%",
+            maxWidth: "100%",
+            maxHeight: "100%",
           }}
         >
           {text}

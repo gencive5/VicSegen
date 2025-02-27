@@ -4,7 +4,7 @@ import ExpandingTextPanel from "./ExpandingTextPanel";
 
 function App() {
   return (
-    <div className="relative w-screen h-screen overflow-hidden">
+    <div className="relative w-screen h-screen overflow-hidden overscroll-none">
       {/* Expanding text as the background (lowest z-index) */}
       <ExpandingTextPanel />
 
