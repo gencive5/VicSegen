@@ -25,28 +25,28 @@ function App() {
       <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-30 inline-flex gap-4">
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-          onClick={() => handleTextChange("Welcome to the ocean!", "font-serif")}
+          onClick={() => handleTextChange("55555555s5555SSSssss555555", "font-serif")}
         >
-          Change to Serif
+          gencive5
         </button>
         <button
           className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
-          onClick={() => handleTextChange("Deep sea adventure!", "font-mono")}
+          onClick={() => handleTextChange("sm00ch", "font-mono")}
         >
-          Change to Mono
+          sm00ch
         </button>
         <button
           className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
-          onClick={() => handleTextChange("Sharks ahead!", "font-sans")}
+          onClick={() => handleTextChange("!!!!!!!!!", "font-sans")}
         >
-          Change to Sans
+          rat portfolio
         </button>
         {/* New Reset Button */}
         <button
           className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full"
           onClick={() => handleTextChange("Hi", "font-bold")}
         >
-          Reset
+          hi
         </button>
       </div>
 
