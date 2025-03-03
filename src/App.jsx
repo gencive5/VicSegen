@@ -2,13 +2,14 @@ import './styles.css';
 import SharkScene from "./SharkScene";
 import ExpandingTextPanel from "./ExpandingTextPanel";
 
+
 function App() {
   return (
     <div className="relative w-screen h-screen overflow-hidden overscroll-none">
-      {/* Expanding text as the background (lowest z-index) */}
+     
       <ExpandingTextPanel />
 
-      {/* SharkScene - Highest z-index */}
+      
       <div className="absolute top-0 left-0 w-full h-full z-20 pointer-events-none">
         <SharkScene />
       </div>
