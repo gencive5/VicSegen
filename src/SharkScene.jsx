@@ -40,7 +40,7 @@ export default function SharkScene() {
         position={[0, 5, 10]}
         angle={0.4}
         penumbra={1}
-        intensity={2}
+        intensity={4}
         color={"#ccccff"}
       />
 
