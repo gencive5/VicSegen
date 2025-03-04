@@ -41,13 +41,14 @@ function App() {
         >
           rat portfolio
         </button>
-        {/* New Reset Button */}
+       
         <button
           className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full"
           onClick={() => handleTextChange("Hi", "font-bold")}
         >
           hi
         </button>
+      
       </div>
 
       <div className="absolute top-0 left-0 w-full h-full z-20 pointer-events-none">
