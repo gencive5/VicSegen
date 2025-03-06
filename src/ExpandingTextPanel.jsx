@@ -43,10 +43,10 @@ export default function ExpandingTextPanel({ textConfig, showLink, link }) {
   }, [expandedText]);
 
   return (
-    <div ref={containerRef} className="w-full h-full p-6 overflow-hidden relative z-50 pointer-events-auto">
+    <div ref={containerRef} className="w-full h-full p-6 overflow-hidden relative pointer-events-auto">
       <p
         ref={textRef}
-        className={`text-[9vw] ${font} leading-none text-left break-words`}
+        className={`text-[9vw] ${font} leading-none text-left break-words z-50`}
         style={{
           wordBreak: "break-word",
           overflowWrap: "break-word",
@@ -64,7 +64,7 @@ export default function ExpandingTextPanel({ textConfig, showLink, link }) {
           href={link}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-300 underline mt-2 block relative z-50 pointer-events-auto"
+          className="text-blue-300 underline mt-2 block relative z-100 pointer-events-auto"
         >
           {link}
         </a>
