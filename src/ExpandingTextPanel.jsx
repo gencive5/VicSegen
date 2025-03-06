@@ -1,7 +1,6 @@
-// ExpandingTextPanel.jsx
 import { useState, useEffect, useRef } from "react";
 
-export default function ExpandingTextPanel({ textConfig }) {
+export default function ExpandingTextPanel({ textConfig, showLink, link }) {
   const { text, font } = textConfig;
   const [expandedText, setExpandedText] = useState(text);
   const containerRef = useRef(null);
@@ -9,7 +8,7 @@ export default function ExpandingTextPanel({ textConfig }) {
 
   // Update expandedText when textConfig.text changes
   useEffect(() => {
-    setExpandedText(text);  // Reset to the new text
+    setExpandedText(text); // Reset to the new text
   }, [text]);
 
   useEffect(() => {
@@ -17,8 +16,6 @@ export default function ExpandingTextPanel({ textConfig }) {
       if (containerRef.current && textRef.current) {
         const containerWidth = containerRef.current.clientWidth;
         const containerHeight = containerRef.current.clientHeight;
-        const textWidth = textRef.current.scrollWidth;
-        const textHeight = textRef.current.scrollHeight;
 
         // Check if adding "i" would cause overflow
         const testText = expandedText + "i";
@@ -43,25 +40,35 @@ export default function ExpandingTextPanel({ textConfig }) {
       clearInterval(interval);
       window.removeEventListener("resize", updateText);
     };
-  }, [expandedText]);  // Depend on expandedText instead of text
+  }, [expandedText]);
 
   return (
-    <div ref={containerRef} className="w-full h-full p-6 overflow-hidden">
-      <div className="absolute top-0 left-0 w-screen h-screen overflow-hidden z-0">
-        <p
-          ref={textRef}
-          className={`text-[9vw] ${font} leading-none text-left break-words`}
-          style={{
-            wordBreak: "break-word",
-            overflowWrap: "break-word",
-            whiteSpace: "pre-wrap",
-            maxWidth: "100%",
-            maxHeight: "100%",
-          }}
+    <div ref={containerRef} className="w-full h-full p-6 overflow-hidden relative z-50 pointer-events-auto">
+      <p
+        ref={textRef}
+        className={`text-[9vw] ${font} leading-none text-left break-words`}
+        style={{
+          wordBreak: "break-word",
+          overflowWrap: "break-word",
+          whiteSpace: "pre-wrap",
+          maxWidth: "100%",
+          maxHeight: "100%",
+        }}
+      >
+        {expandedText}
+      </p>
+
+      {/* Conditional link rendering with URL as text */}
+      {showLink && link && (
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-300 underline mt-2 block relative z-50 pointer-events-auto"
         >
-          {expandedText}
-        </p>
-      </div>
+          {link}
+        </a>
+      )}
     </div>
   );
 }

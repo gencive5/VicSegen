@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+
+@font-face {
+  font-family: 'sm00ch';
+  src: url('/sm00ch.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -19,6 +27,7 @@
 
 div{
   width:100%;
+  height:90vh;
   
  
 }
