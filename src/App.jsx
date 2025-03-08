@@ -28,11 +28,13 @@ function App() {
 
   return (
     <div className="relative w-screen h-screen overflow-hidden overscroll-none">
-      <ExpandingTextPanel 
-        textConfig={textConfig} 
-        showLink={!!currentLink}  // Show link only if currentLink is not null
-        link={currentLink}        // Pass the appropriate link
-      />
+      <div className="expanding-panel">
+  <ExpandingTextPanel 
+    textConfig={textConfig} 
+    showLink={!!currentLink}
+    link={currentLink}        
+  />
+</div>
 
       <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-100 inline-flex gap-4">
         <button
