@@ -8,6 +8,14 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'arial5';
+  src: url('/src/assets/fonts/Arial5.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -17,6 +25,10 @@
 
 .font-sm00ch {
   font-family: 'sm00ch', sans-serif;
+}
+
+.font-arial5 {
+  font-family: 'arial5', sans-serif;
 }
 
 .card {
