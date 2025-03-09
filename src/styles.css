@@ -15,6 +15,29 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'myriad';
+  src: url('/src/assets/fonts/MyriadPro.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'mutlu';
+  src: url('/src/assets/fonts/mutlu.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'sword';
+  src: url('/src/assets/fonts/sword.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 
 #root {
   max-width: 1280px;
@@ -29,6 +52,18 @@
 
 .font-arial5 {
   font-family: 'arial5', sans-serif;
+}
+
+.font-myriad {
+  font-family: 'myriad', sans-serif;
+}
+
+.font-mutlu {
+  font-family: 'mutlu', sans-serif;
+}
+
+.font-sword {
+  font-family: 'sword', sans-serif;
 }
 
 .card {

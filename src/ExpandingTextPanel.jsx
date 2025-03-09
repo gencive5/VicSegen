@@ -73,7 +73,7 @@ export default function ExpandingTextPanel({ textConfig, showLink, link }) {
         <div className="relative w-full h-full z-5">
           <p
             ref={textRef}
-            className={`text-[9vw] font-sans leading-none text-left break-words text-red-500`}
+            className={`text-[9vw] font-myriad leading-none text-left break-words text-red-500`}
             style={{
               transform: "translate(2px, 2px)",
               position: "absolute",
@@ -90,7 +90,7 @@ export default function ExpandingTextPanel({ textConfig, showLink, link }) {
             {expandedText}
           </p>
           <p
-            className={`text-[9vw] font-mono leading-none text-left break-words text-green-500`}
+            className={`text-[9vw] font-mutlu leading-none text-left break-words text-green-500`}
             style={{
               transform: "translate(-2px, -2px)",
               position: "absolute",
@@ -107,7 +107,7 @@ export default function ExpandingTextPanel({ textConfig, showLink, link }) {
             {expandedText}
           </p>
           <p
-            className={`text-[9vw] font-serif leading-none text-left break-words text-blue-500`}
+            className={`text-[9vw] font-sword leading-none text-left break-words text-blue-500`}
             style={{
               position: "absolute",
               top: 0,
