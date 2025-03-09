@@ -17,18 +17,27 @@ export default function ExpandingTextPanel({ textConfig, showLink, link }) {
         const containerWidth = containerRef.current.clientWidth;
         const containerHeight = containerRef.current.clientHeight;
 
-        // Check if adding "i" would cause overflow
-        const testText = expandedText + "i";
+        // Define a weighted random function to choose '5', 's', or 'S'
+        const getRandomChar = () => {
+          const rand = Math.random();
+          if (rand < 0.6) return '5'; // 60% chance for '5'
+          else if (rand < 0.85) return 's'; // 25% chance for 's'
+          else return 'S'; // 15% chance for 'S'
+        };
+
+        // Choose character based on current text
+        const isGencive5 = text === "55555555s5555SSSssss555555";
+        const nextChar = isGencive5 ? getRandomChar() : "i";
+
+        const testText = expandedText + nextChar;
         textRef.current.textContent = testText;
         const newWidth = textRef.current.scrollWidth;
         const newHeight = textRef.current.scrollHeight;
 
-        // Restore the original text
         textRef.current.textContent = expandedText;
 
-        // Only update state if it doesn't cause overflow
         if (newWidth <= containerWidth && newHeight <= containerHeight) {
-          setExpandedText((prev) => prev + "i");
+          setExpandedText((prev) => prev + nextChar);
         }
       }
     };
@@ -40,7 +49,7 @@ export default function ExpandingTextPanel({ textConfig, showLink, link }) {
       clearInterval(interval);
       window.removeEventListener("resize", updateText);
     };
-  }, [expandedText]);
+  }, [expandedText, text]);
 
   return (
     <div ref={containerRef} className="w-full h-full p-6 overflow-hidden relative pointer-events-auto">
