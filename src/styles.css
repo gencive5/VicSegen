@@ -3,7 +3,7 @@
 
 @font-face {
   font-family: 'sm00ch';
-  src: url('/sm00ch.woff') format('woff');
+  src: url('/src/assets/fonts/sm00ch.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
@@ -15,7 +15,9 @@
   text-align: center;
 }
 
-
+.font-sm00ch {
+  font-family: 'sm00ch', sans-serif;
+}
 
 .card {
   padding: 2em;
@@ -28,8 +30,6 @@
 div{
   width:100%;
  
- 
-  
 }
 
 .expanding-panel {
