@@ -17,26 +17,32 @@ export default function ExpandingTextPanel({ textConfig, showLink, link }) {
         const containerWidth = containerRef.current.clientWidth;
         const containerHeight = containerRef.current.clientHeight;
 
-        // Define a weighted random function for '5', 's', or 'S'
+        // Random char generators
         const getRandomGencive5Char = () => {
           const rand = Math.random();
-          if (rand < 0.6) return '5'; // 60% chance for '5'
-          else if (rand < 0.85) return 's'; // 25% chance for 's'
-          else return 'S'; // 15% chance for 'S'
+          if (rand < 0.6) return '5';
+          else if (rand < 0.85) return 's';
+          else return 'S';
         };
 
-        // Define a function for random characters for sm00ch
         const getRandomSm00chChar = () => {
           const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
           return chars.charAt(Math.floor(Math.random() * chars.length));
         };
 
+        const getRandomRatChar = () => {
+          const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*(){}[]<>";
+          return chars.charAt(Math.floor(Math.random() * chars.length));
+        };
+
         // Choose character based on current text
-        let nextChar = "i";  // Default character
+        let nextChar = "i";
         if (text === "55555555s5555SSSssss555555") {
           nextChar = getRandomGencive5Char();
         } else if (text === "sm00ch") {
           nextChar = getRandomSm00chChar();
+        } else if (text === "!!!!!!!!!") {
+          nextChar = getRandomRatChar();
         }
 
         const testText = expandedText + nextChar;
@@ -63,19 +69,75 @@ export default function ExpandingTextPanel({ textConfig, showLink, link }) {
 
   return (
     <div ref={containerRef} className="w-full h-full p-6 overflow-hidden relative pointer-events-auto">
-      <p
-        ref={textRef}
-        className={`text-[9vw] ${font} leading-none text-left break-words z-50`}
-        style={{
-          wordBreak: "break-word",
-          overflowWrap: "break-word",
-          whiteSpace: "pre-wrap",
-          maxWidth: "100%",
-          maxHeight: "100%",
-        }}
-      >
-        {expandedText}
-      </p>
+      {text === "!!!!!!!!!" ? (
+        <div className="relative w-full h-full z-5">
+          <p
+            ref={textRef}
+            className={`text-[9vw] font-sans leading-none text-left break-words text-red-500`}
+            style={{
+              transform: "translate(2px, 2px)",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              zIndex: 1,
+              wordBreak: "break-word",
+              overflowWrap: "break-word",
+              whiteSpace: "pre-wrap",
+              maxWidth: "100%",
+              maxHeight: "100%",
+            }}
+          >
+            {expandedText}
+          </p>
+          <p
+            className={`text-[9vw] font-mono leading-none text-left break-words text-green-500`}
+            style={{
+              transform: "translate(-2px, -2px)",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              zIndex: 2,
+              wordBreak: "break-word",
+              overflowWrap: "break-word",
+              whiteSpace: "pre-wrap",
+              maxWidth: "100%",
+              maxHeight: "100%",
+            }}
+          >
+            {expandedText}
+          </p>
+          <p
+            className={`text-[9vw] font-serif leading-none text-left break-words text-blue-500`}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              zIndex: 3,
+              wordBreak: "break-word",
+              overflowWrap: "break-word",
+              whiteSpace: "pre-wrap",
+              maxWidth: "100%",
+              maxHeight: "100%",
+            }}
+          >
+            {expandedText}
+          </p>
+        </div>
+      ) : (
+        <p
+          ref={textRef}
+          className={`text-[9vw] ${font} leading-none text-left break-words z-50`}
+          style={{
+            wordBreak: "break-word",
+            overflowWrap: "break-word",
+            whiteSpace: "pre-wrap",
+            maxWidth: "100%",
+            maxHeight: "100%",
+          }}
+        >
+          {expandedText}
+        </p>
+      )}
 
       {/* Conditional link rendering with URL as text */}
       {showLink && link && (
@@ -83,7 +145,7 @@ export default function ExpandingTextPanel({ textConfig, showLink, link }) {
           href={link}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-300 underline mt-2 block relative z-100 pointer-events-auto"
+          className="text-blue-300 underline mt-2 block relative z-50 pointer-events-auto"
         >
           {link}
         </a>
