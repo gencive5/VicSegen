@@ -17,17 +17,27 @@ export default function ExpandingTextPanel({ textConfig, showLink, link }) {
         const containerWidth = containerRef.current.clientWidth;
         const containerHeight = containerRef.current.clientHeight;
 
-        // Define a weighted random function to choose '5', 's', or 'S'
-        const getRandomChar = () => {
+        // Define a weighted random function for '5', 's', or 'S'
+        const getRandomGencive5Char = () => {
           const rand = Math.random();
           if (rand < 0.6) return '5'; // 60% chance for '5'
           else if (rand < 0.85) return 's'; // 25% chance for 's'
           else return 'S'; // 15% chance for 'S'
         };
 
+        // Define a function for random characters for sm00ch
+        const getRandomSm00chChar = () => {
+          const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+          return chars.charAt(Math.floor(Math.random() * chars.length));
+        };
+
         // Choose character based on current text
-        const isGencive5 = text === "55555555s5555SSSssss555555";
-        const nextChar = isGencive5 ? getRandomChar() : "i";
+        let nextChar = "i";  // Default character
+        if (text === "55555555s5555SSSssss555555") {
+          nextChar = getRandomGencive5Char();
+        } else if (text === "sm00ch") {
+          nextChar = getRandomSm00chChar();
+        }
 
         const testText = expandedText + nextChar;
         textRef.current.textContent = testText;
