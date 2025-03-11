@@ -60,7 +60,7 @@ function App() {
           className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full"
           onClick={() => handleTextChange("Hi", "font-bold")}
         >
-          hi
+          contact
         </button>
       </div>
 

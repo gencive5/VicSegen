@@ -66,6 +66,19 @@
   font-family: 'sword', sans-serif;
 }
 
+
+.text-bleu {
+  color: #0000a2;
+}
+
+.text-naranja {
+  color: #e72700;
+}
+
+.text-rose {
+  color: #b9007d;
+}
+
 .card {
   padding: 2em;
 }
