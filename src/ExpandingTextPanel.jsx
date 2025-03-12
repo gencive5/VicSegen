@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-export default function ExpandingTextPanel({ textConfig, showLink, link }) {
+export default function ExpandingTextPanel({ textConfig }) {
   const { text, font } = textConfig;
   const [expandedText, setExpandedText] = useState(text);
   const containerRef = useRef(null);
@@ -137,18 +137,6 @@ export default function ExpandingTextPanel({ textConfig, showLink, link }) {
         >
           {expandedText}
         </p>
-      )}
-
-      {/* Conditional link rendering with URL as text */}
-      {showLink && link && (
-        <a
-          href={link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-300 underline mt-2 block relative z-50 pointer-events-auto"
-        >
-          {link}
-        </a>
       )}
     </div>
   );
