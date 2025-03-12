@@ -1,17 +1,17 @@
 import { Canvas } from "@react-three/fiber";
+import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { useGLTF } from "@react-three/drei";
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { EffectComposer, Bloom } from "@react-three/postprocessing";
 
-function SpinningShark({ url }) {
+function SpinningShark({ url, link }) {
   const { scene } = useGLTF(url);
   const ref = useRef();
 
   // Preserve original material color
   scene.traverse((child) => {
     if (child.isMesh) {
-      child.material.toneMapped = false; // Prevent lights from altering original color too much
+      child.material.toneMapped = false;
     }
   });
 
@@ -19,32 +19,37 @@ function SpinningShark({ url }) {
     ref.current.rotation.y += 0.01; // Rotate continuously
   });
 
-  return <primitive object={scene} ref={ref} scale={15} />;
+  // Click handler to open the link
+  const handleClick = () => {
+    if (link) {
+      window.open(link, "_blank");
+    }
+  };
+
+  return (
+    <primitive 
+      object={scene} 
+      ref={ref} 
+      scale={15} 
+      onPointerDown={handleClick} // Make it clickable
+      style={{ cursor: "pointer" }} // Change cursor to indicate interactivity
+    />
+  );
 }
 
-export default function SharkScene() {
+export default function SharkScene({ link }) {
   return (
     <Canvas camera={{ position: [0, 0, 20] }}>
       <EffectComposer>
         <Bloom luminanceThreshold={0.2} luminanceSmoothing={0.9} intensity={2} />
       </EffectComposer>
 
-      {/* Softer ambient light to preserve color */}
       <ambientLight intensity={1} color={"#a0c4ff"} />
-
-      {/* Neutral directional light */}
       <directionalLight position={[5, 5, 5]} intensity={1.5} color={"#ffffff"} />
+      <spotLight position={[0, 5, 10]} angle={0.4} penumbra={1} intensity={4} color={"#ccccff"} />
 
-      {/* Spotlight with less color tint */}
-      <spotLight
-        position={[0, 5, 10]}
-        angle={0.4}
-        penumbra={1}
-        intensity={4}
-        color={"#ccccff"}
-      />
-
-      <SpinningShark url="/shark.glb" />
+      {/* Pass the link to the SpinningShark component */}
+      <SpinningShark url="/shark.glb" link={link} />
     </Canvas>
   );
 }

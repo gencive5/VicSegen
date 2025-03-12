@@ -64,8 +64,8 @@ function App() {
         </button>
       </div>
 
-     <div className="absolute top-0 left-0 w-full h-full z-10 pointer-events-none">
-        <SharkScene />
+     <div className="absolute top-0 left-0 w-full h-full z-10 pointer-events-auto">
+        <SharkScene link={currentLink} />
       </div> 
     </div>
   );
