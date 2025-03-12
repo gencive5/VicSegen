@@ -22,7 +22,8 @@ function SpinningShark({ url, link }) {
   // Click handler to open the link
   const handleClick = () => {
     if (link) {
-      window.open(link, "_blank");
+      // Use location.href for better mobile support
+      window.location.href = link;
     }
   };
 
@@ -31,8 +32,9 @@ function SpinningShark({ url, link }) {
       object={scene} 
       ref={ref} 
       scale={15} 
-      onPointerDown={handleClick} // Make it clickable
-      style={{ cursor: "pointer" }} // Change cursor to indicate interactivity
+      onClick={handleClick} // Ensures desktop click works
+      onPointerDown={handleClick} // Ensures mobile tap works
+      style={{ cursor: "pointer" }} // Changes cursor on hover
     />
   );
 }
