@@ -19,11 +19,12 @@ function SpinningShark({ url, link }) {
     ref.current.rotation.y += 0.01; // Rotate continuously
   });
 
-  // Click handler to open the link
+  // Click handler to open the link in a new tab (desktop & mobile)
   const handleClick = () => {
     if (link) {
-      // Use location.href for better mobile support
-      window.location.href = link;
+      setTimeout(() => {
+        window.open(link, "_blank");
+      }, 0);
     }
   };
 
