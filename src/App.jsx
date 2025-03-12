@@ -1,9 +1,11 @@
-import './styles.css';
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import "./styles.css";
 import SharkScene from "./SharkScene";
 import ExpandingTextPanel from "./ExpandingTextPanel";
 import { useState } from "react";
+import About from "./About"; // Import the About page
 
-function App() {
+function Home() {
   const [textConfig, setTextConfig] = useState({
     text: "Hi",
     font: "font-bold"
@@ -29,15 +31,14 @@ function App() {
   return (
     <div className="relative w-screen h-screen overflow-hidden overscroll-none">
       <div className="expanding-panel">
-  <ExpandingTextPanel 
-    textConfig={textConfig} 
-    showLink={!!currentLink}
-    link={currentLink}        
-  />
-</div>
+        <ExpandingTextPanel 
+          textConfig={textConfig} 
+          showLink={!!currentLink}
+          link={currentLink}        
+        />
+      </div>
 
-<div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 z-100 flex flex-wrap justify-center gap-2 px-4 md:gap-4 md:bottom-10">
-
+      <div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 z-100 flex flex-wrap justify-center gap-2 px-4 md:gap-4 md:bottom-10">
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
           onClick={() => handleTextChange("5", "font-arial5")}
@@ -56,18 +57,27 @@ function App() {
         >
           rat portfolio
         </button>
-        <button
-          className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full"
-          onClick={() => handleTextChange("Hi", "font-bold")}
-        >
-          contact
-        </button>
+        {/* Updated Contact button to navigate to About page */}
+        <Link to="/about" className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
+          Contact
+        </Link>
       </div>
 
-     <div className="absolute top-0 left-0 w-full h-full z-10 pointer-events-auto">
+      <div className="absolute top-0 left-0 w-full h-full z-10 pointer-events-auto">
         <SharkScene link={currentLink} />
-      </div> 
+      </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </Router>
   );
 }
 
