@@ -31,7 +31,7 @@ export default function ExpandingTextPanel({ textConfig, showLink, link }) {
         };
 
         const getRandomRatChar = () => {
-          const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*(){}[]<>";
+          const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
           return chars.charAt(Math.floor(Math.random() * chars.length));
         };
 
@@ -41,7 +41,7 @@ export default function ExpandingTextPanel({ textConfig, showLink, link }) {
           nextChar = getRandomGencive5Char();
         } else if (text === "sm00ch") {
           nextChar = getRandomSm00chChar();
-        } else if (text === "!!!!!!!!!") {
+        } else if (text === "") {
           nextChar = getRandomRatChar();
         }
 
@@ -69,7 +69,7 @@ export default function ExpandingTextPanel({ textConfig, showLink, link }) {
 
   return (
     <div ref={containerRef} className="w-full h-full p-6 overflow-hidden relative pointer-events-auto">
-      {text === "!!!!!!!!!" ? (
+      {text === "" ? (
         <div className="relative w-full h-full z-5">
           <p
             ref={textRef}

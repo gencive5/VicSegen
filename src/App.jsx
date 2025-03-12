@@ -13,7 +13,7 @@ function App() {
   const linkMap = {
     "55555555s5555SSSssss555555": "https://gencive5.com/",
     "sm00ch": "https://sm00ch.xyz/",
-    "!!!!!!!!!": "https://ratfaggotking.fr/"
+    "": "https://ratfaggotking.fr/"
   };
 
   const handleTextChange = (newText, newFont) => {
@@ -52,7 +52,7 @@ function App() {
         </button>
         <button
           className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
-          onClick={() => handleTextChange("!!!!!!!!!", "font-sans")}
+          onClick={() => handleTextChange("", "font-sans")}
         >
           rat portfolio
         </button>
