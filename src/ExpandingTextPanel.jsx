@@ -37,7 +37,7 @@ export default function ExpandingTextPanel({ textConfig, showLink, link }) {
 
         // Choose character based on current text
         let nextChar = "i";
-        if (text === "55555555s5555SSSssss555555") {
+        if (text === "5") {
           nextChar = getRandomGencive5Char();
         } else if (text === "sm00ch") {
           nextChar = getRandomSm00chChar();

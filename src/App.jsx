@@ -11,7 +11,7 @@ function App() {
 
   // Map texts to their corresponding links
   const linkMap = {
-    "55555555s5555SSSssss555555": "https://gencive5.com/",
+    "5": "https://gencive5.com/",
     "sm00ch": "https://sm00ch.xyz/",
     "": "https://ratfaggotking.fr/"
   };
@@ -40,7 +40,7 @@ function App() {
 
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-          onClick={() => handleTextChange("55555555s5555SSSssss555555", "font-arial5")}
+          onClick={() => handleTextChange("5", "font-arial5")}
         >
           gencive5
         </button>
@@ -52,7 +52,7 @@ function App() {
         </button>
         <button
           className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
-          onClick={() => handleTextChange("", "font-sans")}
+          onClick={() => handleTextChange("!!!!!!!!!", "font-sans")}
         >
           rat portfolio
         </button>
