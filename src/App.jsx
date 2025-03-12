@@ -38,7 +38,8 @@ function Home() {
         />
       </div>
 
-      <div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 z-100 flex flex-wrap justify-center gap-2 px-4 md:gap-4 md:bottom-10">
+      <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-100 flex flex-wrap justify-center gap-2 px-4 md:gap-4 md:bottom-18">
+
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
           onClick={() => handleTextChange("5", "font-arial5")}
