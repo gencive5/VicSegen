@@ -1,20 +1,22 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
-import { useGLTF, Sphere } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import { useRef } from "react";
 
 function FloatingCursors({ sharkRef }) {
   const cursors = [useRef(), useRef(), useRef()];
-  const orbitRadius = 15; 
+  const { scene: cursorModel } = useGLTF("/arrow.glb");
+  const orbitRadius = 12; // Larger orbit radius
 
   useFrame(() => {
     if (sharkRef.current) {
       const t = performance.now() * 0.001;
-      cursors.forEach((cursor, index) => {
+      cursors.forEach((cursorRef, index) => {
         const angle = t + (index * Math.PI * 0.66);
-        cursor.current.position.x = sharkRef.current.position.x + Math.cos(angle) * orbitRadius;
-        cursor.current.position.z = sharkRef.current.position.z + Math.sin(angle) * orbitRadius;
-        cursor.current.position.y = sharkRef.current.position.y; // Keep Y consistent for horizontal movement
+        cursorRef.current.position.x = Math.cos(angle) * orbitRadius;
+        cursorRef.current.position.z = Math.sin(angle) * orbitRadius;
+        cursorRef.current.position.y = Math.sin(angle * 0.5) * 3; // Adds vertical wave for cylindrical motion
+        cursorRef.current.rotation.y = angle + Math.PI / 2; // Align cursor along orbit direction
       });
     }
   });
@@ -22,9 +24,7 @@ function FloatingCursors({ sharkRef }) {
   return (
     <>
       {cursors.map((ref, index) => (
-        <Sphere key={index} ref={ref} args={[0.3, 10, 10]}>
-          <meshStandardMaterial color="yellow" emissive="white" emissiveIntensity={2} />
-        </Sphere>
+        <primitive key={index} object={cursorModel.clone()} ref={ref} scale={2} />
       ))}
     </>
   );
