@@ -2,11 +2,15 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { useGLTF } from "@react-three/drei";
 import { useRef } from "react";
+import * as THREE from 'three'; // Import THREE for color manipulation
 
 function FloatingCursors({ sharkRef, link }) {
   const cursors = [useRef(), useRef(), useRef()];
-  const { scene: cursorModel } = useGLTF("/arrow.glb");
+  const { scene: cursorModel } = useGLTF("/arrowyellow.glb");
   const orbitRadius = 12; // Larger orbit radius
+
+  // Pearl Grey color in RGB
+  const pearlGrey = new THREE.Color(0xA9A9A9); // Pearl grey color
 
   const handleCursorClick = () => {
     if (link) {
@@ -16,11 +20,18 @@ function FloatingCursors({ sharkRef, link }) {
     }
   };
 
+  // Set the cursor's material to pearl grey right after loading the model
+  cursorModel.traverse((child) => {
+    if (child.isMesh) {
+      child.material.color = pearlGrey;  // Force the material color to pearl grey
+    }
+  });
+
   useFrame(() => {
     if (sharkRef.current) {
       const t = performance.now() * 0.0006;
       cursors.forEach((cursorRef, index) => {
-        const angle = t + (index * Math.PI * 0.66);
+        const angle = t + (index * Math.PI * 0.66); // Reverse direction by adding
         cursorRef.current.position.x = Math.cos(angle) * orbitRadius;
         cursorRef.current.position.z = Math.sin(angle) * orbitRadius;
         cursorRef.current.position.y = Math.sin(angle * 0.5) * 3; // Adds vertical wave for cylindrical motion
