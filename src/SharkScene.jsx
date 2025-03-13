@@ -10,7 +10,7 @@ function FloatingCursors({ sharkRef }) {
 
   useFrame(() => {
     if (sharkRef.current) {
-      const t = performance.now() * 0.001;
+      const t = performance.now() * 0.0006;
       cursors.forEach((cursorRef, index) => {
         const angle = t + (index * Math.PI * 0.66);
         cursorRef.current.position.x = Math.cos(angle) * orbitRadius;
