@@ -6,9 +6,9 @@ export default function ExpandingTextPanel({ textConfig }) {
   const containerRef = useRef(null);
   const textRef = useRef(null);
 
-  // Update expandedText when textConfig.text changes
+  // Reset expandedText when textConfig.text changes
   useEffect(() => {
-    setExpandedText(text); // Reset to the new text
+    setExpandedText(text);
   }, [text]);
 
   useEffect(() => {
@@ -20,9 +20,9 @@ export default function ExpandingTextPanel({ textConfig }) {
         // Random char generators
         const getRandomGencive5Char = () => {
           const rand = Math.random();
-          if (rand < 0.6) return '5';
-          else if (rand < 0.85) return 's';
-          else return 'S';
+          if (rand < 0.6) return "5";
+          else if (rand < 0.85) return "s";
+          else return "S";
         };
 
         const getRandomSm00chChar = () => {
@@ -35,7 +35,7 @@ export default function ExpandingTextPanel({ textConfig }) {
           return chars.charAt(Math.floor(Math.random() * chars.length));
         };
 
-        // Choose character based on current text
+        // Determine next character
         let nextChar = "i";
         if (text === "5") {
           nextChar = getRandomGencive5Char();
@@ -45,11 +45,11 @@ export default function ExpandingTextPanel({ textConfig }) {
           nextChar = getRandomRatChar();
         }
 
+        // Test new expanded text size
         const testText = expandedText + nextChar;
         textRef.current.textContent = testText;
         const newWidth = textRef.current.scrollWidth;
         const newHeight = textRef.current.scrollHeight;
-
         textRef.current.textContent = expandedText;
 
         if (newWidth <= containerWidth && newHeight <= containerHeight) {
