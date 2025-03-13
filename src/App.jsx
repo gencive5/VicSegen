@@ -63,7 +63,7 @@ function Home() {
           Contact
         </Link>
       </div>
-      <div className="absolute top-0 left-0 w-full h-full z-10 pointer-events-auto">
+      <div className="absolute top-[-50px] md:top-0 left-0 w-full h-full z-10 pointer-events-auto">
   <SharkScene link={currentLink} />
 </div>
 
