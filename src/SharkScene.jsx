@@ -6,8 +6,8 @@ import * as THREE from 'three'; // Import THREE for color manipulation
 
 function FloatingCursors({ sharkRef, link }) {
   const cursors = [useRef(), useRef(), useRef()];
-  const { scene: cursorModel } = useGLTF("/arrowyellow.glb");
-  const orbitRadius = 12; // Larger orbit radius
+  const { scene: cursorModel } = useGLTF("/fleche.glb");
+  const orbitRadius = 12;
 
   // Pearl Grey color in RGB
   const pearlGrey = new THREE.Color(0xA9A9A9); // Pearl grey color
@@ -47,7 +47,7 @@ function FloatingCursors({ sharkRef, link }) {
           key={index}
           object={cursorModel.clone()}
           ref={ref}
-          scale={2}
+          scale={6}
           onClick={handleCursorClick}
           onPointerDown={handleCursorClick} // Ensure the cursor is clickable
           style={{ cursor: "pointer" }}
