@@ -3,10 +3,18 @@ import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { useGLTF } from "@react-three/drei";
 import { useRef } from "react";
 
-function FloatingCursors({ sharkRef }) {
+function FloatingCursors({ sharkRef, link }) {
   const cursors = [useRef(), useRef(), useRef()];
   const { scene: cursorModel } = useGLTF("/arrow.glb");
   const orbitRadius = 12; // Larger orbit radius
+
+  const handleCursorClick = () => {
+    if (link) {
+      setTimeout(() => {
+        window.open(link, "_blank");
+      }, 0);
+    }
+  };
 
   useFrame(() => {
     if (sharkRef.current) {
@@ -24,7 +32,15 @@ function FloatingCursors({ sharkRef }) {
   return (
     <>
       {cursors.map((ref, index) => (
-        <primitive key={index} object={cursorModel.clone()} ref={ref} scale={2} />
+        <primitive
+          key={index}
+          object={cursorModel.clone()}
+          ref={ref}
+          scale={2}
+          onClick={handleCursorClick}
+          onPointerDown={handleCursorClick} // Ensure the cursor is clickable
+          style={{ cursor: "pointer" }}
+        />
       ))}
     </>
   );
@@ -57,7 +73,7 @@ function SpinningShark({ url, link }) {
   return (
     <group>
       <primitive object={scene} ref={ref} scale={15} onClick={handleClick} onPointerDown={handleClick} style={{ cursor: "pointer" }} />
-      {link && <FloatingCursors sharkRef={ref} />} 
+      {link && <FloatingCursors sharkRef={ref} link={link} />} 
     </group>
   );
 }
