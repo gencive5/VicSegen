@@ -1,14 +1,39 @@
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, Sphere } from "@react-three/drei";
 import { useRef } from "react";
-import { useFrame } from "@react-three/fiber";
+
+function FloatingCursors({ sharkRef }) {
+  const cursors = [useRef(), useRef(), useRef()];
+  const orbitRadius = 15; 
+
+  useFrame(() => {
+    if (sharkRef.current) {
+      const t = performance.now() * 0.001;
+      cursors.forEach((cursor, index) => {
+        const angle = t + (index * Math.PI * 0.66);
+        cursor.current.position.x = sharkRef.current.position.x + Math.cos(angle) * orbitRadius;
+        cursor.current.position.z = sharkRef.current.position.z + Math.sin(angle) * orbitRadius;
+        cursor.current.position.y = sharkRef.current.position.y; // Keep Y consistent for horizontal movement
+      });
+    }
+  });
+
+  return (
+    <>
+      {cursors.map((ref, index) => (
+        <Sphere key={index} ref={ref} args={[0.3, 10, 10]}>
+          <meshStandardMaterial color="yellow" emissive="white" emissiveIntensity={2} />
+        </Sphere>
+      ))}
+    </>
+  );
+}
 
 function SpinningShark({ url, link }) {
   const { scene } = useGLTF(url);
   const ref = useRef();
 
-  // Preserve original material color
   scene.traverse((child) => {
     if (child.isMesh) {
       child.material.toneMapped = false;
@@ -16,10 +41,11 @@ function SpinningShark({ url, link }) {
   });
 
   useFrame(() => {
-    ref.current.rotation.y += 0.01; // Rotate continuously
+    if (ref.current) {
+      ref.current.rotation.y += 0.01;
+    }
   });
 
-  // Click handler to open the link in a new tab (desktop & mobile)
   const handleClick = () => {
     if (link) {
       setTimeout(() => {
@@ -29,14 +55,10 @@ function SpinningShark({ url, link }) {
   };
 
   return (
-    <primitive 
-      object={scene} 
-      ref={ref} 
-      scale={15} 
-      onClick={handleClick} // Ensures desktop click works
-      onPointerDown={handleClick} // Ensures mobile tap works
-      style={{ cursor: "pointer" }} // Changes cursor on hover
-    />
+    <group>
+      <primitive object={scene} ref={ref} scale={15} onClick={handleClick} onPointerDown={handleClick} style={{ cursor: "pointer" }} />
+      {link && <FloatingCursors sharkRef={ref} />} 
+    </group>
   );
 }
 
@@ -51,7 +73,6 @@ export default function SharkScene({ link }) {
       <directionalLight position={[5, 5, 5]} intensity={1.5} color={"#ffffff"} />
       <spotLight position={[0, 5, 10]} angle={0.4} penumbra={1} intensity={4} color={"#ccccff"} />
 
-      {/* Pass the link to the SpinningShark component */}
       <SpinningShark url="/shark.glb" link={link} />
     </Canvas>
   );
