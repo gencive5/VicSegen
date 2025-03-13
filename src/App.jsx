@@ -60,7 +60,7 @@ function Home() {
         </button>
         {/* Updated Contact button to navigate to About page */}
         <Link to="/about" className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
-          Contact
+          About
         </Link>
       </div>
       <div className="absolute top-[-50px] md:top-0 left-0 w-full h-full z-10 pointer-events-auto">
