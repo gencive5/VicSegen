@@ -1,6 +1,6 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
-import { useGLTF, Text } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import { useRef } from "react";
 import * as THREE from "three";
 
@@ -94,11 +94,6 @@ function SpinningShark({ url, link }) {
     <group onClick={handleClick} onPointerDown={handleClick} style={{ cursor: link ? "pointer" : "default" }}>
       <primitive object={scene} ref={ref} scale={15} />
       {link && <FloatingCursors sharkRef={ref} link={link} />} 
-      {link && (
-        <Text position={[0, 10, 0]} fontSize={2} color="#ff0000" anchorX="center" anchorY="middle">
-          CLICK ME
-        </Text>
-      )}
     </group>
   );
 }
