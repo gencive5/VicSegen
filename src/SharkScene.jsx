@@ -1,16 +1,23 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, Text } from "@react-three/drei";
 import { useRef } from "react";
-import * as THREE from 'three'; // Import THREE for color manipulation
+import * as THREE from "three";
 
 function FloatingCursors({ sharkRef, link }) {
+  if (!link) return null;
+  
   const cursors = [useRef(), useRef(), useRef()];
   const { scene: cursorModel } = useGLTF("/fleche.glb");
   const orbitRadius = 12;
 
-  // Pearl Grey color in RGB
-  const pearlGrey = new THREE.Color(0xA9A9A9); // Pearl grey color
+  cursorModel.traverse((child) => {
+    if (child.isMesh) {
+      child.material.color = new THREE.Color(0xffd700);
+      child.material.emissive = new THREE.Color(0xffd700);
+      child.material.emissiveIntensity = 3;
+    }
+  });
 
   const handleCursorClick = () => {
     if (link) {
@@ -20,22 +27,17 @@ function FloatingCursors({ sharkRef, link }) {
     }
   };
 
-  // Set the cursor's material to pearl grey right after loading the model
-  cursorModel.traverse((child) => {
-    if (child.isMesh) {
-      child.material.color = pearlGrey;  // Force the material color to pearl grey
-    }
-  });
-
   useFrame(() => {
     if (sharkRef.current) {
-      const t = performance.now() * 0.0006;
+      const t = performance.now() * 0.001;
       cursors.forEach((cursorRef, index) => {
-        const angle = t + (index * Math.PI * 0.66); // Reverse direction by adding
-        cursorRef.current.position.x = Math.cos(angle) * orbitRadius;
-        cursorRef.current.position.z = Math.sin(angle) * orbitRadius;
-        cursorRef.current.position.y = Math.sin(angle * 0.5) * 3; // Adds vertical wave for cylindrical motion
-        cursorRef.current.rotation.y = angle + Math.PI / 2; // Align cursor along orbit direction
+        const angle = t + index * Math.PI * 0.66;
+        cursorRef.current.position.set(
+          Math.cos(angle) * orbitRadius,
+          Math.sin(angle * 0.5) * 3,
+          Math.sin(angle) * orbitRadius
+        );
+        cursorRef.current.rotation.y = angle + Math.PI / 2;
       });
     }
   });
@@ -49,7 +51,7 @@ function FloatingCursors({ sharkRef, link }) {
           ref={ref}
           scale={6}
           onClick={handleCursorClick}
-          onPointerDown={handleCursorClick} // Ensure the cursor is clickable
+          onPointerDown={handleCursorClick}
           style={{ cursor: "pointer" }}
         />
       ))}
@@ -64,6 +66,13 @@ function SpinningShark({ url, link }) {
   scene.traverse((child) => {
     if (child.isMesh) {
       child.material.toneMapped = false;
+      if (link) {
+        child.material.emissive = new THREE.Color(0x00ffff);
+        child.material.emissiveIntensity = 2;
+      } else {
+        child.material.emissive = new THREE.Color(0x000000);
+        child.material.emissiveIntensity = 0;
+      }
     }
   });
 
@@ -82,9 +91,14 @@ function SpinningShark({ url, link }) {
   };
 
   return (
-    <group>
-      <primitive object={scene} ref={ref} scale={15} onClick={handleClick} onPointerDown={handleClick} style={{ cursor: "pointer" }} />
+    <group onClick={handleClick} onPointerDown={handleClick} style={{ cursor: link ? "pointer" : "default" }}>
+      <primitive object={scene} ref={ref} scale={15} />
       {link && <FloatingCursors sharkRef={ref} link={link} />} 
+      {link && (
+        <Text position={[0, 10, 0]} fontSize={2} color="#ff0000" anchorX="center" anchorY="middle">
+          CLICK ME
+        </Text>
+      )}
     </group>
   );
 }
