@@ -3,7 +3,7 @@ import "./styles.css";
 import SharkScene from "./SharkScene";
 import ExpandingTextPanel from "./ExpandingTextPanel";
 import { useState } from "react";
-import About from "./About"; // Import the About page
+import About from "./About";
 
 function Home() {
   const [textConfig, setTextConfig] = useState({
@@ -11,7 +11,6 @@ function Home() {
     font: "font-bold"
   });
 
-  // Map texts to their corresponding links
   const linkMap = {
     "5": "https://gencive5.com/",
     "sm00ch": "https://sm00ch.xyz/",
@@ -25,7 +24,6 @@ function Home() {
     });
   };
 
-  // Get the link based on the current text
   const currentLink = linkMap[textConfig.text] || null;
 
   return (
@@ -38,8 +36,7 @@ function Home() {
         />
       </div>
 
-      <div className="absolute bottom-30 left-1/2 transform -translate-x-1/2 z-100 flex flex-wrap justify-center gap-2 px-4 md:gap-4 md:bottom-15">
-
+      <div className="absolute bottom-30 left-1/2 transform -translate-x-1/2 z-100 flex flex-wrap justify-center gap-2 px-4 md:gap-4 md:bottom-20">
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
           onClick={() => handleTextChange("5", "font-arial5")}
@@ -58,15 +55,20 @@ function Home() {
         >
           rat portfolio
         </button>
-        {/* Updated Contact button to navigate to About page */}
         <Link to="/about" className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
           About
         </Link>
       </div>
+      
       <div className="absolute top-[-50px] md:top-0 left-0 w-full h-full z-10 pointer-events-auto">
-  <SharkScene link={currentLink} />
-</div>
-
+        <SharkScene link={currentLink} />
+      </div>
+      
+      {/* Fixed footer for email and Instagram */}
+      <footer className="fixed bottom-4 left-1/2 transform -translate-x-1/2 text-white text-sm z-100">
+        <a href="mailto:vic.segen@gmail.com" className="mx-2 hover:underline">Email</a> |
+        <a href="https://instagram.com/gencive5" target="_blank" rel="noopener noreferrer" className="mx-2 hover:underline">Instagram</a>
+      </footer>
     </div>
   );
 }
