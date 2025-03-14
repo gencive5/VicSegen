@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "./styles.css";
 import SharkScene from "./SharkScene";
 import ExpandingTextPanel from "./ExpandingTextPanel";
+import ExpandingHi from "./ExpandingHi"; // Corrected import
 import { useState } from "react";
 import About from "./About";
 
@@ -29,11 +30,15 @@ function Home() {
   return (
     <div className="relative w-screen h-screen overflow-hidden overscroll-none">
       <div className="expanding-panel">
-        <ExpandingTextPanel 
-          textConfig={textConfig} 
-          showLink={!!currentLink}
-          link={currentLink}        
-        />
+        {textConfig.text === "Hi" ? (
+          <ExpandingHi /> // Use ExpandingHi when "Hi" is selected
+        ) : (
+          <ExpandingTextPanel 
+            textConfig={textConfig} 
+            showLink={!!currentLink}
+            link={currentLink}        
+          />
+        )}
       </div>
 
       <div className="absolute bottom-30 left-1/2 transform -translate-x-1/2 z-100 flex flex-wrap justify-center gap-2 px-4 md:gap-4 md:bottom-20">

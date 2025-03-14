@@ -1,75 +1,65 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import ExpandingHi from "./ExpandingHi"; // Import the new "Hi" component
 
 export default function ExpandingTextPanel({ textConfig }) {
   const { text, font } = textConfig;
-  const [expandedText, setExpandedText] = useState(text);
+  const [displayText, setDisplayText] = useState(text);
   const containerRef = useRef(null);
   const textRef = useRef(null);
 
-  // Reset expandedText when textConfig.text changes
   useEffect(() => {
-    setExpandedText(text);
-  }, [text]);
+    if (text === "Hi") {
+      return; // "Hi" is handled by ExpandingHi component
+    }
 
-  useEffect(() => {
-    const updateText = () => {
-      if (containerRef.current && textRef.current) {
-        const containerWidth = containerRef.current.clientWidth;
-        const containerHeight = containerRef.current.clientHeight;
-
-        // Random char generators
-        const getRandomGencive5Char = () => {
-          const rand = Math.random();
-          if (rand < 0.6) return "5";
-          else if (rand < 0.85) return "s";
-          else return "S";
-        };
-
-        const getRandomSm00chChar = () => {
-          const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
-          return chars.charAt(Math.floor(Math.random() * chars.length));
-        };
-
-        const getRandomRatChar = () => {
-          const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-          return chars.charAt(Math.floor(Math.random() * chars.length));
-        };
-
-        // Determine next character
-        let nextChar = "i";
-        if (text === "5") {
-          nextChar = getRandomGencive5Char();
-        } else if (text === "sm00ch") {
-          nextChar = getRandomSm00chChar();
-        } else if (text === "") {
-          nextChar = getRandomRatChar();
+    // Generate a full block of random text at once
+    const generateRandomText = (length) => {
+      let result = "";
+      if (text === "5") {
+        const chars = "555ssssSS";
+        for (let i = 0; i < length; i++) {
+          result += chars.charAt(Math.floor(Math.random() * chars.length));
         }
-
-        // Test new expanded text size
-        const testText = expandedText + nextChar;
-        textRef.current.textContent = testText;
-        const newWidth = textRef.current.scrollWidth;
-        const newHeight = textRef.current.scrollHeight;
-        textRef.current.textContent = expandedText;
-
-        if (newWidth <= containerWidth && newHeight <= containerHeight) {
-          setExpandedText((prev) => prev + nextChar);
+      } else if (text === "sm00ch") {
+        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+        for (let i = 0; i < length; i++) {
+          result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+      } else {
+        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        for (let i = 0; i < length; i++) {
+          result += chars.charAt(Math.floor(Math.random() * chars.length));
         }
       }
+      return result;
     };
 
-    const interval = setInterval(updateText, 50);
-    window.addEventListener("resize", updateText);
+    // Fill text to match size of "Hi" expanding version
+    const fillTextToSize = () => {
+      if (!containerRef.current || !textRef.current) return;
 
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener("resize", updateText);
+      let testText = "";
+      let maxChars = 50; // Adjust to control size
+      while (
+        textRef.current.scrollWidth < containerRef.current.clientWidth &&
+        textRef.current.scrollHeight < containerRef.current.clientHeight &&
+        testText.length < maxChars
+      ) {
+        testText = generateRandomText(testText.length + 5);
+        textRef.current.textContent = testText;
+      }
+      setDisplayText(testText);
     };
-  }, [expandedText, text]);
+
+    fillTextToSize();
+  }, [text]);
 
   return (
     <div ref={containerRef} className="w-full h-full p-6 overflow-hidden relative pointer-events-auto">
-      {text === "" ? (
+      {text === "Hi" ? (
+        <ExpandingHi /> // Use the separate component for expanding "Hi"
+      ) : text === "" ? (
+        // SPECIAL TRIPLE FONT EFFECT FOR "RAT PORTFOLIO"
         <div className="relative w-full h-full z-5">
           <p
             ref={textRef}
@@ -87,7 +77,7 @@ export default function ExpandingTextPanel({ textConfig }) {
               maxHeight: "100%",
             }}
           >
-            {expandedText}
+            {displayText}
           </p>
           <p
             className={`text-[9vw] font-mutlu leading-none text-left break-words text-bleu`}
@@ -104,7 +94,7 @@ export default function ExpandingTextPanel({ textConfig }) {
               maxHeight: "100%",
             }}
           >
-            {expandedText}
+            {displayText}
           </p>
           <p
             className={`text-[9vw] font-sword leading-none text-left break-words text-rose`}
@@ -120,7 +110,7 @@ export default function ExpandingTextPanel({ textConfig }) {
               maxHeight: "100%",
             }}
           >
-            {expandedText}
+            {displayText}
           </p>
         </div>
       ) : (
@@ -135,7 +125,7 @@ export default function ExpandingTextPanel({ textConfig }) {
             maxHeight: "100%",
           }}
         >
-          {expandedText}
+          {displayText}
         </p>
       )}
     </div>
