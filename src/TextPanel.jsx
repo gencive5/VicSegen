@@ -4,6 +4,7 @@ import ExpandingHi from "./ExpandingHi";
 export default function TextPanel({ textConfig }) {
   const { text, font } = textConfig;
   const [displayText, setDisplayText] = useState("");
+  const [isLoaded, setIsLoaded] = useState(false); // Track when text is ready
   const containerRef = useRef(null);
   const textRefs = useRef([]); // Store refs for all 3 text layers
 
@@ -24,6 +25,8 @@ export default function TextPanel({ textConfig }) {
     const fillText = () => {
       if (!containerRef.current || textRefs.current.length === 0) return;
 
+      setIsLoaded(false); // Hide text during adjustment
+
       const screenWidth = window.innerWidth;
       const isMobile = screenWidth < 768;
       const baseFontSize = isMobile ? 12 : 9; // 12vw for mobile, 9vw for desktop
@@ -36,7 +39,7 @@ export default function TextPanel({ textConfig }) {
       let textHeight = textRefs.current[0].scrollHeight;
       const containerHeight = containerRef.current.clientHeight;
 
-      // Trim text dynamically to fit within the container (if necessary)
+      // Trim text dynamically to fit within the container
       while (textHeight > containerHeight && randomText.length > 0) {
         randomText = randomText.slice(0, -1); // Remove last character
         textRefs.current[0].textContent = randomText;
@@ -49,12 +52,16 @@ export default function TextPanel({ textConfig }) {
       textRefs.current.forEach((ref) => {
         if (ref) ref.style.fontSize = `${baseFontSize}vw`;
       });
+
+      // Smoothly reveal text after adjustments are done
+      setTimeout(() => {
+        setIsLoaded(true);
+      }, 50); // Short delay to avoid flickering
     };
 
-    // Delay initial rendering to allow for DOM and styles to be fully applied
     setTimeout(() => {
       fillText();
-    }, 100); // 100ms delay for first render (you can adjust this)
+    }, 100); // Initial delay to let styles apply
 
     window.addEventListener("resize", fillText);
 
@@ -70,10 +77,10 @@ export default function TextPanel({ textConfig }) {
           {["myriad text-naranja", "mutlu text-bleu", "sword text-rose"].map((fontClass, index) => (
             <p
               key={index}
-              ref={(el) => (textRefs.current[index] = el)} // Assign ref dynamically to all layers
-              className={`absolute text-center font-${fontClass} leading-none`}
+              ref={(el) => (textRefs.current[index] = el)}
+              className={`absolute text-center font-${fontClass} leading-none transition-opacity duration-200`}
               style={{
-                fontSize: "9vw", // Default desktop font size
+                fontSize: "9vw",
                 transform: index === 0 ? "translate(2px, 2px)" : index === 1 ? "translate(-2px, -2px)" : "none",
                 zIndex: index + 1,
                 wordBreak: "break-word",
@@ -81,6 +88,7 @@ export default function TextPanel({ textConfig }) {
                 whiteSpace: "pre-wrap",
                 maxWidth: "100%",
                 maxHeight: "100%",
+                opacity: isLoaded ? 1 : 0, // Hide while adjusting, fade in after
               }}
             >
               {displayText}
@@ -89,8 +97,8 @@ export default function TextPanel({ textConfig }) {
         </div>
       ) : (
         <p
-          ref={(el) => (textRefs.current[0] = el)} // Single text case
-          className={`text-[9vw] leading-none text-center break-words z-50 ${font}`}
+          ref={(el) => (textRefs.current[0] = el)}
+          className={`text-[9vw] leading-none text-center break-words z-50 transition-opacity duration-200 ${font}`}
           style={{
             wordBreak: "break-word",
             overflowWrap: "break-word",
@@ -98,6 +106,7 @@ export default function TextPanel({ textConfig }) {
             maxWidth: "100%",
             maxHeight: "100%",
             visibility: "visible",
+            opacity: isLoaded ? 1 : 0, // Hide while adjusting, fade in after
           }}
         >
           {displayText}
