@@ -1,85 +1,65 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import ExpandingHi from "./ExpandingHi";
 
-export default function ExpandingTextPanel({ textConfig }) {
+export default function TextPanel({ textConfig }) {
   const { text, font } = textConfig;
   const [displayText, setDisplayText] = useState("");
-  const [isTextReady, setIsTextReady] = useState(false);
   const containerRef = useRef(null);
-  const hiddenMeasureRef = useRef(null);
+  const textRef = useRef(null);
+
+  function generateRandomText(length) {
+    const chars =
+      text === "5"
+        ? "555ssssSS"
+        : text === "sm00ch"
+        ? "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()"
+        : "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    return Array.from({ length }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join("");
+  }
 
   useEffect(() => {
-    if (text === "Hi") return; // Skip if using ExpandingHi component
+    if (text === "Hi") return; // Skip for ExpandingHi component
+    if (!containerRef.current || !textRef.current) return;
 
-    const generateRandomText = (length) => {
-      let result = "";
-      const chars =
-        text === "5"
-          ? "555ssssSS"
-          : text === "sm00ch"
-          ? "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()"
-          : "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let min = 10; // Start with a reasonable minimum
+    let max = 5000; // Limit the max length for performance
+    let bestFitText = "";
 
-      for (let i = 0; i < length; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    while (min <= max) {
+      const mid = Math.floor((min + max) / 2);
+      const testText = generateRandomText(mid);
+      textRef.current.textContent = testText;
+
+      const containerWidth = containerRef.current.clientWidth;
+      const containerHeight = containerRef.current.clientHeight;
+      const textWidth = textRef.current.scrollWidth;
+      const textHeight = textRef.current.scrollHeight;
+
+      if (textWidth <= containerWidth && textHeight <= containerHeight) {
+        bestFitText = testText; // Store best fit
+        min = mid + 10; // Increase text size in bigger steps for speed
+      } else {
+        max = mid - 10; // Reduce text size in bigger steps
       }
-      return result;
-    };
+    }
 
-    const fillTextToViewport = () => {
-      if (!containerRef.current || !hiddenMeasureRef.current) return;
-
-      let min = 1;
-      let max = 10000; // Large upper limit for text length
-      let bestFitText = "";
-
-      while (min <= max) {
-        const mid = Math.floor((min + max) / 2);
-        const testText = generateRandomText(mid);
-        hiddenMeasureRef.current.textContent = testText;
-
-        const containerBounds = containerRef.current.getBoundingClientRect();
-        const textBounds = hiddenMeasureRef.current.getBoundingClientRect();
-
-        if (textBounds.width <= containerBounds.width && textBounds.height <= containerBounds.height) {
-          bestFitText = testText; // Keep this as the best fit so far
-          min = mid + 1; // Try adding more text
-        } else {
-          max = mid - 1; // Reduce text size
-        }
-      }
-
-      setDisplayText(bestFitText);
-      setIsTextReady(true);
-    };
-
-    fillTextToViewport();
-
-    const handleResize = () => {
-      setIsTextReady(false);
-      requestAnimationFrame(fillTextToViewport);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    setDisplayText(bestFitText);
   }, [text]);
 
   return (
-    <div ref={containerRef} className="w-full h-full p-6 overflow-hidden relative pointer-events-auto">
-      {/* Hidden element for measuring text */}
-      <p ref={hiddenMeasureRef} className="absolute invisible text-[9vw]">
-        {displayText}
-      </p>
-
+    <div ref={containerRef} className="w-full h-full p-6 overflow-hidden relative flex items-center justify-center">
       {text === "Hi" ? (
         <ExpandingHi />
       ) : text === "" ? (
-        <div className="relative w-full h-full z-5">
+        <div className="relative w-full h-full">
           {["myriad text-naranja", "mutlu text-bleu", "sword text-rose"].map((fontClass, index) => (
             <p
               key={index}
-              className={`text-[9vw] font-${fontClass} leading-none absolute top-0 left-0 break-words`}
+              ref={index === 0 ? textRef : null} // Only measure the first layer
+              className={`absolute text-center font-${fontClass} leading-none`}
               style={{
+                fontSize: "9vw",
                 transform: index === 0 ? "translate(2px, 2px)" : index === 1 ? "translate(-2px, -2px)" : "none",
                 zIndex: index + 1,
                 wordBreak: "break-word",
@@ -87,7 +67,6 @@ export default function ExpandingTextPanel({ textConfig }) {
                 whiteSpace: "pre-wrap",
                 maxWidth: "100%",
                 maxHeight: "100%",
-                visibility: isTextReady ? "visible" : "hidden",
               }}
             >
               {displayText}
@@ -96,14 +75,14 @@ export default function ExpandingTextPanel({ textConfig }) {
         </div>
       ) : (
         <p
-          className={`text-[9vw] ${font} leading-none text-left break-words z-50`}
+          ref={textRef}
+          className={`text-[9vw] leading-none text-center break-words z-50 ${font}`}
           style={{
             wordBreak: "break-word",
             overflowWrap: "break-word",
             whiteSpace: "pre-wrap",
             maxWidth: "100%",
             maxHeight: "100%",
-            visibility: isTextReady ? "visible" : "hidden",
           }}
         >
           {displayText}
