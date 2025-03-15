@@ -12,42 +12,41 @@ export default function ExpandingTextPanel({ textConfig }) {
       return; // "Hi" is handled by ExpandingHi component
     }
 
-    // Generate a full block of random text at once
     const generateRandomText = (length) => {
       let result = "";
-      if (text === "5") {
-        const chars = "555ssssSS";
-        for (let i = 0; i < length; i++) {
-          result += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-      } else if (text === "sm00ch") {
-        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
-        for (let i = 0; i < length; i++) {
-          result += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-      } else {
-        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        for (let i = 0; i < length; i++) {
-          result += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
+      const chars =
+        text === "5"
+          ? "555ssssSS"
+          : text === "sm00ch"
+          ? "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()"
+          : "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+      for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
       }
       return result;
     };
 
-    // Fill text to match size of "Hi" expanding version
     const fillTextToSize = () => {
       if (!containerRef.current || !textRef.current) return;
 
       let testText = "";
-      let maxChars = 50; // Adjust to control size
-      while (
-        textRef.current.scrollWidth < containerRef.current.clientWidth &&
-        textRef.current.scrollHeight < containerRef.current.clientHeight &&
-        testText.length < maxChars
-      ) {
-        testText = generateRandomText(testText.length + 5);
+      let step = 5; // Number of characters to add per iteration
+
+      while (true) {
+        testText += generateRandomText(step);
         textRef.current.textContent = testText;
+
+        if (
+          textRef.current.scrollWidth > containerRef.current.clientWidth ||
+          textRef.current.scrollHeight > containerRef.current.clientHeight
+        ) {
+          // Remove the last added batch if overflow occurs
+          testText = testText.slice(0, -step);
+          break;
+        }
       }
+
       setDisplayText(testText);
     };
 
@@ -57,13 +56,13 @@ export default function ExpandingTextPanel({ textConfig }) {
   return (
     <div ref={containerRef} className="w-full h-full p-6 overflow-hidden relative pointer-events-auto">
       {text === "Hi" ? (
-        <ExpandingHi /> // Use the separate component for expanding "Hi"
+        <ExpandingHi />
       ) : text === "" ? (
         // SPECIAL TRIPLE FONT EFFECT FOR "RAT PORTFOLIO"
         <div className="relative w-full h-full z-5">
           <p
             ref={textRef}
-            className={`text-[9vw] font-myriad leading-none text-left break-words text-naranja`}
+            className="text-[9vw] font-myriad leading-none text-left break-words text-naranja"
             style={{
               transform: "translate(2px, 2px)",
               position: "absolute",
@@ -80,7 +79,7 @@ export default function ExpandingTextPanel({ textConfig }) {
             {displayText}
           </p>
           <p
-            className={`text-[9vw] font-mutlu leading-none text-left break-words text-bleu`}
+            className="text-[9vw] font-mutlu leading-none text-left break-words text-bleu"
             style={{
               transform: "translate(-2px, -2px)",
               position: "absolute",
@@ -97,7 +96,7 @@ export default function ExpandingTextPanel({ textConfig }) {
             {displayText}
           </p>
           <p
-            className={`text-[9vw] font-sword leading-none text-left break-words text-rose`}
+            className="text-[9vw] font-sword leading-none text-left break-words text-rose"
             style={{
               position: "absolute",
               top: 0,
