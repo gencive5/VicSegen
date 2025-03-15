@@ -8,9 +8,7 @@ export default function ExpandingTextPanel({ textConfig }) {
   const textRef = useRef(null);
 
   useEffect(() => {
-    if (text === "Hi") {
-      return; // "Hi" is handled by ExpandingHi component
-    }
+    if (text === "Hi") return; // Skip if using ExpandingHi component
 
     const generateRandomText = (length) => {
       let result = "";
@@ -31,26 +29,50 @@ export default function ExpandingTextPanel({ textConfig }) {
       if (!containerRef.current || !textRef.current) return;
 
       let testText = "";
-      let step = 5; // Number of characters to add per iteration
+      let step = 10; // Start with a larger step for speed
+      let fits = false;
 
-      while (true) {
-        testText += generateRandomText(step);
+      const updateText = () => {
+        if (!containerRef.current || !textRef.current) return;
         textRef.current.textContent = testText;
 
-        if (
+        const overflows =
           textRef.current.scrollWidth > containerRef.current.clientWidth ||
-          textRef.current.scrollHeight > containerRef.current.clientHeight
-        ) {
-          // Remove the last added batch if overflow occurs
-          testText = testText.slice(0, -step);
-          break;
-        }
-      }
+          textRef.current.scrollHeight > containerRef.current.clientHeight;
 
-      setDisplayText(testText);
+        if (overflows) {
+          // Remove last addition and decrease step size for precision
+          testText = testText.slice(0, -step);
+          step = Math.max(1, Math.floor(step / 2)); // Reduce step but keep at least 1
+
+          if (step === 1) {
+            fits = true; // Stop refining when step size is 1
+          }
+        } else {
+          // If there's still space, add more characters
+          testText += generateRandomText(step);
+        }
+
+        if (!fits) {
+          requestAnimationFrame(updateText); // Continue refining
+        } else {
+          setDisplayText(testText); // Finalize the text
+        }
+      };
+
+      updateText();
     };
 
     fillTextToSize();
+
+    // Handle window resize dynamically
+    const handleResize = () => {
+      setDisplayText(""); // Clear before recalculating
+      requestAnimationFrame(fillTextToSize);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [text]);
 
   return (
