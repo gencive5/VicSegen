@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import ExpandingHi from "./ExpandingHi"; // Import the new "Hi" component
+import ExpandingHi from "./ExpandingHi";
 
 export default function ExpandingTextPanel({ textConfig }) {
   const { text, font } = textConfig;
-  const [displayText, setDisplayText] = useState(text);
+  const [displayText, setDisplayText] = useState("");
+  const [isTextReady, setIsTextReady] = useState(false);
   const containerRef = useRef(null);
-  const textRef = useRef(null);
+  const hiddenMeasureRef = useRef(null);
 
   useEffect(() => {
     if (text === "Hi") return; // Skip if using ExpandingHi component
@@ -25,50 +26,38 @@ export default function ExpandingTextPanel({ textConfig }) {
       return result;
     };
 
-    const fillTextToSize = () => {
-      if (!containerRef.current || !textRef.current) return;
+    const fillTextToViewport = () => {
+      if (!containerRef.current || !hiddenMeasureRef.current) return;
 
-      let testText = "";
-      let step = 10; // Start with a larger step for speed
-      let fits = false;
+      let min = 1;
+      let max = 10000; // Large upper limit for text length
+      let bestFitText = "";
 
-      const updateText = () => {
-        if (!containerRef.current || !textRef.current) return;
-        textRef.current.textContent = testText;
+      while (min <= max) {
+        const mid = Math.floor((min + max) / 2);
+        const testText = generateRandomText(mid);
+        hiddenMeasureRef.current.textContent = testText;
 
-        const overflows =
-          textRef.current.scrollWidth > containerRef.current.clientWidth ||
-          textRef.current.scrollHeight > containerRef.current.clientHeight;
+        const containerBounds = containerRef.current.getBoundingClientRect();
+        const textBounds = hiddenMeasureRef.current.getBoundingClientRect();
 
-        if (overflows) {
-          // Remove last addition and decrease step size for precision
-          testText = testText.slice(0, -step);
-          step = Math.max(1, Math.floor(step / 2)); // Reduce step but keep at least 1
-
-          if (step === 1) {
-            fits = true; // Stop refining when step size is 1
-          }
+        if (textBounds.width <= containerBounds.width && textBounds.height <= containerBounds.height) {
+          bestFitText = testText; // Keep this as the best fit so far
+          min = mid + 1; // Try adding more text
         } else {
-          // If there's still space, add more characters
-          testText += generateRandomText(step);
+          max = mid - 1; // Reduce text size
         }
+      }
 
-        if (!fits) {
-          requestAnimationFrame(updateText); // Continue refining
-        } else {
-          setDisplayText(testText); // Finalize the text
-        }
-      };
-
-      updateText();
+      setDisplayText(bestFitText);
+      setIsTextReady(true);
     };
 
-    fillTextToSize();
+    fillTextToViewport();
 
-    // Handle window resize dynamically
     const handleResize = () => {
-      setDisplayText(""); // Clear before recalculating
-      requestAnimationFrame(fillTextToSize);
+      setIsTextReady(false);
+      requestAnimationFrame(fillTextToViewport);
     };
 
     window.addEventListener("resize", handleResize);
@@ -77,66 +66,36 @@ export default function ExpandingTextPanel({ textConfig }) {
 
   return (
     <div ref={containerRef} className="w-full h-full p-6 overflow-hidden relative pointer-events-auto">
+      {/* Hidden element for measuring text */}
+      <p ref={hiddenMeasureRef} className="absolute invisible text-[9vw]">
+        {displayText}
+      </p>
+
       {text === "Hi" ? (
         <ExpandingHi />
       ) : text === "" ? (
-        // SPECIAL TRIPLE FONT EFFECT FOR "RAT PORTFOLIO"
         <div className="relative w-full h-full z-5">
-          <p
-            ref={textRef}
-            className="text-[9vw] font-myriad leading-none text-left break-words text-naranja"
-            style={{
-              transform: "translate(2px, 2px)",
-              position: "absolute",
-              top: 0,
-              left: 0,
-              zIndex: 1,
-              wordBreak: "break-word",
-              overflowWrap: "break-word",
-              whiteSpace: "pre-wrap",
-              maxWidth: "100%",
-              maxHeight: "100%",
-            }}
-          >
-            {displayText}
-          </p>
-          <p
-            className="text-[9vw] font-mutlu leading-none text-left break-words text-bleu"
-            style={{
-              transform: "translate(-2px, -2px)",
-              position: "absolute",
-              top: 0,
-              left: 0,
-              zIndex: 2,
-              wordBreak: "break-word",
-              overflowWrap: "break-word",
-              whiteSpace: "pre-wrap",
-              maxWidth: "100%",
-              maxHeight: "100%",
-            }}
-          >
-            {displayText}
-          </p>
-          <p
-            className="text-[9vw] font-sword leading-none text-left break-words text-rose"
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              zIndex: 3,
-              wordBreak: "break-word",
-              overflowWrap: "break-word",
-              whiteSpace: "pre-wrap",
-              maxWidth: "100%",
-              maxHeight: "100%",
-            }}
-          >
-            {displayText}
-          </p>
+          {["myriad text-naranja", "mutlu text-bleu", "sword text-rose"].map((fontClass, index) => (
+            <p
+              key={index}
+              className={`text-[9vw] font-${fontClass} leading-none absolute top-0 left-0 break-words`}
+              style={{
+                transform: index === 0 ? "translate(2px, 2px)" : index === 1 ? "translate(-2px, -2px)" : "none",
+                zIndex: index + 1,
+                wordBreak: "break-word",
+                overflowWrap: "break-word",
+                whiteSpace: "pre-wrap",
+                maxWidth: "100%",
+                maxHeight: "100%",
+                visibility: isTextReady ? "visible" : "hidden",
+              }}
+            >
+              {displayText}
+            </p>
+          ))}
         </div>
       ) : (
         <p
-          ref={textRef}
           className={`text-[9vw] ${font} leading-none text-left break-words z-50`}
           style={{
             wordBreak: "break-word",
@@ -144,6 +103,7 @@ export default function ExpandingTextPanel({ textConfig }) {
             whiteSpace: "pre-wrap",
             maxWidth: "100%",
             maxHeight: "100%",
+            visibility: isTextReady ? "visible" : "hidden",
           }}
         >
           {displayText}
