@@ -36,7 +36,7 @@ export default function TextPanel({ textConfig }) {
       let textHeight = textRefs.current[0].scrollHeight;
       const containerHeight = containerRef.current.clientHeight;
 
-      // Trim text dynamically to fit within the container
+      // Trim text dynamically to fit within the container (if necessary)
       while (textHeight > containerHeight && randomText.length > 0) {
         randomText = randomText.slice(0, -1); // Remove last character
         textRefs.current[0].textContent = randomText;
@@ -51,14 +51,18 @@ export default function TextPanel({ textConfig }) {
       });
     };
 
-    fillText();
+    // Delay initial rendering to allow for DOM and styles to be fully applied
+    setTimeout(() => {
+      fillText();
+    }, 100); // 100ms delay for first render (you can adjust this)
+
     window.addEventListener("resize", fillText);
 
     return () => window.removeEventListener("resize", fillText);
   }, [text]);
 
   return (
-    <div ref={containerRef} className="w-full h-full p-6 p-6 md:p-2 pb-12 overflow-hidden relative flex items-center justify-center z-5">
+    <div ref={containerRef} className="w-full h-full p-6 pb-12 overflow-hidden relative flex items-center justify-center z-5">
       {text === "Hi" ? (
         <ExpandingHi />
       ) : text === "" ? (
