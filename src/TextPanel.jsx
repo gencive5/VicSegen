@@ -21,40 +21,26 @@ export default function TextPanel({ textConfig }) {
   useEffect(() => {
     if (text === "Hi") return; // Skip for ExpandingHi component
 
-    // Function to resize and fill the container with random text
     const fillText = () => {
       if (!containerRef.current || !textRef.current) return;
 
-      const containerWidth = containerRef.current.clientWidth;
-      
+      const screenWidth = window.innerWidth;
+      const isMobile = screenWidth < 768; // Check if mobile
+      const baseFontSize = isMobile ? 12 : 9; // 12vw for mobile, 9vw for desktop
 
-      // Start with a reasonable random text length (1,000 characters)
-      const initialLength = 1000; // You can adjust this for more/less randomness
+      const initialLength = 1000; // Random text length
       const randomText = generateRandomText(initialLength);
 
-      // Set the text
       textRef.current.textContent = randomText;
+      textRef.current.style.fontSize = `${baseFontSize}vw`;
 
-      // Set the font size to fill the container (based on viewport width)
-      let fontSize = Math.min(containerWidth / randomText.length, 9); // Max font size 9vw (or adjust to your needs)
-      fontSize = fontSize > 9 ? fontSize : 9; // Ensuring at least 9vw font size
-
-      setDisplayText(randomText); // Update the display text for rendering
-
-      // Apply the font size directly to the text
-      textRef.current.style.fontSize = `${fontSize}vw`;
+      setDisplayText(randomText);
     };
 
-    fillText(); // Call initially
+    fillText();
+    window.addEventListener("resize", fillText);
 
-    // Recalculate text when window is resized
-    const handleResize = () => {
-      fillText();
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", fillText);
   }, [text]);
 
   return (
@@ -66,10 +52,10 @@ export default function TextPanel({ textConfig }) {
           {["myriad text-naranja", "mutlu text-bleu", "sword text-rose"].map((fontClass, index) => (
             <p
               key={index}
-              ref={index === 0 ? textRef : null} // Only measure the first layer
+              ref={index === 0 ? textRef : null}
               className={`absolute text-center font-${fontClass} leading-none`}
               style={{
-                fontSize: "9vw",
+                fontSize: "9vw", // Default desktop size
                 transform: index === 0 ? "translate(2px, 2px)" : index === 1 ? "translate(-2px, -2px)" : "none",
                 zIndex: index + 1,
                 wordBreak: "break-word",
