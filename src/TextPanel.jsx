@@ -26,7 +26,7 @@ export default function TextPanel({ textConfig }) {
       if (!containerRef.current || !textRef.current) return;
 
       const containerWidth = containerRef.current.clientWidth;
-      const containerHeight = containerRef.current.clientHeight;
+      
 
       // Start with a reasonable random text length (1,000 characters)
       const initialLength = 1000; // You can adjust this for more/less randomness
