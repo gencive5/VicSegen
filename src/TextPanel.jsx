@@ -28,8 +28,20 @@ export default function TextPanel({ textConfig }) {
       const isMobile = screenWidth < 768;
       const baseFontSize = isMobile ? 12 : 9; // 12vw for mobile, 9vw for desktop
 
-      const initialLength = 1000;
-      const randomText = generateRandomText(initialLength);
+      let initialLength = 1000;
+      let randomText = generateRandomText(initialLength);
+
+      // Temporarily set text to measure height
+      textRefs.current[0].textContent = randomText;
+      let textHeight = textRefs.current[0].scrollHeight;
+      const containerHeight = containerRef.current.clientHeight;
+
+      // Trim text dynamically to fit within the container
+      while (textHeight > containerHeight && randomText.length > 0) {
+        randomText = randomText.slice(0, -1); // Remove last character
+        textRefs.current[0].textContent = randomText;
+        textHeight = textRefs.current[0].scrollHeight;
+      }
 
       setDisplayText(randomText);
 
@@ -46,7 +58,7 @@ export default function TextPanel({ textConfig }) {
   }, [text]);
 
   return (
-    <div ref={containerRef} className="w-full h-full p-6 overflow-hidden relative flex items-center justify-center z-5">
+    <div ref={containerRef} className="w-full h-full p-6 pb-12 overflow-hidden relative flex items-center justify-center z-5">
       {text === "Hi" ? (
         <ExpandingHi />
       ) : text === "" ? (
@@ -57,6 +69,7 @@ export default function TextPanel({ textConfig }) {
               ref={(el) => (textRefs.current[index] = el)} // Assign ref dynamically to all layers
               className={`absolute text-center font-${fontClass} leading-none`}
               style={{
+                fontSize: "9vw", // Default desktop font size
                 transform: index === 0 ? "translate(2px, 2px)" : index === 1 ? "translate(-2px, -2px)" : "none",
                 zIndex: index + 1,
                 wordBreak: "break-word",
