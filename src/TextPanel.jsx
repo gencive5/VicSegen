@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import ExpandingHi from "./ExpandingHi";
 
 export default function TextPanel({ textConfig }) {
@@ -19,7 +19,7 @@ export default function TextPanel({ textConfig }) {
     return Array.from({ length }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join("");
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (text === "Hi") return; // Skip for ExpandingHi component
 
     const fillText = () => {
@@ -53,16 +53,13 @@ export default function TextPanel({ textConfig }) {
         if (ref) ref.style.fontSize = `${baseFontSize}vw`;
       });
 
-      // Smoothly reveal text after adjustments are done
+      // Ensure the text is fully loaded and adjust before showing it
       setTimeout(() => {
         setIsLoaded(true);
-      }, 50); // Short delay to avoid flickering
+      }, 100); // Short delay after adjustment to ensure smooth transition
     };
 
-    setTimeout(() => {
-      fillText();
-    }, 100); // Initial delay to let styles apply
-
+    fillText();
     window.addEventListener("resize", fillText);
 
     return () => window.removeEventListener("resize", fillText);
@@ -78,7 +75,7 @@ export default function TextPanel({ textConfig }) {
             <p
               key={index}
               ref={(el) => (textRefs.current[index] = el)}
-              className={`absolute text-center font-${fontClass} leading-none transition-opacity duration-200`}
+              className={`absolute text-center font-${fontClass} leading-none transition-opacity duration-300`}
               style={{
                 fontSize: "9vw",
                 transform: index === 0 ? "translate(2px, 2px)" : index === 1 ? "translate(-2px, -2px)" : "none",
@@ -98,7 +95,7 @@ export default function TextPanel({ textConfig }) {
       ) : (
         <p
           ref={(el) => (textRefs.current[0] = el)}
-          className={`text-[9vw] leading-none text-center break-words z-50 transition-opacity duration-200 ${font}`}
+          className={`text-[9vw] leading-none text-center break-words z-50 transition-opacity duration-300 ${font}`}
           style={{
             wordBreak: "break-word",
             overflowWrap: "break-word",
