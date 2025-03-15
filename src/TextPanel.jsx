@@ -7,7 +7,7 @@ export default function TextPanel({ textConfig }) {
   const containerRef = useRef(null);
   const textRef = useRef(null);
 
-  function generateRandomText(length) {
+  const generateRandomText = (length) => {
     const chars =
       text === "5"
         ? "555ssssSS"
@@ -16,35 +16,45 @@ export default function TextPanel({ textConfig }) {
         : "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     return Array.from({ length }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join("");
-  }
+  };
 
   useEffect(() => {
     if (text === "Hi") return; // Skip for ExpandingHi component
-    if (!containerRef.current || !textRef.current) return;
 
-    let min = 10; // Start with a reasonable minimum
-    let max = 5000; // Limit the max length for performance
-    let bestFitText = "";
-
-    while (min <= max) {
-      const mid = Math.floor((min + max) / 2);
-      const testText = generateRandomText(mid);
-      textRef.current.textContent = testText;
+    // Function to resize and fill the container with random text
+    const fillText = () => {
+      if (!containerRef.current || !textRef.current) return;
 
       const containerWidth = containerRef.current.clientWidth;
       const containerHeight = containerRef.current.clientHeight;
-      const textWidth = textRef.current.scrollWidth;
-      const textHeight = textRef.current.scrollHeight;
 
-      if (textWidth <= containerWidth && textHeight <= containerHeight) {
-        bestFitText = testText; // Store best fit
-        min = mid + 10; // Increase text size in bigger steps for speed
-      } else {
-        max = mid - 10; // Reduce text size in bigger steps
-      }
-    }
+      // Start with a reasonable random text length (1,000 characters)
+      const initialLength = 1000; // You can adjust this for more/less randomness
+      const randomText = generateRandomText(initialLength);
 
-    setDisplayText(bestFitText);
+      // Set the text
+      textRef.current.textContent = randomText;
+
+      // Set the font size to fill the container (based on viewport width)
+      let fontSize = Math.min(containerWidth / randomText.length, 9); // Max font size 9vw (or adjust to your needs)
+      fontSize = fontSize > 9 ? fontSize : 9; // Ensuring at least 9vw font size
+
+      setDisplayText(randomText); // Update the display text for rendering
+
+      // Apply the font size directly to the text
+      textRef.current.style.fontSize = `${fontSize}vw`;
+    };
+
+    fillText(); // Call initially
+
+    // Recalculate text when window is resized
+    const handleResize = () => {
+      fillText();
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
   }, [text]);
 
   return (
@@ -83,6 +93,7 @@ export default function TextPanel({ textConfig }) {
             whiteSpace: "pre-wrap",
             maxWidth: "100%",
             maxHeight: "100%",
+            visibility: "visible",
           }}
         >
           {displayText}
