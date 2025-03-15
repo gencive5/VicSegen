@@ -27,7 +27,7 @@ export default function TextPanel({ textConfig }) {
 
       const screenWidth = window.innerWidth;
       const isMobile = screenWidth < 768;
-      const baseFontSize = isMobile ? 12 : 9;
+      const baseFontSize = isMobile ? (text === "sm00ch" ? 16 : 12) : 9; // Larger size for sm00ch on mobile
 
       let initialLength = text === "sm00ch" ? 500 : 1000;
       let tempText = generateRandomText(initialLength);
@@ -97,7 +97,7 @@ export default function TextPanel({ textConfig }) {
               </div>
             ) : (
               <p
-                className={`text-[9vw] leading-none text-center break-words z-50 ${font}`}
+                className={`text-[${window.innerWidth < 768 && text === "sm00ch" ? "16vw" : "9vw"}] leading-none text-center break-words z-50 ${font}`}
                 style={{
                   wordBreak: "break-word",
                   overflowWrap: "break-word",
