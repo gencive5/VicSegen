@@ -5,7 +5,7 @@ export default function TextPanel({ textConfig }) {
   const { text, font } = textConfig;
   const [displayText, setDisplayText] = useState("");
   const containerRef = useRef(null);
-  const textRef = useRef(null);
+  const textRefs = useRef([]); // Store refs for all 3 text layers
 
   const generateRandomText = (length) => {
     const chars =
@@ -22,19 +22,21 @@ export default function TextPanel({ textConfig }) {
     if (text === "Hi") return; // Skip for ExpandingHi component
 
     const fillText = () => {
-      if (!containerRef.current || !textRef.current) return;
+      if (!containerRef.current || textRefs.current.length === 0) return;
 
       const screenWidth = window.innerWidth;
-      const isMobile = screenWidth < 768; // Check if mobile
+      const isMobile = screenWidth < 768;
       const baseFontSize = isMobile ? 12 : 9; // 12vw for mobile, 9vw for desktop
 
-      const initialLength = 1000; // Random text length
+      const initialLength = 1000;
       const randomText = generateRandomText(initialLength);
 
-      textRef.current.textContent = randomText;
-      textRef.current.style.fontSize = `${baseFontSize}vw`;
-
       setDisplayText(randomText);
+
+      // Apply the same font size to all 3 text layers
+      textRefs.current.forEach((ref) => {
+        if (ref) ref.style.fontSize = `${baseFontSize}vw`;
+      });
     };
 
     fillText();
@@ -52,10 +54,9 @@ export default function TextPanel({ textConfig }) {
           {["myriad text-naranja", "mutlu text-bleu", "sword text-rose"].map((fontClass, index) => (
             <p
               key={index}
-              ref={index === 0 ? textRef : null}
+              ref={(el) => (textRefs.current[index] = el)} // Assign ref dynamically to all layers
               className={`absolute text-center font-${fontClass} leading-none`}
               style={{
-                fontSize: "9vw", // Default desktop size
                 transform: index === 0 ? "translate(2px, 2px)" : index === 1 ? "translate(-2px, -2px)" : "none",
                 zIndex: index + 1,
                 wordBreak: "break-word",
@@ -71,7 +72,7 @@ export default function TextPanel({ textConfig }) {
         </div>
       ) : (
         <p
-          ref={textRef}
+          ref={(el) => (textRefs.current[0] = el)} // Single text case
           className={`text-[9vw] leading-none text-center break-words z-50 ${font}`}
           style={{
             wordBreak: "break-word",
