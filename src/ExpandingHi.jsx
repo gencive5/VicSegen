@@ -33,7 +33,7 @@ export default function ExpandingHi() {
   }, []);
 
   return (
-    <div ref={containerRef} className="w-full h-full p-6 overflow-hidden relative pointer-events-auto">
+    <div ref={containerRef} className="w-full h-full p-6 p-6 md:p-2 overflow-hidden relative pointer-events-auto">
       <p
         ref={textRef}
         className="text-[9vw] font-bold leading-none text-left break-words z-0"

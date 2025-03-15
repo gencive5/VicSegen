@@ -58,7 +58,7 @@ export default function TextPanel({ textConfig }) {
   }, [text]);
 
   return (
-    <div ref={containerRef} className="w-full h-full p-6 pb-12 overflow-hidden relative flex items-center justify-center z-5">
+    <div ref={containerRef} className="w-full h-full p-6 p-6 md:p-2 pb-12 overflow-hidden relative flex items-center justify-center z-5">
       {text === "Hi" ? (
         <ExpandingHi />
       ) : text === "" ? (
