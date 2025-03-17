@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "./styles.css";
 import SharkScene from "./SharkScene";
 import TextPanel from "./TextPanel";
-import ExpandingHi from "./ExpandingHi"; // Corrected import
+// import ExpandingHi from "./ExpandingHi"; // Corrected import
 import { useState } from "react";
 import About from "./About";
 
@@ -31,7 +31,8 @@ function Home() {
     <div className="relative w-screen h-screen overflow-hidden overscroll-none">
       <div className="expanding-panel">
         {textConfig.text === "Hi" ? (
-          <ExpandingHi /> // Use ExpandingHi when "Hi" is selected
+          /* <ExpandingHi /> */ // Use ExpandingHi when "Hi" is selected
+          null // You can replace this with null or any other placeholder
         ) : (
           <TextPanel 
             textConfig={textConfig} 
