@@ -14,83 +14,49 @@ export default function Text() {
   };
 
   // Function to check if the text overflows the container
-  const checkOverflow = () => {
+  const checkOverflow = (text) => {
     return textRefs.some(ref => {
       if (!ref.current || !containerRef.current) return false;
+      ref.current.textContent = text; // Set the text content
       const isWidthOverflowing = ref.current.scrollWidth > containerRef.current.clientWidth;
       const isHeightOverflowing = ref.current.scrollHeight > containerRef.current.clientHeight;
       return isWidthOverflowing || isHeightOverflowing;
     });
   };
 
-  useEffect(() => {
+  // Function to preload the expansion
+  const preloadExpansion = () => {
     let text = "";
-    let interval;
+    while (true) {
+      const randomLetter = getRandomLetter();
+      const newText = text + randomLetter;
 
-    const startExpansion = () => {
-      interval = setInterval(() => {
-        if (!containerRef.current || textRefs.some(ref => !ref.current)) return;
+      // Check if the new text overflows the container
+      if (checkOverflow(newText)) {
+        break; // Stop if the text overflows
+      }
 
-        // Generate a random letter
-        const randomLetter = getRandomLetter();
+      text = newText; // Update the text
+    }
+    return text;
+  };
 
-        // Temporarily add the random letter to test if it will overflow
-        textRefs.forEach(ref => {
-          ref.current.textContent = text + randomLetter;
-        });
-
-        // Check if ANY of the fonts overflow the container
-        const isOverflowing = checkOverflow();
-
-        if (isOverflowing) {
-          // If ANY font overflows, revert to the last valid text for ALL fonts
-          textRefs.forEach(ref => {
-            ref.current.textContent = text;
-          });
-          clearInterval(interval);
-          return;
-        }
-
-        // If no overflow, permanently add the random letter
-        text += randomLetter;
-        setDisplayText(text);
-      }, 50);
-    };
-
-    // Start the initial expansion
-    startExpansion();
+  useEffect(() => {
+    // Preload the expansion and set the final text
+    const finalText = preloadExpansion();
+    setDisplayText(finalText);
 
     // Add a resize event listener to handle viewport size changes
     const handleResize = () => {
-      // Clear the existing interval
-      clearInterval(interval);
-
-      // Check if the container size has increased
-      const isContainerLarger = textRefs.some(ref => {
-        if (!ref.current || !containerRef.current) return false;
-        const isWidthSmaller = ref.current.scrollWidth < containerRef.current.clientWidth;
-        const isHeightSmaller = ref.current.scrollHeight < containerRef.current.clientHeight;
-        return isWidthSmaller || isHeightSmaller;
-      });
-
-      // If the container is larger, reset the text and restart expansion
-      if (isContainerLarger) {
-        text = ""; // Reset the text
-        setDisplayText(text); // Update the state
-        textRefs.forEach(ref => {
-          if (ref.current) ref.current.textContent = text; // Reset the displayed text
-        });
-      }
-
-      // Restart the expansion process
-      startExpansion();
+      // Preload the expansion again and update the text
+      const newFinalText = preloadExpansion();
+      setDisplayText(newFinalText);
     };
 
     window.addEventListener("resize", handleResize);
 
     // Cleanup on unmount
     return () => {
-      clearInterval(interval);
       window.removeEventListener("resize", handleResize);
     };
   }, []);
