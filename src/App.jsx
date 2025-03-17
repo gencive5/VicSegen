@@ -40,7 +40,7 @@ function Home() {
           />
         )}
       </div>
-
+{/*
       <div className="absolute bottom-30 left-1/2 transform -translate-x-1/2 z-100 flex flex-wrap justify-center gap-2 px-4 md:gap-4 md:bottom-20">
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
@@ -59,12 +59,12 @@ function Home() {
           onClick={() => handleTextChange("", "font-sans")}
         >
           rat portfolio
-        </button>
-        {/* Commented out the About button */}
-        {/* <Link to="/about" className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
+        </button> 
+        
+        <Link to="/about" className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
           About
-        </Link> */}
-      </div>
+        </Link> =
+      </div>   */}
       
       <div className="absolute top-[-70px] md:top-0 left-0 w-full h-full z-10 pointer-events-auto">
         <SharkScene link={currentLink} />
