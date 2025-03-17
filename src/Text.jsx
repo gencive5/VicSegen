@@ -14,8 +14,15 @@ export default function Text() {
 
   // Function to generate a random letter
   const getRandomLetter = () => {
-    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    return alphabet[Math.floor(Math.random() * alphabet.length)];
+    if (fontStyle === "arial5") {
+      // For Arial5, use only '5', 's', and 'S'
+      const characters = ["5", "s", "S"];
+      return characters[Math.floor(Math.random() * characters.length)];
+    } else {
+      // For other fonts, use the full alphabet
+      const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      return alphabet[Math.floor(Math.random() * alphabet.length)];
+    }
   };
 
   // Function to check if the text overflows the container
