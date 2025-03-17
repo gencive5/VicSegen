@@ -1,20 +1,29 @@
 import { useEffect, useState, useRef } from "react";
 
 export default function Text() {
-  const [displayText, setDisplayText] = useState("A");
+  const [displayText, setDisplayText] = useState("");
   const containerRef = useRef(null);
   const textRefs = [useRef(null), useRef(null), useRef(null)];
 
   const fonts = ["font-myriad", "font-mutlu", "font-sword"];
 
+  // Function to generate a random letter
+  const getRandomLetter = () => {
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    return alphabet[Math.floor(Math.random() * alphabet.length)];
+  };
+
   useEffect(() => {
-    let text = "A";
+    let text = "";
     const interval = setInterval(() => {
       if (!containerRef.current || textRefs.some(ref => !ref.current)) return;
 
-      // Temporarily add a character to test if it will overflow
+      // Generate a random letter
+      const randomLetter = getRandomLetter();
+
+      // Temporarily add the random letter to test if it will overflow
       textRefs.forEach(ref => {
-        ref.current.textContent = text + "A";
+        ref.current.textContent = text + randomLetter;
       });
 
       // Check if ANY of the fonts overflow the container
@@ -33,8 +42,8 @@ export default function Text() {
         return;
       }
 
-      // If no overflow, permanently add the character
-      text += "A";
+      // If no overflow, permanently add the random letter
+      text += randomLetter;
       setDisplayText(text);
     }, 50);
 
