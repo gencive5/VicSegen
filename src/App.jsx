@@ -4,7 +4,7 @@ import SharkScene from "./SharkScene";
 import TextPanel from "./TextPanel";
 // import ExpandingHi from "./ExpandingHi"; // Corrected import
 import { useState } from "react";
-import About from "./About";
+// import About from "./About"; // Commented out the About component
 
 function Home() {
   const [textConfig, setTextConfig] = useState({
@@ -61,9 +61,10 @@ function Home() {
         >
           rat portfolio
         </button>
-        <Link to="/about" className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
+        {/* Commented out the About button */}
+        {/* <Link to="/about" className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
           About
-        </Link>
+        </Link> */}
       </div>
       
       <div className="absolute top-[-70px] md:top-0 left-0 w-full h-full z-10 pointer-events-auto">
@@ -84,7 +85,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
+        {/* Commented out the About route */}
+        {/* <Route path="/about" element={<About />} /> */}
       </Routes>
     </Router>
   );
