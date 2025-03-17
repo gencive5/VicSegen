@@ -13,41 +13,86 @@ export default function Text() {
     return alphabet[Math.floor(Math.random() * alphabet.length)];
   };
 
+  // Function to check if the text overflows the container
+  const checkOverflow = () => {
+    return textRefs.some(ref => {
+      if (!ref.current || !containerRef.current) return false;
+      const isWidthOverflowing = ref.current.scrollWidth > containerRef.current.clientWidth;
+      const isHeightOverflowing = ref.current.scrollHeight > containerRef.current.clientHeight;
+      return isWidthOverflowing || isHeightOverflowing;
+    });
+  };
+
   useEffect(() => {
     let text = "";
-    const interval = setInterval(() => {
-      if (!containerRef.current || textRefs.some(ref => !ref.current)) return;
+    let interval;
 
-      // Generate a random letter
-      const randomLetter = getRandomLetter();
+    const startExpansion = () => {
+      interval = setInterval(() => {
+        if (!containerRef.current || textRefs.some(ref => !ref.current)) return;
 
-      // Temporarily add the random letter to test if it will overflow
-      textRefs.forEach(ref => {
-        ref.current.textContent = text + randomLetter;
-      });
+        // Generate a random letter
+        const randomLetter = getRandomLetter();
 
-      // Check if ANY of the fonts overflow the container
-      const isOverflowing = textRefs.some(ref => {
-        const isWidthOverflowing = ref.current.scrollWidth > containerRef.current.clientWidth;
-        const isHeightOverflowing = ref.current.scrollHeight > containerRef.current.clientHeight;
-        return isWidthOverflowing || isHeightOverflowing;
-      });
-
-      if (isOverflowing) {
-        // If ANY font overflows, revert to the last valid text for ALL fonts
+        // Temporarily add the random letter to test if it will overflow
         textRefs.forEach(ref => {
-          ref.current.textContent = text;
+          ref.current.textContent = text + randomLetter;
         });
-        clearInterval(interval);
-        return;
+
+        // Check if ANY of the fonts overflow the container
+        const isOverflowing = checkOverflow();
+
+        if (isOverflowing) {
+          // If ANY font overflows, revert to the last valid text for ALL fonts
+          textRefs.forEach(ref => {
+            ref.current.textContent = text;
+          });
+          clearInterval(interval);
+          return;
+        }
+
+        // If no overflow, permanently add the random letter
+        text += randomLetter;
+        setDisplayText(text);
+      }, 50);
+    };
+
+    // Start the initial expansion
+    startExpansion();
+
+    // Add a resize event listener to handle viewport size changes
+    const handleResize = () => {
+      // Clear the existing interval
+      clearInterval(interval);
+
+      // Check if the container size has increased
+      const isContainerLarger = textRefs.some(ref => {
+        if (!ref.current || !containerRef.current) return false;
+        const isWidthSmaller = ref.current.scrollWidth < containerRef.current.clientWidth;
+        const isHeightSmaller = ref.current.scrollHeight < containerRef.current.clientHeight;
+        return isWidthSmaller || isHeightSmaller;
+      });
+
+      // If the container is larger, reset the text and restart expansion
+      if (isContainerLarger) {
+        text = ""; // Reset the text
+        setDisplayText(text); // Update the state
+        textRefs.forEach(ref => {
+          if (ref.current) ref.current.textContent = text; // Reset the displayed text
+        });
       }
 
-      // If no overflow, permanently add the random letter
-      text += randomLetter;
-      setDisplayText(text);
-    }, 50);
+      // Restart the expansion process
+      startExpansion();
+    };
 
-    return () => clearInterval(interval);
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup on unmount
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   return (
