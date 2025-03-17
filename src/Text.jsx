@@ -2,10 +2,15 @@ import { useEffect, useState, useRef } from "react";
 
 export default function Text() {
   const [displayText, setDisplayText] = useState("");
+  const [fontStyle, setFontStyle] = useState("triple"); // State to track the selected font style
   const containerRef = useRef(null);
   const textRefs = [useRef(null), useRef(null), useRef(null)];
 
-  const fonts = ["font-myriad", "font-mutlu", "font-sword"];
+  const fonts = {
+    triple: ["font-myriad", "font-mutlu", "font-sword"], // Triple font style
+    arial5: ["font-arial5", "font-arial5", "font-arial5"], // Arial5 font style
+    sm00ch: ["font-sm00ch", "font-sm00ch", "font-sm00ch"], // Sm00ch font style
+  };
 
   // Function to generate a random letter
   const getRandomLetter = () => {
@@ -59,15 +64,38 @@ export default function Text() {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [fontStyle]); // Re-run effect when fontStyle changes
 
   return (
     <div ref={containerRef} className="w-full h-full p-6 md:p-2 overflow-hidden relative pointer-events-auto">
+      {/* Buttons to switch font styles */}
+      <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 flex gap-4 z-50">
+        <button
+          onClick={() => setFontStyle("triple")}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+        >
+          Triple Font
+        </button>
+        <button
+          onClick={() => setFontStyle("arial5")}
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
+        >
+          Arial5
+        </button>
+        <button
+          onClick={() => setFontStyle("sm00ch")}
+          className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full"
+        >
+          Sm00ch
+        </button>
+      </div>
+
+      {/* Render the text with the selected font style */}
       {textRefs.map((ref, index) => (
         <p
           key={index}
           ref={ref}
-          className={`text-[9vw] font-bold leading-none text-left break-words z-0 ${fonts[index]}`}
+          className={`text-[9vw] font-bold leading-none text-left break-words z-0 ${fonts[fontStyle][index]}`}
           style={{
             position: "absolute",
             top: 0,
