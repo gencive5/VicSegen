@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 export default function Text() {
   const [displayText, setDisplayText] = useState("");
   const [fontStyle, setFontStyle] = useState("triple"); // State to track the selected font style
+  const [matrixEffect, setMatrixEffect] = useState(false); // State to track if Matrix effect is active
   const containerRef = useRef(null);
   const textRefs = [useRef(null), useRef(null), useRef(null)];
 
@@ -53,6 +54,28 @@ export default function Text() {
     return text;
   };
 
+  // Function to randomize a few letters in the text
+  const randomizeLetters = (text) => {
+    const textArray = text.split("");
+    const numberOfChanges = 1; // Change only 1-2 letters at a time
+    for (let i = 0; i < numberOfChanges; i++) {
+      const randomIndex = Math.floor(Math.random() * textArray.length);
+      textArray[randomIndex] = getRandomLetter();
+    }
+    return textArray.join("");
+  };
+
+  // Effect to handle the Matrix effect
+  useEffect(() => {
+    let interval;
+    if (matrixEffect) {
+      interval = setInterval(() => {
+        setDisplayText((prevText) => randomizeLetters(prevText));
+      }, 1000); // Change letters every 1000ms (1 second)
+    }
+    return () => clearInterval(interval); // Cleanup interval on unmount or effect change
+  }, [matrixEffect, fontStyle]); // Re-run effect when matrixEffect or fontStyle changes
+
   useEffect(() => {
     // Preload the expansion and set the final text
     const finalText = preloadExpansion();
@@ -94,6 +117,13 @@ export default function Text() {
           className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full"
         >
           Sm00ch
+        </button>
+        {/* Button to toggle Matrix effect */}
+        <button
+          onClick={() => setMatrixEffect((prev) => !prev)}
+          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
+        >
+          {matrixEffect ? "Stop Matrix" : "Start Matrix"}
         </button>
       </div>
 
