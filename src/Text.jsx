@@ -71,7 +71,7 @@ export default function Text() {
     if (matrixEffect) {
       interval = setInterval(() => {
         setDisplayText((prevText) => randomizeLetters(prevText));
-      }, 3000); // Change letters every 1000ms (1 second)
+      }, 2100); // Change letters every 1000ms (1 second)
     }
     return () => clearInterval(interval); // Cleanup interval on unmount or effect change
   }, [matrixEffect, fontStyle]); // Re-run effect when matrixEffect or fontStyle changes
