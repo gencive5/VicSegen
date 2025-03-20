@@ -94,28 +94,28 @@ export default function Text() {
 
   return (
     <div ref={containerRef} className="w-full h-full p-6 md:p-2 overflow-hidden relative pointer-events-auto">
-      <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 flex gap-4 z-50">
+      <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 flex flex-col sm:flex-row gap-2 sm:gap-4 z-50">
         <button
           onClick={() => setFontStyle("triple")}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full text-sm sm:text-base"
         >
           rat portfolio
         </button>
         <button
           onClick={() => setFontStyle("arial5")}
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full text-sm sm:text-base"
         >
           Arial5
         </button>
         <button
           onClick={() => setFontStyle("sm00ch")}
-          className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full"
+          className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full  text-sm sm:text-base"
         >
           Sm00ch
         </button>
         <button
           onClick={() => setMatrixEffect((prev) => !prev)}
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
+          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full text-sm sm:text-base"
         >
           {matrixEffect ? "Stop Matrix" : "Start Matrix"}
         </button>
