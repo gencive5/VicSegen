@@ -125,7 +125,7 @@ export default function Text() {
         <p
           key={index}
           ref={ref}
-          className={`text-[9vw] font-bold leading-none text-left break-words z-0 ${fonts[fontStyle][index]}`}
+          className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${fonts[fontStyle][index]}`}
           style={{
             position: "absolute",
             top: 0,
@@ -135,7 +135,6 @@ export default function Text() {
             whiteSpace: "pre-wrap",
             maxWidth: "100%",
             maxHeight: "100%",
-            fontSize: "9vw",
             lineHeight: 1,
             letterSpacing: "0",
           }}
