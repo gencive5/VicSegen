@@ -93,7 +93,10 @@ export default function Text() {
   }, [fontStyle]);
 
   return (
-    <div ref={containerRef} className="w-full h-full p-6 md:p-2 overflow-hidden relative pointer-events-auto">
+    <div
+      ref={containerRef}
+      className="w-full h-full overflow-hidden relative pointer-events-auto"
+    >
       <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 flex flex-col sm:flex-row gap-2 sm:gap-4 z-50">
         <button
           onClick={() => setFontStyle("triple")}
@@ -130,8 +133,10 @@ export default function Text() {
           } font-bold leading-none text-left break-words z-0 ${fonts[fontStyle][index]}`}
           style={{
             position: "absolute",
-            top: 0,
-            left: 0,
+            top: "1.6rem", // Add padding to the top
+            left: "1.6rem", // Add padding to the left
+            right: "1.6rem", // Add padding to the right
+            bottom: "1.6rem", // Add padding to the bottom
             wordBreak: "break-word",
             overflowWrap: "break-word",
             whiteSpace: "pre-wrap",
