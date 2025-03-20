@@ -109,7 +109,7 @@ export default function Text() {
         </button>
         <button
           onClick={() => setFontStyle("sm00ch")}
-          className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full  text-sm sm:text-base"
+          className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full text-sm sm:text-base"
         >
           Sm00ch
         </button>
@@ -125,7 +125,9 @@ export default function Text() {
         <p
           key={index}
           ref={ref}
-          className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${fonts[fontStyle][index]}`}
+          className={`${
+            fontStyle === "sm00ch" ? "text-[14vw] sm:text-[9vw]" : "text-[12vw] sm:text-[9vw]"
+          } font-bold leading-none text-left break-words z-0 ${fonts[fontStyle][index]}`}
           style={{
             position: "absolute",
             top: 0,
