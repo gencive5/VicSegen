@@ -4,6 +4,7 @@ export default function Text() {
   const [displayText, setDisplayText] = useState("");
   const [fontStyle, setFontStyle] = useState("triple");
   const [matrixEffect, setMatrixEffect] = useState(false);
+  const [fontsLoaded, setFontsLoaded] = useState(false);
   const containerRef = useRef(null);
   const textRefs = [useRef(null), useRef(null), useRef(null)];
 
@@ -69,15 +70,23 @@ export default function Text() {
   }, [matrixEffect, fontStyle]);
 
   useEffect(() => {
-    // Initial preload of the expansion
-    const finalText = preloadExpansion();
-    setDisplayText(finalText);
+    const loadFontsAndSetText = async () => {
+      try {
+        // Wait for fonts to load
+        await document.fonts.ready;
+        setFontsLoaded(true);
+      } catch (error) {
+        console.error("Error loading fonts:", error);
+        // Fallback: Set fontsLoaded to true even if fonts fail to load
+        setFontsLoaded(true);
+      }
 
-    // Force a recalculation after a short delay to account for font metrics
-    const timeoutId = setTimeout(() => {
-      const recalculatedText = preloadExpansion();
-      setDisplayText(recalculatedText);
-    }, 200); // Adjust the delay if needed
+      // Set the initial text
+      const finalText = preloadExpansion();
+      setDisplayText(finalText);
+    };
+
+    loadFontsAndSetText();
 
     const handleResize = () => {
       const newFinalText = preloadExpansion();
@@ -88,7 +97,6 @@ export default function Text() {
 
     return () => {
       window.removeEventListener("resize", handleResize);
-      clearTimeout(timeoutId);
     };
   }, [fontStyle]);
 
@@ -133,10 +141,10 @@ export default function Text() {
           } font-bold leading-none text-left break-words z-0 ${fonts[fontStyle][index]}`}
           style={{
             position: "absolute",
-            top: "1.6rem", // Add padding to the top
-            left: "1.6rem", // Add padding to the left
-            right: "1.6rem", // Add padding to the right
-            bottom: "1.6rem", // Add padding to the bottom
+            top: "1.6rem",
+            left: "1.6rem",
+            right: "1.6rem",
+            bottom: "1.6rem",
             wordBreak: "break-word",
             overflowWrap: "break-word",
             whiteSpace: "pre-wrap",
@@ -144,6 +152,7 @@ export default function Text() {
             maxHeight: "100%",
             lineHeight: 1,
             letterSpacing: "0",
+            visibility: fontsLoaded ? "visible" : "hidden", // Hide text until fonts are loaded
           }}
         >
           {displayText}
