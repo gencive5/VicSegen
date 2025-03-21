@@ -129,7 +129,7 @@ export default function Text() {
           key={index}
           ref={ref}
           className={`${
-            fontStyle === "sm00ch" ? "text-[14vw] sm:text-[9vw]" : "text-[12vw] sm:text-[9vw]"
+            fontStyle === "sm00ch" ? "text-[12vw] sm:text-[9vw]" : "text-[12vw] sm:text-[9vw]"
           } font-bold leading-none text-left break-words z-0 ${fonts[fontStyle][index]}`}
           style={{
             position: "absolute",
