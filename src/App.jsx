@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "./styles.css";
 import SharkScene from "./SharkScene";
-import TextPanel from "./TextPanel";
 import Text from "./Text"; // Import the new Text component
 import { useState } from "react";
 // import About from "./About"; // Commented out the About component
@@ -33,11 +32,7 @@ function Home() {
         {textConfig.text === "Hi" ? (
           <Text /> // Use the new Text component when "Hi" is selected
         ) : (
-          <TextPanel 
-            textConfig={textConfig} 
-            showLink={!!currentLink}
-            link={currentLink}        
-          />
+          <Text /> // Use the Text component for other cases
         )}
       </div>
 {/*
