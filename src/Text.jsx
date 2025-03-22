@@ -27,6 +27,9 @@ export default function Text() {
     if (fontStyle === "arial5") {
       const characters = ["5", "s", "S"];
       return characters[Math.floor(Math.random() * characters.length)];
+    } else if (fontStyle === "triple") {
+      const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+      return alphabet[Math.floor(Math.random() * alphabet.length)];
     } else {
       const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       return alphabet[Math.floor(Math.random() * alphabet.length)];
