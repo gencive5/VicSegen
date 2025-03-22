@@ -144,7 +144,7 @@ export default function Text() {
           className="custom-button bg-triple-button"
           style={{ width: "200px", height: "100px" }} // Adjust based on your PNG aspect ratio
         >
-         <span className="button-text" style={{ whiteSpace: "nowrap" }}>rat portfolio</span>
+         <span className="button-text" >rat portfolio</span>
          </button>
         <button
           onClick={handleSm00chClick}
