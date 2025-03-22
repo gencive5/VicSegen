@@ -5,7 +5,6 @@ export default function Text() {
   const [fontStyle, setFontStyle] = useState("arial5"); // Default font style is now "arial5"
   const [matrixEffect, setMatrixEffect] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  const [isMobile, setIsMobile] = useState(false); // State to check if the device is mobile
   const containerRef = useRef(null);
   const textRefs = [useRef(null), useRef(null), useRef(null)];
 
@@ -13,11 +12,6 @@ export default function Text() {
     triple: ["font-myriad", "font-mutlu", "font-sword"],
     arial5: ["font-arial5", "font-arial5", "font-arial5"],
     sm00ch: ["font-sm00ch", "font-sm00ch", "font-sm00ch"],
-  };
-
-  // Function to detect mobile devices
-  const checkIfMobile = () => {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   };
 
   const getRandomLetter = () => {
@@ -76,9 +70,6 @@ export default function Text() {
   }, [matrixEffect, fontStyle]);
 
   useEffect(() => {
-    // Check if the device is mobile
-    setIsMobile(checkIfMobile());
-
     const loadFontsAndSetText = async () => {
       try {
         // Wait for fonts to load
@@ -150,7 +141,7 @@ export default function Text() {
           key={index}
           ref={ref}
           className={`${
-            fontStyle === "sm00ch" ? "text-[14vw] sm:text-[9vw]" : "text-[12vw] sm:text-[9vw]"
+            fontStyle === "sm00ch" ? "text-[12vw] sm:text-[9vw]" : "text-[12vw] sm:text-[9vw]"
           } font-bold leading-none text-left break-words z-0 ${fonts[fontStyle][index]}`}
           style={{
             position: "absolute",
