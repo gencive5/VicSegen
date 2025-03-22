@@ -6,7 +6,7 @@ export default function Text() {
   const [matrixEffect, setMatrixEffect] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [preloadedSm00chText, setPreloadedSm00chText] = useState(""); // Store preloaded sm00ch text
+  const [isFirstSm00chRender, setIsFirstSm00chRender] = useState(true); // Track first render for sm00ch
   const containerRef = useRef(null);
   const textRefs = [useRef(null), useRef(null), useRef(null)];
 
@@ -21,29 +21,9 @@ export default function Text() {
     const userAgent = navigator.userAgent.toLowerCase();
     const mobile = /iphone|ipad|ipod|android|blackberry|windows phone/g.test(userAgent);
     setIsMobile(mobile);
-
-    // Preload sm00ch font and text expansion in the background (only for mobile)
-    if (mobile) {
-      preloadSm00ch();
-    }
   }, []);
 
-  const preloadSm00ch = async () => {
-    try {
-      // Preload sm00ch font
-      const font = new FontFace("font-sm00ch", "url(/path/to/sm00ch.woff2)");
-      await font.load();
-      document.fonts.add(font);
-
-      // Precalculate sm00ch text expansion
-      const text = preloadExpansion("sm00ch");
-      setPreloadedSm00chText(text); // Store preloaded text
-    } catch (error) {
-      console.error("Error preloading sm00ch:", error);
-    }
-  };
-
-  const getRandomLetter = (fontStyle) => {
+  const getRandomLetter = () => {
     if (fontStyle === "arial5") {
       const characters = ["5", "s", "S"];
       return characters[Math.floor(Math.random() * characters.length)];
@@ -63,10 +43,10 @@ export default function Text() {
     });
   };
 
-  const preloadExpansion = (fontStyle) => {
+  const preloadExpansion = () => {
     let text = "";
     while (true) {
-      const randomLetter = getRandomLetter(fontStyle);
+      const randomLetter = getRandomLetter();
       const newText = text + randomLetter;
 
       if (checkOverflow(newText)) {
@@ -83,7 +63,7 @@ export default function Text() {
     const numberOfChanges = 1;
     for (let i = 0; i < numberOfChanges; i++) {
       const randomIndex = Math.floor(Math.random() * textArray.length);
-      textArray[randomIndex] = getRandomLetter(fontStyle);
+      textArray[randomIndex] = getRandomLetter();
     }
     return textArray.join("");
   };
@@ -106,15 +86,23 @@ export default function Text() {
         setFontsLoaded(true);
 
         // Set the initial text after fonts are loaded
-        const finalText = preloadExpansion(fontStyle);
+        const finalText = preloadExpansion();
         setDisplayText(finalText);
+
+        // Force a re-render for sm00ch on mobile to simulate the second load
+        if (isMobile && fontStyle === "sm00ch" && isFirstSm00chRender) {
+          setTimeout(() => {
+            setDisplayText(preloadExpansion()); // Recalculate and set text
+            setIsFirstSm00chRender(false); // Mark first render as done
+          }, 100); // Short delay to ensure the first render completes
+        }
       } catch (error) {
         console.error("Error loading fonts:", error);
         // Fallback: Set fontsLoaded to true even if fonts fail to load
         setFontsLoaded(true);
 
         // Set the initial text even if fonts fail to load
-        const finalText = preloadExpansion(fontStyle);
+        const finalText = preloadExpansion();
         setDisplayText(finalText);
       }
     };
@@ -122,7 +110,7 @@ export default function Text() {
     loadFontsAndSetText();
 
     const handleResize = () => {
-      const newFinalText = preloadExpansion(fontStyle);
+      const newFinalText = preloadExpansion();
       setDisplayText(newFinalText);
     };
 
@@ -131,14 +119,11 @@ export default function Text() {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [fontStyle]);
+  }, [fontStyle, isMobile, isFirstSm00chRender]);
 
   const handleSm00chClick = () => {
     setFontStyle("sm00ch");
-    // Use preloaded text only on mobile
-    if (isMobile) {
-      setDisplayText(preloadedSm00chText);
-    }
+    setIsFirstSm00chRender(true); // Reset first render state when sm00ch is clicked
   };
 
   return (
