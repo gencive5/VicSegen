@@ -92,7 +92,42 @@ div{
  
 }
 
-.expanding-panel {
-  width: 100%;
-  height: 90vh;
+
+
+.custom-button {
+  background-size: contain;
+  background-repeat: no-repeat; 
+  background-position: center;
+  width: 100px; /* Adjust based on your image size */
+  height: 100px; /* Adjust based on your image size */
+  border: none;
+  cursor: pointer;
+  position: relative;
+}
+
+.bg-arial5-button {
+  background-image: url('/src/assets/button.png'); /* Path to your PNG */
+}
+
+.bg-triple-button {
+  background-image: url('/src/assets/button1.png'); /* Path to your PNG */
+}
+
+.bg-sm00ch-button {
+  background-image: url('/src/assets/button3.png'); /* Path to your PNG */
+}
+
+.button-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white; /* Adjust text color as needed */
+  font-size: 16px; /* Adjust text size as needed */
+  font-weight: bold;
+  padding: 4rem;
+}
+
+.bg-matrix-button {
+  color: rgb(0, 0, 0);
 }

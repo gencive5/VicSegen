@@ -131,30 +131,33 @@ export default function Text() {
       ref={containerRef}
       className="w-full h-full overflow-hidden relative pointer-events-auto"
     >
-      <div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 flex flex-col sm:flex-row gap-2 sm:gap-4 z-50"> 
+      <div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 flex flex-col sm:flex-row gap-2 sm:gap-4 z-50">
         <button
           onClick={() => setFontStyle("arial5")}
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full text-sm sm:text-base"
+          className="custom-button bg-arial5-button"
+          style={{ width: "200px", height: "100px" }} // Adjust based on your PNG aspect ratio
         >
-          Arial5
+          <span className="button-text">Arial5</span>
         </button>
         <button
           onClick={() => setFontStyle("triple")}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full text-sm sm:text-base"
+          className="custom-button bg-triple-button"
+          style={{ width: "200px", height: "100px" }} // Adjust based on your PNG aspect ratio
         >
-          rat portfolio
-        </button>
-       <button
-          onClick={handleSm00chClick} // Use custom handler for sm00ch
-          className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full text-sm sm:text-base"
+         <span className="button-text" style={{ whiteSpace: "nowrap" }}>rat portfolio</span>
+         </button>
+        <button
+          onClick={handleSm00chClick}
+          className="custom-button bg-sm00ch-button"
+          style={{ width: "200px", height: "100px" }} // Adjust based on your PNG aspect ratio
         >
-          Sm00ch
+          <span className="button-text">Sm00ch</span>
         </button>
         <button
           onClick={() => setMatrixEffect((prev) => !prev)}
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full text-sm sm:text-base"
+          className="custom-button bg-matrix-button"
         >
-          {matrixEffect ? "Stop Matrix" : "Start Matrix"}
+          <span>{matrixEffect ? "Stop Matrix" : "Start Matrix"}</span>
         </button>
       </div>
 
