@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./styles.css";
 import SharkScene from "./SharkScene";
-import Text from "./Text"; // Import the new Text component
+import Text from "./Text"; 
 import { useState } from "react";
 
 function Home() {
@@ -20,7 +20,7 @@ function Home() {
 
   return (
     <div className="relative w-screen h-screen overflow-hidden overscroll-none">
-      <div className="expanding-panel">
+    <div className="w-full h-[70vh] md:h-[90vh]">
         {textConfig.text === "Hi" ? (
           <Text /> // Use the new Text component when "Hi" is selected
         ) : (
