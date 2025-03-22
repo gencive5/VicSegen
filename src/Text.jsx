@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 
 export default function Text() {
   const [displayText, setDisplayText] = useState("");
-  const [fontStyle, setFontStyle] = useState("arial5"); // Default font style is now "arial5"
+  const [fontStyle, setFontStyle] = useState("arial5"); // Default font style is "arial5"
   const [matrixEffect, setMatrixEffect] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const containerRef = useRef(null);
@@ -72,77 +72,55 @@ export default function Text() {
   useEffect(() => {
     const loadFontsAndSetText = async () => {
       try {
-        // Wait for fonts to load
         await document.fonts.ready;
         setFontsLoaded(true);
 
-        // Set the initial text after fonts are loaded
-        const finalText = preloadExpansion();
+        const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+        let finalText = preloadExpansion();
+
+        if (isMobile && fontStyle === "sm00ch") {
+          finalText = preloadExpansion();
+        }
+
         setDisplayText(finalText);
       } catch (error) {
         console.error("Error loading fonts:", error);
-        // Fallback: Set fontsLoaded to true even if fonts fail to load
         setFontsLoaded(true);
-
-        // Set the initial text even if fonts fail to load
-        const finalText = preloadExpansion();
-        setDisplayText(finalText);
+        setDisplayText(preloadExpansion());
       }
     };
 
     loadFontsAndSetText();
 
     const handleResize = () => {
-      const newFinalText = preloadExpansion();
-      setDisplayText(newFinalText);
+      setDisplayText(preloadExpansion());
     };
 
     window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, [fontStyle]);
 
   return (
-    <div
-      ref={containerRef}
-      className="w-full h-full overflow-hidden relative pointer-events-auto"
-    >
-      <div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 flex flex-col sm:flex-row gap-2 sm:gap-4 z-50"> 
-        <button
-          onClick={() => setFontStyle("arial5")}
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full text-sm sm:text-base"
-        >
+    <div ref={containerRef} className="w-full h-full overflow-hidden relative pointer-events-auto">
+      <div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 flex flex-col sm:flex-row gap-2 sm:gap-4 z-50">
+        <button onClick={() => setFontStyle("arial5")} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full text-sm sm:text-base">
           Arial5
         </button>
-        <button
-          onClick={() => setFontStyle("triple")}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full text-sm sm:text-base"
-        >
+        <button onClick={() => setFontStyle("triple")} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full text-sm sm:text-base">
           rat portfolio
         </button>
-       <button
-          onClick={() => setFontStyle("sm00ch")}
-          className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full text-sm sm:text-base"
-        >
+        <button onClick={() => setFontStyle("sm00ch")} className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full text-sm sm:text-base">
           Sm00ch
         </button>
-        <button
-          onClick={() => setMatrixEffect((prev) => !prev)}
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full text-sm sm:text-base"
-        >
+        <button onClick={() => setMatrixEffect((prev) => !prev)} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full text-sm sm:text-base">
           {matrixEffect ? "Stop Matrix" : "Start Matrix"}
         </button>
       </div>
-
       {textRefs.map((ref, index) => (
         <p
           key={index}
           ref={ref}
-          className={`${
-            fontStyle === "sm00ch" ? "text-[14vw] sm:text-[9vw]" : "text-[12vw] sm:text-[9vw]"
-          } font-bold leading-none text-left break-words z-0 ${fonts[fontStyle][index]}`} 
+          className={`${fontStyle === "sm00ch" ? "text-[14vw] sm:text-[9vw]" : "text-[12vw] sm:text-[9vw]"} font-bold leading-none text-left break-words z-0 ${fonts[fontStyle][index]}`}
           style={{
             position: "absolute",
             top: "1.6rem",
@@ -156,7 +134,7 @@ export default function Text() {
             maxHeight: "100%",
             lineHeight: 1,
             letterSpacing: "0",
-            visibility: fontsLoaded ? "visible" : "hidden", // Hide text until fonts are loaded
+            visibility: fontsLoaded ? "visible" : "hidden",
           }}
         >
           {displayText}
