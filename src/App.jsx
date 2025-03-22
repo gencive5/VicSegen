@@ -20,7 +20,7 @@ function Home() {
 
   return (
     <div className="relative w-screen h-screen overflow-hidden overscroll-none">
-    <div className="w-full h-[80vh] md:h-[90vh]">
+    <div className="w-full h-[85vh] md:h-[90vh]">
         {textConfig.text === "Hi" ? (
           <Text /> // Use the new Text component when "Hi" is selected
         ) : (
