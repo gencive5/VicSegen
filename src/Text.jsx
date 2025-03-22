@@ -131,24 +131,24 @@ export default function Text() {
       ref={containerRef}
       className="w-full h-full overflow-hidden relative pointer-events-auto"
     >
-      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex flex-col gap-[-8px] z-50 sm:flex-row sm:bottom-5 sm:gap-4">
+      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex flex-col z-50 sm:flex-row sm:bottom-5 sm:gap-4">
         <button
           onClick={() => setFontStyle("arial5")}
-          className="custom-button bg-arial5-button"
+          className="custom-button bg-arial5-button mb-[-8px]"
           style={{ width: "200px", height: "100px" }} // Adjust based on your PNG aspect ratio
         >
           <span className="button-text">gencive5</span>
         </button>
         <button
           onClick={() => setFontStyle("triple")}
-          className="custom-button bg-triple-button"
+          className="custom-button bg-triple-button mb-[-8px]"
           style={{ width: "200px", height: "100px" }} // Adjust based on your PNG aspect ratio
         >
          <span className="button-text" >rat portfolio</span>
          </button>
         <button
           onClick={handleSm00chClick}
-          className="custom-button bg-sm00ch-button"
+          className="custom-button bg-sm00ch-button mb-[-8px]"
           style={{ width: "200px", height: "100px" }} // Adjust based on your PNG aspect ratio
         >
           <span className="button-text">Sm00ch</span>
