@@ -6,7 +6,7 @@ export default function Text() {
   const [matrixEffect, setMatrixEffect] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [isFirstSm00chClick, setIsFirstSm00chClick] = useState(true); // Track first sm00ch click
+  const [preloadedSm00chText, setPreloadedSm00chText] = useState(""); // Store preloaded sm00ch text
   const containerRef = useRef(null);
   const textRefs = [useRef(null), useRef(null), useRef(null)];
 
@@ -21,9 +21,29 @@ export default function Text() {
     const userAgent = navigator.userAgent.toLowerCase();
     const mobile = /iphone|ipad|ipod|android|blackberry|windows phone/g.test(userAgent);
     setIsMobile(mobile);
+
+    // Preload sm00ch font and text expansion in the background (only for mobile)
+    if (mobile) {
+      preloadSm00ch();
+    }
   }, []);
 
-  const getRandomLetter = () => {
+  const preloadSm00ch = async () => {
+    try {
+      // Preload sm00ch font
+      const font = new FontFace("font-sm00ch", "url(/path/to/sm00ch.woff2)");
+      await font.load();
+      document.fonts.add(font);
+
+      // Precalculate sm00ch text expansion
+      const text = preloadExpansion("sm00ch");
+      setPreloadedSm00chText(text); // Store preloaded text
+    } catch (error) {
+      console.error("Error preloading sm00ch:", error);
+    }
+  };
+
+  const getRandomLetter = (fontStyle) => {
     if (fontStyle === "arial5") {
       const characters = ["5", "s", "S"];
       return characters[Math.floor(Math.random() * characters.length)];
@@ -43,10 +63,10 @@ export default function Text() {
     });
   };
 
-  const preloadExpansion = () => {
+  const preloadExpansion = (fontStyle) => {
     let text = "";
     while (true) {
-      const randomLetter = getRandomLetter();
+      const randomLetter = getRandomLetter(fontStyle);
       const newText = text + randomLetter;
 
       if (checkOverflow(newText)) {
@@ -63,7 +83,7 @@ export default function Text() {
     const numberOfChanges = 1;
     for (let i = 0; i < numberOfChanges; i++) {
       const randomIndex = Math.floor(Math.random() * textArray.length);
-      textArray[randomIndex] = getRandomLetter();
+      textArray[randomIndex] = getRandomLetter(fontStyle);
     }
     return textArray.join("");
   };
@@ -81,35 +101,20 @@ export default function Text() {
   useEffect(() => {
     const loadFontsAndSetText = async () => {
       try {
-        // Preload sm00ch font on mobile
-        if (isMobile && fontStyle === "sm00ch") {
-          const font = new FontFace("font-sm00ch", "url(/path/to/sm00ch.woff2)");
-          await font.load();
-          document.fonts.add(font);
-        }
-
         // Wait for fonts to load
         await document.fonts.ready;
         setFontsLoaded(true);
 
         // Set the initial text after fonts are loaded
-        const finalText = preloadExpansion();
+        const finalText = preloadExpansion(fontStyle);
         setDisplayText(finalText);
-
-        // Force a re-render on first sm00ch click
-        if (isMobile && fontStyle === "sm00ch" && isFirstSm00chClick) {
-          setTimeout(() => {
-            setDisplayText(preloadExpansion()); // Recalculate and set text
-            setIsFirstSm00chClick(false); // Mark first click as done
-          }, 100); // Short delay to ensure font is applied
-        }
       } catch (error) {
         console.error("Error loading fonts:", error);
         // Fallback: Set fontsLoaded to true even if fonts fail to load
         setFontsLoaded(true);
 
         // Set the initial text even if fonts fail to load
-        const finalText = preloadExpansion();
+        const finalText = preloadExpansion(fontStyle);
         setDisplayText(finalText);
       }
     };
@@ -117,7 +122,7 @@ export default function Text() {
     loadFontsAndSetText();
 
     const handleResize = () => {
-      const newFinalText = preloadExpansion();
+      const newFinalText = preloadExpansion(fontStyle);
       setDisplayText(newFinalText);
     };
 
@@ -126,12 +131,13 @@ export default function Text() {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [fontStyle, isMobile, isFirstSm00chClick]);
+  }, [fontStyle]);
 
   const handleSm00chClick = () => {
     setFontStyle("sm00ch");
-    if (isFirstSm00chClick) {
-      setIsFirstSm00chClick(false); // Mark first click as done
+    // Use preloaded text only on mobile
+    if (isMobile) {
+      setDisplayText(preloadedSm00chText);
     }
   };
 
