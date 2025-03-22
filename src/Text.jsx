@@ -73,7 +73,7 @@ export default function Text() {
     if (matrixEffect) {
       interval = setInterval(() => {
         setDisplayText((prevText) => randomizeLetters(prevText));
-      }, 2100);
+      }, 1600);
     }
     return () => clearInterval(interval);
   }, [matrixEffect, fontStyle]);
@@ -137,7 +137,7 @@ export default function Text() {
           className="custom-button bg-arial5-button"
           style={{ width: "200px", height: "100px" }} // Adjust based on your PNG aspect ratio
         >
-          <span className="button-text">Arial5</span>
+          <span className="button-text">gencive5</span>
         </button>
         <button
           onClick={() => setFontStyle("triple")}
