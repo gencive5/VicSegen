@@ -6,6 +6,9 @@ export default function Text() {
   const [matrixEffect, setMatrixEffect] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [sm00chPreloadedText, setSm00chPreloadedText] = useState(""); // Store precomputed Sm00ch text
+  const [isLoading, setIsLoading] = useState(true); // Manage loading state
+
   const containerRef = useRef(null);
   const textRefs = [useRef(null), useRef(null), useRef(null)];
 
@@ -51,6 +54,21 @@ export default function Text() {
   };
 
   useEffect(() => {
+    const preloadSm00chText = async () => {
+      await document.fonts.ready;
+      setFontsLoaded(true);
+
+      const sm00chText = preloadExpansion(); // Generate preloaded Sm00ch text
+      setSm00chPreloadedText(sm00chText);
+
+      setDisplayText(preloadExpansion()); // Set the initial normal text
+      setIsLoading(false); // Preloading complete
+    };
+
+    preloadSm00chText();
+  }, []);
+
+  useEffect(() => {
     let interval;
     if (matrixEffect) {
       interval = setInterval(() => {
@@ -64,20 +82,12 @@ export default function Text() {
     return () => clearInterval(interval);
   }, [matrixEffect]);
 
-  useEffect(() => {
-    const loadFontsAndSetText = async () => {
-      await document.fonts.ready;
-      setFontsLoaded(true);
-      setDisplayText(preloadExpansion());
-    };
-
-    loadFontsAndSetText();
-    const resizeHandler = () => setDisplayText(preloadExpansion());
-    window.addEventListener("resize", resizeHandler);
-    return () => window.removeEventListener("resize", resizeHandler);
-  }, [fontStyle]);
-
-  const handleSm00chClick = () => setFontStyle("sm00ch");
+  const handleSm00chClick = () => {
+    if (!isLoading) {
+      setFontStyle("sm00ch");
+      setDisplayText(sm00chPreloadedText); // Use the precomputed Sm00ch text
+    }
+  };
 
   return (
     <div ref={containerRef} className="w-full h-full overflow-hidden relative pointer-events-auto">
@@ -111,7 +121,7 @@ export default function Text() {
             maxHeight: "100%",
             lineHeight: 1,
             letterSpacing: "0",
-            visibility: fontsLoaded ? "visible" : "visible",
+            visibility: fontsLoaded ? "visible" : "hidden",
           }}>
           {displayText}
         </p>
