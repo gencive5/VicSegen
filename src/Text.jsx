@@ -134,7 +134,7 @@ export default function Text() {
       ref={containerRef}
       className="w-full h-full overflow-hidden relative pointer-events-auto"
     >
-      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex flex-col z-50 sm:flex-row sm:bottom-5 sm:gap-4">
+      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex flex-row gap-1 z-50 sm:bottom-5 sm:gap-4">
         <button
           onClick={() => setFontStyle("arial5")}
           className="custom-button bg-arial5-button mb-[-8px]"
