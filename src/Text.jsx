@@ -125,16 +125,22 @@ export default function Text() {
 
   const handleSm00chClick = () => {
     if (isMobile) {
-      // Generate random letters for each line based on the number of lines from arial5
-      const newText = Array.from({ length: arial5Lines }, () =>
-        Array.from({ length: 50 }, () => {
-          const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-          return alphabet[Math.floor(Math.random() * alphabet.length)];
-        }).join("")
-      ).join("");
+      // Clear the previous text immediately
+      setDisplayText("");
 
-      // Update the display text
-      setDisplayText(newText);
+      // Force a re-render to ensure the sm00ch font is applied
+      setTimeout(() => {
+        // Generate random letters for each line without gaps
+        const sm00chText = Array.from({ length: arial5Lines }, () =>
+          Array.from({ length: 50 }, () => {
+            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            return alphabet[Math.floor(Math.random() * alphabet.length)];
+          }).join("")
+        ).join(""); // Remove "\n" to avoid gaps
+
+        setDisplayText(sm00chText);
+        setFontsLoaded(true);
+      }, 50); // Small delay to allow the DOM to update
     }
     setFontStyle("sm00ch");
   };
@@ -157,10 +163,7 @@ export default function Text() {
       </div>
 
       {textRefs.map((ref, index) => (
-        <p
-          key={`${fontStyle}-${index}`} // Force re-render on font change
-          ref={ref}
-          className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${fonts[fontStyle][index]}`}
+        <p key={index} ref={ref} className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${fonts[fontStyle][index]}`}
           style={{
             position: "absolute",
             top: "1.6rem",
@@ -175,8 +178,7 @@ export default function Text() {
             lineHeight: 1,
             letterSpacing: "0",
             visibility: fontsLoaded ? "visible" : "hidden",
-          }}
-        >
+          }}>
           {displayText}
         </p>
       ))}
