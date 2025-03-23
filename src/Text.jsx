@@ -132,7 +132,10 @@ export default function Text() {
       setTimeout(() => {
         // Generate random letters for each line
         const sm00chText = Array.from({ length: arial5Lines }, () =>
-          Array.from({ length: 50 }, () => getRandomLetter()).join("")
+          Array.from({ length: 50 }, () => {
+            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            return alphabet[Math.floor(Math.random() * alphabet.length)];
+          }).join("")
         ).join("\n");
 
         setDisplayText(sm00chText);
