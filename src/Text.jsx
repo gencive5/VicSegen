@@ -117,9 +117,9 @@ export default function Text() {
         <button onClick={handleSm00chClick} className="custom-button bg-sm00ch-button" style={{ width: "200px", height: "100px" }}>
           <span className="button-text">Sm00ch</span>
         </button>
-        <button onClick={() => setMatrixEffect((prev) => !prev)} className="custom-button bg-matrix-button">
+        {/* <button onClick={() => setMatrixEffect((prev) => !prev)} className="custom-button bg-matrix-button">
           <span>{matrixEffect ? "Stop Matrix" : "Start Matrix"}</span>
-        </button>
+        </button> */}
       </div>
 
       {textRefs.map((ref, index) => (
