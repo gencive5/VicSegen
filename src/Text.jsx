@@ -66,32 +66,18 @@ export default function Text() {
 
   useEffect(() => {
     const loadFontsAndSetText = async () => {
-      await document.fonts.ready; // Ensure fonts are fully loaded
+      await document.fonts.ready;
       setFontsLoaded(true);
-      requestAnimationFrame(() => {
-        setDisplayText(preloadExpansion());
-      });
+      setDisplayText(preloadExpansion());
     };
 
     loadFontsAndSetText();
-
-    const resizeHandler = () => {
-      requestAnimationFrame(() => {
-        setDisplayText(preloadExpansion());
-      });
-    };
-
+    const resizeHandler = () => setDisplayText(preloadExpansion());
     window.addEventListener("resize", resizeHandler);
     return () => window.removeEventListener("resize", resizeHandler);
   }, [fontStyle]);
 
-  const handleSm00chClick = async () => {
-    setFontStyle("sm00ch");
-    await document.fonts.ready; // Wait for fonts to load before updating text
-    requestAnimationFrame(() => {
-      setDisplayText(preloadExpansion());
-    });
-  };
+  const handleSm00chClick = () => setFontStyle("sm00ch");
 
   return (
     <div ref={containerRef} className="w-full h-full overflow-hidden relative pointer-events-auto">
@@ -125,7 +111,7 @@ export default function Text() {
             maxHeight: "100%",
             lineHeight: 1,
             letterSpacing: "0",
-            visibility: fontsLoaded ? "visible" : "hidden",
+            visibility: fontsLoaded ? "visible" : "visible",
           }}>
           {displayText}
         </p>
