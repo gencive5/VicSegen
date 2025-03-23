@@ -125,7 +125,7 @@ export default function Text() {
 
   const handleSm00chClick = () => {
     if (isMobile) {
-      // Clear the previous text
+      // Clear the previous text immediately
       setDisplayText("");
 
       // Force a re-render to ensure the sm00ch font is applied
