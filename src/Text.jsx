@@ -130,13 +130,13 @@ export default function Text() {
 
       // Force a re-render to ensure the sm00ch font is applied
       setTimeout(() => {
-        // Generate random letters for each line
+        // Generate random letters for each line without gaps
         const sm00chText = Array.from({ length: arial5Lines }, () =>
           Array.from({ length: 50 }, () => {
             const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             return alphabet[Math.floor(Math.random() * alphabet.length)];
           }).join("")
-        ).join("\n");
+        ).join(""); // Remove "\n" to avoid gaps
 
         setDisplayText(sm00chText);
         setFontsLoaded(true);
