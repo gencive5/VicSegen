@@ -130,7 +130,7 @@ export default function Text() {
 
       // Force a re-render to ensure the sm00ch font is applied
       setTimeout(() => {
-        // On mobile, use the same number of lines as arial5 for sm00ch
+        // Generate random letters for each line
         const sm00chText = Array.from({ length: arial5Lines }, () =>
           Array.from({ length: 50 }, () => getRandomLetter()).join("")
         ).join("\n");
