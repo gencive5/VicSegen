@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from "react";
 
 export default function Text() {
   const [displayText, setDisplayText] = useState("Loading...");
-  const [sm00chText, setSm00chText] = useState(""); // Separate state for sm00ch text
   const [fontStyle, setFontStyle] = useState("arial5");
   const [matrixEffect, setMatrixEffect] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -126,16 +125,22 @@ export default function Text() {
 
   const handleSm00chClick = () => {
     if (isMobile) {
-      // Generate random letters for each line based on the number of lines from arial5
-      const newSm00chText = Array.from({ length: arial5Lines }, () =>
-        Array.from({ length: 50 }, () => {
-          const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-          return alphabet[Math.floor(Math.random() * alphabet.length)];
-        }).join("")
-      ).join("");
+      // Clear the previous text immediately
+      setDisplayText("");
 
-      // Update the sm00ch text state
-      setSm00chText(newSm00chText);
+      // Force a re-render to ensure the sm00ch font is applied
+      setTimeout(() => {
+        // Generate random letters for each line without gaps
+        const sm00chText = Array.from({ length: arial5Lines }, () =>
+          Array.from({ length: 50 }, () => {
+            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            return alphabet[Math.floor(Math.random() * alphabet.length)];
+          }).join("")
+        ).join(""); // Remove "\n" to avoid gaps
+
+        setDisplayText(sm00chText);
+        setFontsLoaded(true);
+      }, 50); // Small delay to allow the DOM to update
     }
     setFontStyle("sm00ch");
   };
@@ -174,7 +179,7 @@ export default function Text() {
             letterSpacing: "0",
             visibility: fontsLoaded ? "visible" : "hidden",
           }}>
-          {fontStyle === "sm00ch" ? sm00chText : displayText}
+          {displayText}
         </p>
       ))}
     </div>
