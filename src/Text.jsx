@@ -125,13 +125,19 @@ export default function Text() {
 
   const handleSm00chClick = () => {
     if (isMobile) {
-      // On mobile, use the same number of lines as arial5 for sm00ch
-      const sm00chText = Array.from({ length: arial5Lines }, () =>
-        Array.from({ length: 50 }, () => getRandomLetter()).join("")
-      ).join("\n");
+      // Clear the previous text
+      setDisplayText("");
 
-      setDisplayText(sm00chText);
-      setFontsLoaded(true);
+      // Force a re-render to ensure the sm00ch font is applied
+      setTimeout(() => {
+        // On mobile, use the same number of lines as arial5 for sm00ch
+        const sm00chText = Array.from({ length: arial5Lines }, () =>
+          Array.from({ length: 50 }, () => getRandomLetter()).join("")
+        ).join("\n");
+
+        setDisplayText(sm00chText);
+        setFontsLoaded(true);
+      }, 50); // Small delay to allow the DOM to update
     }
     setFontStyle("sm00ch");
   };
