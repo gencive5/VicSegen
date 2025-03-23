@@ -6,6 +6,7 @@ export default function Text() {
   const [matrixEffect, setMatrixEffect] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [arial5Lines, setArial5Lines] = useState(0); // Store number of lines for arial5
   const containerRef = useRef(null);
   const textRefs = [useRef(null), useRef(null), useRef(null)];
 
@@ -71,6 +72,22 @@ export default function Text() {
     return text;
   };
 
+  // Calculate the number of lines for arial5
+  const calculateArial5Lines = () => {
+    if (!containerRef.current || !textRefs[0].current) return 0;
+
+    // Temporarily set the font to arial5 and calculate the number of lines
+    textRefs[0].current.style.fontFamily = "arial5";
+    textRefs[0].current.textContent = displayText;
+
+    const lineHeight = parseFloat(window.getComputedStyle(textRefs[0].current).lineHeight);
+    const containerHeight = containerRef.current.clientHeight;
+    const textHeight = textRefs[0].current.scrollHeight;
+
+    const lines = Math.floor(textHeight / lineHeight);
+    return lines;
+  };
+
   useEffect(() => {
     let interval;
     if (matrixEffect) {
@@ -89,17 +106,31 @@ export default function Text() {
     const loadFontsAndSetText = async () => {
       await document.fonts.ready;
       setFontsLoaded(true);
-      setDisplayText(preloadExpansion());
+
+      // Preload arial5 text and calculate the number of lines
+      const arial5Text = preloadExpansion();
+      setDisplayText(arial5Text);
+
+      if (isMobile) {
+        const lines = calculateArial5Lines();
+        setArial5Lines(lines);
+      }
     };
 
     loadFontsAndSetText();
     const resizeHandler = () => setDisplayText(preloadExpansion());
     window.addEventListener("resize", resizeHandler);
     return () => window.removeEventListener("resize", resizeHandler);
-  }, [fontStyle]);
+  }, [fontStyle, isMobile]);
 
   const handleSm00chClick = () => {
     if (isMobile) {
+      // On mobile, use the same number of lines as arial5 for sm00ch
+      const sm00chText = Array.from({ length: arial5Lines }, () =>
+        Array.from({ length: 50 }, () => getRandomLetter()).join("")
+      ).join("\n");
+
+      setDisplayText(sm00chText);
       setFontsLoaded(true);
     }
     setFontStyle("sm00ch");
