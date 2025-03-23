@@ -77,6 +77,14 @@ export default function Text() {
     return () => window.removeEventListener("resize", resizeHandler);
   }, [fontStyle]);
 
+  useEffect(() => {
+    if (fontsLoaded) {
+      // Force a re-render by toggling visibility
+      setDisplayText("");
+      setTimeout(() => setDisplayText(preloadExpansion()), 50);
+    }
+  }, [fontsLoaded, fontStyle]);
+
   const handleSm00chClick = () => setFontStyle("sm00ch");
 
   return (
@@ -88,7 +96,7 @@ export default function Text() {
         <button onClick={() => setFontStyle("triple")} className="custom-button bg-triple-button" style={{ width: "200px", height: "100px" }}>
           <span className="button-text">rat portfolio</span>
         </button>
-        <button onClick={handleSm00chClick} className="custom-button bg-sm00ch-button" style={{ width: "200px", height: "100px" }}>
+        <button onClick={handleSm00chClick} onTouchStart={handleSm00chClick} className="custom-button bg-sm00ch-button" style={{ width: "200px", height: "100px" }}>
           <span className="button-text">Sm00ch</span>
         </button>
         <button onClick={() => setMatrixEffect((prev) => !prev)} className="custom-button bg-matrix-button">
