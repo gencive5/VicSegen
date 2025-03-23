@@ -15,10 +15,31 @@ export default function Text() {
     sm00ch: ["font-sm00ch", "font-sm00ch", "font-sm00ch"],
   };
 
+  // Detect if the user is on a mobile device
   useEffect(() => {
     const mobileCheck = /iphone|ipad|ipod|android|blackberry|windows phone/i.test(navigator.userAgent);
     setIsMobile(mobileCheck);
   }, []);
+
+  // Preload the sm00ch font only on mobile devices
+  useEffect(() => {
+    if (isMobile) {
+      const preloadFont = async () => {
+        try {
+          const font = new FontFace("sm00ch", "url(/path/to/sm00ch-font.woff2)", {
+            style: "normal",
+            weight: "400",
+          });
+          await font.load();
+          document.fonts.add(font);
+          console.log("sm00ch font preloaded on mobile");
+        } catch (error) {
+          console.error("Failed to preload sm00ch font:", error);
+        }
+      };
+      preloadFont();
+    }
+  }, [isMobile]);
 
   const getRandomLetter = () => {
     if (fontStyle === "arial5") {
@@ -77,7 +98,12 @@ export default function Text() {
     return () => window.removeEventListener("resize", resizeHandler);
   }, [fontStyle]);
 
-  const handleSm00chClick = () => setFontStyle("sm00ch");
+  const handleSm00chClick = () => {
+    if (isMobile) {
+      setFontsLoaded(true);
+    }
+    setFontStyle("sm00ch");
+  };
 
   return (
     <div ref={containerRef} className="w-full h-full overflow-hidden relative pointer-events-auto">
@@ -111,7 +137,7 @@ export default function Text() {
             maxHeight: "100%",
             lineHeight: 1,
             letterSpacing: "0",
-            visibility: fontsLoaded ? "visible" : "visible",
+            visibility: fontsLoaded ? "visible" : "hidden",
           }}>
           {displayText}
         </p>
