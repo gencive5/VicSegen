@@ -43,8 +43,15 @@ export default function Text() {
   }, [isMobile]);
 
   const getRandomLetter = () => {
-    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    return alphabet[Math.floor(Math.random() * alphabet.length)];
+    if (fontStyle === "arial5") {
+      return ["5", "s", "S"][Math.floor(Math.random() * 3)];
+    } else if (fontStyle === "triple") {
+      const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+      return alphabet[Math.floor(Math.random() * alphabet.length)];
+    } else {
+      const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      return alphabet[Math.floor(Math.random() * alphabet.length)];
+    }
   };
 
   const checkOverflow = (text) => {
@@ -118,15 +125,24 @@ export default function Text() {
 
   const handleSm00chClick = () => {
     if (isMobile) {
-      // Generate random letters for each line based on the number of lines from arial5
-      const sm00chText = Array.from({ length: arial5Lines }, () =>
-        Array.from({ length: 50 }, () => getRandomLetter()).join("")
-      ).join("");
+      // Clear the previous text immediately
+      setDisplayText("");
 
-      // Update the display text and font style
-      setDisplayText(sm00chText);
-      setFontStyle("sm00ch");
+      // Force a re-render to ensure the sm00ch font is applied
+      setTimeout(() => {
+        // Generate random letters for each line without gaps
+        const sm00chText = Array.from({ length: arial5Lines }, () =>
+          Array.from({ length: 50 }, () => {
+            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            return alphabet[Math.floor(Math.random() * alphabet.length)];
+          }).join("")
+        ).join(""); // Remove "\n" to avoid gaps
+
+        setDisplayText(sm00chText);
+        setFontsLoaded(true);
+      }, 50); // Small delay to allow the DOM to update
     }
+    setFontStyle("sm00ch");
   };
 
   return (
