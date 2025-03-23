@@ -15,23 +15,6 @@ export default function Text() {
     sm00ch: ["font-sm00ch", "font-sm00ch", "font-sm00ch"],
   };
 
-  // Preload the sm00ch font
-  useEffect(() => {
-    const preloadFont = async () => {
-      const font = new FontFace("sm00ch", "url(/path/to/sm00ch-font.woff2)", {
-        style: "normal",
-        weight: "400",
-      });
-      await font.load();
-      document.fonts.add(font);
-      console.log("sm00ch font preloaded");
-    };
-
-    preloadFont().catch((error) => {
-      console.error("Failed to preload sm00ch font:", error);
-    });
-  }, []);
-
   useEffect(() => {
     const mobileCheck = /iphone|ipad|ipod|android|blackberry|windows phone/i.test(navigator.userAgent);
     setIsMobile(mobileCheck);
