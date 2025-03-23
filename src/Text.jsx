@@ -6,7 +6,7 @@ export default function Text() {
   const [matrixEffect, setMatrixEffect] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [isSm00chFontLoaded, setIsSm00chFontLoaded] = useState(false); // Track sm00ch font loading
+  const [isFirstSm00chRender, setIsFirstSm00chRender] = useState(true); // Track first render for sm00ch
   const containerRef = useRef(null);
   const textRefs = [useRef(null), useRef(null), useRef(null)];
 
@@ -21,23 +21,7 @@ export default function Text() {
     const userAgent = navigator.userAgent.toLowerCase();
     const mobile = /iphone|ipad|ipod|android|blackberry|windows phone/g.test(userAgent);
     setIsMobile(mobile);
-
-    // Preload sm00ch font on mobile
-    if (mobile) {
-      preloadSm00chFont();
-    }
   }, []);
-
-  const preloadSm00chFont = async () => {
-    try {
-      const font = new FontFace("font-sm00ch", "url(/path/to/sm00ch.woff2)");
-      await font.load();
-      document.fonts.add(font);
-      setIsSm00chFontLoaded(true); // Mark font as loaded
-    } catch (error) {
-      console.error("Error preloading sm00ch font:", error);
-    }
-  };
 
   const getRandomLetter = () => {
     if (fontStyle === "arial5") {
@@ -108,10 +92,11 @@ export default function Text() {
         const finalText = preloadExpansion();
         setDisplayText(finalText);
 
-        // Force a re-render for sm00ch on mobile after font is loaded
-        if (isMobile && fontStyle === "sm00ch" && isSm00chFontLoaded) {
+        // Force a re-render for sm00ch on mobile to simulate the second load
+        if (isMobile && fontStyle === "sm00ch" && isFirstSm00chRender) {
           setTimeout(() => {
             setDisplayText(preloadExpansion()); // Recalculate and set text
+            setIsFirstSm00chRender(false); // Mark first render as done
           }, 100); // Short delay to ensure the first render completes
         }
       } catch (error) {
@@ -137,13 +122,11 @@ export default function Text() {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [fontStyle, isMobile, isSm00chFontLoaded]);
+  }, [fontStyle, isMobile, isFirstSm00chRender]);
 
   const handleSm00chClick = () => {
     setFontStyle("sm00ch");
-    if (isMobile && !isSm00chFontLoaded) {
-      preloadSm00chFont(); // Ensure font is loaded if not already
-    }
+    setIsFirstSm00chRender(true); // Reset first render state when sm00ch is clicked
   };
 
   return (
@@ -164,8 +147,8 @@ export default function Text() {
           className="custom-button bg-triple-button mb-[-8px]"
           style={{ width: "200px", height: "100px" }} // Adjust based on your PNG aspect ratio
         >
-          <span className="button-text">rat portfolio</span>
-        </button>
+         <span className="button-text" >rat portfolio</span>
+         </button>
         <button
           onClick={handleSm00chClick}
           className="custom-button bg-sm00ch-button mb-[-8px]"
