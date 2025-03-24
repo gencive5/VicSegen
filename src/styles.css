@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+/* Ensure proper viewport height calculation on mobile */
+@supports (height: 100dvh) {
+  .min-h-screen {
+    min-height: 100dvh;
+  }
+}
+
+/* Fallback for browsers that don't support dvh */
+@supports not (height: 100dvh) {
+  .min-h-screen {
+    min-height: 100vh;
+  }
+}
+
 
 @font-face {
   font-family: 'sm00ch';
