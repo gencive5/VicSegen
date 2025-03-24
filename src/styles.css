@@ -14,6 +14,19 @@
   }
 }
 
+/* Mobile-safe viewport units */
+@supports (height: 100svh) {
+  .h-screen {
+    height: 100svh;
+  }
+  .h-\[calc\(100svh-80px\)\] {
+    height: calc(100svh - 80px);
+  }
+  .max-h-\[80svh\] {
+    max-height: 80svh;
+  }
+}
+
 
 @font-face {
   font-family: 'sm00ch';
