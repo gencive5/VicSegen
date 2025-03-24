@@ -6,14 +6,14 @@ export default function Text() {
   const [matrixEffect, setMatrixEffect] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [arial5Lines, setArial5Lines] = useState(0); // Store number of lines for arial5
+  const [arial5Lines, setArial5Lines] = useState(0);
   const containerRef = useRef(null);
-  const textRefs = [useRef(null), useRef(null), useRef(null)];
+  const textRefs = [useRef(null), useRef(null), useRef(null)]; // Keep multiple refs for triple font
 
   const fonts = {
-    triple: ["font-myriad", "font-mutlu", "font-sword"],
-    arial5: ["font-arial5", "font-arial5", "font-arial5"],
-    sm00ch: ["font-sm00ch", "font-sm00ch", "font-sm00ch"],
+    triple: ["font-myriad", "font-mutlu", "font-sword"], // Array for triple font
+    arial5: "font-arial5", // Single string for arial5
+    sm00ch: "font-sm00ch", // Single string for sm00ch
   };
 
   // Detect if the user is on a mobile device
@@ -21,26 +21,6 @@ export default function Text() {
     const mobileCheck = /iphone|ipad|ipod|android|blackberry|windows phone/i.test(navigator.userAgent);
     setIsMobile(mobileCheck);
   }, []);
-
-  // Preload the sm00ch font only on mobile devices
-  useEffect(() => {
-    if (isMobile) {
-      const preloadFont = async () => {
-        try {
-          const font = new FontFace("sm00ch", "url(/path/to/sm00ch-font.woff2)", {
-            style: "normal",
-            weight: "400",
-          });
-          await font.load();
-          document.fonts.add(font);
-          console.log("sm00ch font preloaded on mobile");
-        } catch (error) {
-          console.error("Failed to preload sm00ch font:", error);
-        }
-      };
-      preloadFont();
-    }
-  }, [isMobile]);
 
   const getRandomLetter = () => {
     if (fontStyle === "arial5") {
@@ -55,11 +35,11 @@ export default function Text() {
   };
 
   const checkOverflow = (text) => {
-    return textRefs.some((ref) => {
-      if (!ref.current || !containerRef.current) return false;
-      ref.current.textContent = text;
-      return ref.current.scrollWidth > containerRef.current.clientWidth || ref.current.scrollHeight > containerRef.current.clientHeight;
-    });
+    // Use the first ref for overflow checking
+    if (!textRefs[0].current || !containerRef.current) return false;
+    textRefs[0].current.textContent = text;
+    return textRefs[0].current.scrollWidth > containerRef.current.clientWidth || 
+           textRefs[0].current.scrollHeight > containerRef.current.clientHeight;
   };
 
   const preloadExpansion = () => {
@@ -81,7 +61,6 @@ export default function Text() {
     textRefs[0].current.textContent = displayText;
 
     const lineHeight = parseFloat(window.getComputedStyle(textRefs[0].current).lineHeight);
-    const containerHeight = containerRef.current.clientHeight;
     const textHeight = textRefs[0].current.scrollHeight;
 
     const lines = Math.floor(textHeight / lineHeight);
@@ -100,7 +79,7 @@ export default function Text() {
       }, 600);
     }
     return () => clearInterval(interval);
-  }, [matrixEffect]);
+  }, [matrixEffect, fontStyle]);
 
   useEffect(() => {
     const loadFontsAndSetText = async () => {
@@ -125,22 +104,15 @@ export default function Text() {
 
   const handleSm00chClick = () => {
     if (isMobile) {
-      // Clear the previous text immediately
-      setDisplayText("");
+      // Generate random letters for each line without gaps
+      const sm00chText = Array.from({ length: arial5Lines }, () =>
+        Array.from({ length: 50 }, () => {
+          const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          return alphabet[Math.floor(Math.random() * alphabet.length)];
+        }).join("")
+      ).join("\n");
 
-      // Force a re-render to ensure the sm00ch font is applied
-      setTimeout(() => {
-        // Generate random letters for each line without gaps
-        const sm00chText = Array.from({ length: arial5Lines }, () =>
-          Array.from({ length: 50 }, () => {
-            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            return alphabet[Math.floor(Math.random() * alphabet.length)];
-          }).join("")
-        ).join(""); // Remove "\n" to avoid gaps
-
-        setDisplayText(sm00chText);
-        setFontsLoaded(true);
-      }, 50); // Small delay to allow the DOM to update
+      setDisplayText(sm00chText);
     }
     setFontStyle("sm00ch");
   };
@@ -157,13 +129,39 @@ export default function Text() {
         <button onClick={handleSm00chClick} className="custom-button bg-sm00ch-button" style={{ width: "200px", height: "100px" }}>
           <span className="button-text">Sm00ch</span>
         </button>
-        {/* <button onClick={() => setMatrixEffect((prev) => !prev)} className="custom-button bg-matrix-button">
-          <span>{matrixEffect ? "Stop Matrix" : "Start Matrix"}</span>
-        </button> */}
       </div>
 
-      {textRefs.map((ref, index) => (
-        <p key={index} ref={ref} className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${fonts[fontStyle][index]}`}
+      {/* Render multiple text layers only for triple font */}
+      {fontStyle === "triple" ? (
+        textRefs.map((ref, index) => (
+          <p 
+            key={index} 
+            ref={ref} 
+            className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${fonts.triple[index]}`}
+            style={{
+              position: "absolute",
+              top: "1.6rem",
+              left: "1.6rem",
+              right: "1.6rem",
+              bottom: "1.6rem",
+              wordBreak: "break-word",
+              overflowWrap: "break-word",
+              whiteSpace: "pre-wrap",
+              maxWidth: "100%",
+              maxHeight: "100%",
+              lineHeight: 1,
+              letterSpacing: "0",
+              visibility: fontsLoaded ? "visible" : "hidden",
+            }}
+          >
+            {displayText}
+          </p>
+        ))
+      ) : (
+        // Render single text layer for other fonts
+        <p 
+          ref={textRefs[0]}
+          className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${fonts[fontStyle]}`}
           style={{
             position: "absolute",
             top: "1.6rem",
@@ -178,10 +176,11 @@ export default function Text() {
             lineHeight: 1,
             letterSpacing: "0",
             visibility: fontsLoaded ? "visible" : "hidden",
-          }}>
+          }}
+        >
           {displayText}
         </p>
-      ))}
+      )}
     </div>
   );
 }
