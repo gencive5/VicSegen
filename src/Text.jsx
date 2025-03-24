@@ -6,12 +6,12 @@ export default function Text() {
   const [matrixEffect, setMatrixEffect] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const containerRef = useRef(null);
-  const textRefs = [useRef(null), useRef(null), useRef(null)]; // Keep multiple refs for triple font
+  const textRefs = [useRef(null), useRef(null), useRef(null)];
 
   const fonts = {
-    triple: ["font-myriad", "font-mutlu", "font-sword"], // Array for triple font
-    arial5: "font-arial5", // Single string for arial5
-    sm00ch: "font-sm00ch", // Single string for sm00ch
+    triple: ["font-myriad", "font-mutlu", "font-sword"],
+    arial5: "font-arial5",
+    sm00ch: "font-sm00ch",
   };
 
   const getRandomLetter = () => {
@@ -27,7 +27,6 @@ export default function Text() {
   };
 
   const checkOverflow = (text) => {
-    // Use the first ref for overflow checking
     if (!textRefs[0].current || !containerRef.current) return false;
     textRefs[0].current.textContent = text;
     return textRefs[0].current.scrollWidth > containerRef.current.clientWidth || 
@@ -73,7 +72,7 @@ export default function Text() {
 
   const handleSm00chClick = () => {
     setFontStyle("sm00ch");
-    setDisplayText(preloadExpansion()); // Generate text normally like other fonts
+    setDisplayText(preloadExpansion());
   };
 
   return (
@@ -90,7 +89,6 @@ export default function Text() {
         </button>
       </div>
 
-      {/* Render multiple text layers only for triple font */}
       {fontStyle === "triple" ? (
         textRefs.map((ref, index) => (
           <p 
@@ -110,14 +108,15 @@ export default function Text() {
               maxHeight: "100%",
               lineHeight: 1,
               letterSpacing: "0",
+              opacity: 1, // Full opacity for all layers
               visibility: fontsLoaded ? "visible" : "hidden",
+              transform: index === 0 ? "scaleX(-1)" : "none" // Mirror only Myriad (first font)
             }}
           >
             {displayText}
           </p>
         ))
       ) : (
-        // Render single text layer for other fonts
         <p 
           ref={textRefs[0]}
           className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${fonts[fontStyle]}`}
