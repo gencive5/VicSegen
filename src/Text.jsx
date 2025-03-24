@@ -5,8 +5,6 @@ export default function Text() {
   const [fontStyle, setFontStyle] = useState("arial5");
   const [matrixEffect, setMatrixEffect] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [arial5Lines, setArial5Lines] = useState(0);
   const containerRef = useRef(null);
   const textRefs = [useRef(null), useRef(null), useRef(null)]; // Keep multiple refs for triple font
 
@@ -15,12 +13,6 @@ export default function Text() {
     arial5: "font-arial5", // Single string for arial5
     sm00ch: "font-sm00ch", // Single string for sm00ch
   };
-
-  // Detect if the user is on a mobile device
-  useEffect(() => {
-    const mobileCheck = /iphone|ipad|ipod|android|blackberry|windows phone/i.test(navigator.userAgent);
-    setIsMobile(mobileCheck);
-  }, []);
 
   const getRandomLetter = () => {
     if (fontStyle === "arial5") {
@@ -52,21 +44,6 @@ export default function Text() {
     return text;
   };
 
-  // Calculate the number of lines for arial5
-  const calculateArial5Lines = () => {
-    if (!containerRef.current || !textRefs[0].current) return 0;
-
-    // Temporarily set the font to arial5 and calculate the number of lines
-    textRefs[0].current.style.fontFamily = "arial5";
-    textRefs[0].current.textContent = displayText;
-
-    const lineHeight = parseFloat(window.getComputedStyle(textRefs[0].current).lineHeight);
-    const textHeight = textRefs[0].current.scrollHeight;
-
-    const lines = Math.floor(textHeight / lineHeight);
-    return lines;
-  };
-
   useEffect(() => {
     let interval;
     if (matrixEffect) {
@@ -85,36 +62,18 @@ export default function Text() {
     const loadFontsAndSetText = async () => {
       await document.fonts.ready;
       setFontsLoaded(true);
-
-      // Preload arial5 text and calculate the number of lines
-      const arial5Text = preloadExpansion();
-      setDisplayText(arial5Text);
-
-      if (isMobile) {
-        const lines = calculateArial5Lines();
-        setArial5Lines(lines);
-      }
+      setDisplayText(preloadExpansion());
     };
 
     loadFontsAndSetText();
     const resizeHandler = () => setDisplayText(preloadExpansion());
     window.addEventListener("resize", resizeHandler);
     return () => window.removeEventListener("resize", resizeHandler);
-  }, [fontStyle, isMobile]);
+  }, [fontStyle]);
 
   const handleSm00chClick = () => {
-    if (isMobile) {
-      // Generate random letters for each line without gaps
-      const sm00chText = Array.from({ length: arial5Lines }, () =>
-        Array.from({ length: 50 }, () => {
-          const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-          return alphabet[Math.floor(Math.random() * alphabet.length)];
-        }).join("")
-      ).join("\n");
-
-      setDisplayText(sm00chText);
-    }
     setFontStyle("sm00ch");
+    setDisplayText(preloadExpansion()); // Generate text normally like other fonts
   };
 
   return (
