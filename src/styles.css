@@ -133,15 +133,15 @@ div{
 }
 
 .bg-arial5-button {
-  background-image: url('/src/assets/button.png'); /* Path to your PNG */
+  background-image: url('/src/assets/gencive5btnL.png'); /* Path to your PNG */
 }
 
 .bg-triple-button {
-  background-image: url('/src/assets/button1.png'); /* Path to your PNG */
+  background-image: url('/src/assets/ratbtnL2.png'); /* Path to your PNG */
 }
 
 .bg-sm00ch-button {
-  background-image: url('/src/assets/button3.png'); /* Path to your PNG */
+  background-image: url('/src/assets/sm00chbtnL.png'); /* Path to your PNG */
 }
 
 .button-text {
