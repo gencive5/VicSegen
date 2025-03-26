@@ -38,7 +38,7 @@ export default function ExpandingHi() {
       // If no overflow, permanently add the "i"
       text += "i";
       setDisplayText(text);
-    }, 50);
+    }, 10);
 
     return () => clearInterval(interval);
   }, [fontsLoaded]);
