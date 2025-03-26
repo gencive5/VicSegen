@@ -6,6 +6,7 @@ export default function ExpandingHi() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [displayText, setDisplayText] = useState("");
 
+  // Same font loading logic as Text.jsx
   useEffect(() => {
     const loadFonts = async () => {
       await document.fonts.ready;
@@ -14,34 +15,39 @@ export default function ExpandingHi() {
     loadFonts();
   }, []);
 
+  // Identical overflow checking logic from Text.jsx
+  const checkOverflow = (text) => {
+    if (!textRef.current || !containerRef.current) return false;
+    textRef.current.textContent = text;
+    return (
+      textRef.current.scrollWidth > containerRef.current.clientWidth || 
+      textRef.current.scrollHeight > containerRef.current.clientHeight
+    );
+  };
+
+  // Modified preloadExpansion to use "Hiii..." instead of random letters
+  const preloadExpansion = () => {
+    let text = "H";
+    while (true) {
+      const newText = text + "i";
+      if (checkOverflow(newText)) break;
+      text = newText;
+    }
+    return text;
+  };
+
+  // Same resize and font loading behavior as Text.jsx
   useEffect(() => {
-    if (!fontsLoaded || !containerRef.current || !textRef.current) return;
+    if (!fontsLoaded) return;
 
-    const calculateMaxText = () => {
-      let text = "H";
-      while (true) {
-        textRef.current.textContent = text + "i";
-        const isOverflowing =
-          textRef.current.scrollWidth > containerRef.current.clientWidth ||
-          textRef.current.scrollHeight > containerRef.current.clientHeight;
-        
-        if (isOverflowing) {
-          textRef.current.textContent = text;
-          break;
-        }
-        text += "i";
-      }
-      return text;
+    const updateText = () => {
+      setDisplayText(preloadExpansion());
     };
 
-    setDisplayText(calculateMaxText());
-
-    const handleResize = () => {
-      setDisplayText(calculateMaxText());
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    updateText();
+    const resizeHandler = () => updateText();
+    window.addEventListener("resize", resizeHandler);
+    return () => window.removeEventListener("resize", resizeHandler);
   }, [fontsLoaded]);
 
   return (
