@@ -1,10 +1,10 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function ExpandingHi() {
-  const [displayText, setDisplayText] = useState("H");
   const containerRef = useRef(null);
   const textRef = useRef(null);
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [displayText, setDisplayText] = useState("");
 
   useEffect(() => {
     const loadFonts = async () => {
@@ -15,32 +15,33 @@ export default function ExpandingHi() {
   }, []);
 
   useEffect(() => {
-    if (!fontsLoaded) return;
-    
-    let text = "H";
-    const interval = setInterval(() => {
-      if (!containerRef.current || !textRef.current) return;
+    if (!fontsLoaded || !containerRef.current || !textRef.current) return;
 
-      // Temporarily add an "i" to test if it will overflow
-      textRef.current.textContent = text + "i";
-
-      // Check if adding the "i" will cause overflow
-      const isOverflowing =
-        textRef.current.scrollWidth > containerRef.current.clientWidth ||
-        textRef.current.scrollHeight > containerRef.current.clientHeight;
-
-      if (isOverflowing) {
-        textRef.current.textContent = text; // Revert to the last valid text
-        clearInterval(interval);
-        return;
+    const calculateMaxText = () => {
+      let text = "H";
+      while (true) {
+        textRef.current.textContent = text + "i";
+        const isOverflowing =
+          textRef.current.scrollWidth > containerRef.current.clientWidth ||
+          textRef.current.scrollHeight > containerRef.current.clientHeight;
+        
+        if (isOverflowing) {
+          textRef.current.textContent = text;
+          break;
+        }
+        text += "i";
       }
+      return text;
+    };
 
-      // If no overflow, permanently add the "i"
-      text += "i";
-      setDisplayText(text);
-    }, 10);
+    setDisplayText(calculateMaxText());
 
-    return () => clearInterval(interval);
+    const handleResize = () => {
+      setDisplayText(calculateMaxText());
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, [fontsLoaded]);
 
   return (
