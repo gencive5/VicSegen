@@ -3,91 +3,95 @@ import { useEffect, useRef, useState } from "react";
 export default function ExpandingHi() {
   const containerRef = useRef(null);
   const textRef = useRef(null);
+  const [fontsLoaded, setFontsLoaded] = useState(false);
   const [displayText, setDisplayText] = useState("");
 
-  // Optimized measurement function
+  // 1:1 copy of arial5's font loading logic
+  useEffect(() => {
+    let isMounted = true;
+    const loadFonts = async () => {
+      try {
+        // Arial5's exact font readiness sequence
+        await document.fonts.ready;
+        await new Promise(resolve => setTimeout(resolve, 50));
+        if (isMounted) setFontsLoaded(true);
+      } catch (e) {
+        console.error("Font loading error:", e);
+        if (isMounted) setFontsLoaded(true);
+      }
+    };
+    loadFonts();
+    return () => { isMounted = false; };
+  }, []);
+
+  // Direct clone of arial5's text expansion algorithm
   const calculateMaxText = () => {
     if (!textRef.current || !containerRef.current) return "H";
     
-    // Save original state
-    const originalStyle = {
-      position: textRef.current.style.position,
-      visibility: textRef.current.style.visibility,
-      opacity: textRef.current.style.opacity
-    };
-
-    // Set measurement state
-    textRef.current.style.position = 'absolute';
+    // Arial5's exact measurement approach
     textRef.current.style.visibility = 'hidden';
-    textRef.current.style.opacity = '0';
-
+    textRef.current.textContent = "H";
+    const container = containerRef.current;
+    
     let text = "H";
-    textRef.current.textContent = text;
-
-    // Bulk expansion (4 i's at a time)
-    while (text.length < 500) {
-      const testText = text + "iiii";
+    let safety = 0;
+    const maxIterations = 500; // Same as arial5's limit
+    
+    // Phase 1: Bulk expansion (identical to arial5)
+    while (safety++ < maxIterations) {
+      const testText = text + "iiii"; // Same chunk size as arial5 uses
       textRef.current.textContent = testText;
       
-      if (textRef.current.scrollWidth > containerRef.current.clientWidth || 
-          textRef.current.scrollHeight > containerRef.current.clientHeight) {
+      if (textRef.current.scrollWidth > container.clientWidth || 
+          textRef.current.scrollHeight > container.clientHeight) {
         break;
       }
       text = testText;
     }
-
-    // Precise adjustment
-    while (text.length < 1000) {
+    
+    // Phase 2: Precise adjustment (arial5's exact method)
+    while (safety++ < maxIterations) {
       const testText = text + "i";
       textRef.current.textContent = testText;
       
-      if (textRef.current.scrollWidth > containerRef.current.clientWidth || 
-          textRef.current.scrollHeight > containerRef.current.clientHeight) {
+      if (textRef.current.scrollWidth > container.clientWidth || 
+          textRef.current.scrollHeight > container.clientHeight) {
+        textRef.current.textContent = text;
         break;
       }
       text = testText;
     }
-
-    // Restore original state
-    Object.assign(textRef.current.style, originalStyle);
+    
+    textRef.current.style.visibility = fontsLoaded ? 'visible' : 'hidden';
     return text;
   };
 
-  // Robust initialization
+  // Exact copy of arial5's resize handling
   useEffect(() => {
-    let mounted = true;
-    let rafId;
-    let resizeObserver;
+    if (!fontsLoaded) return;
 
+    let resizeTimeout;
     const updateText = () => {
-      if (mounted) {
-        setDisplayText(calculateMaxText());
-      }
+      setDisplayText(calculateMaxText());
     };
 
-    // Wait for fonts and initial layout
-    const init = async () => {
-      await document.fonts.ready;
-      await new Promise(resolve => requestAnimationFrame(resolve));
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(updateText, 150); // Arial5's debounce timing
+    };
+
+    // Arial5's initialization delay
+    const initTimeout = setTimeout(() => {
       updateText();
+      window.addEventListener('resize', handleResize);
+    }, 200);
 
-      // Modern resize observer instead of resize event
-      if (containerRef.current) {
-        resizeObserver = new ResizeObserver(() => {
-          cancelAnimationFrame(rafId);
-          rafId = requestAnimationFrame(updateText);
-        });
-        resizeObserver.observe(containerRef.current);
-      }
-    };
-
-    init();
     return () => {
-      mounted = false;
-      cancelAnimationFrame(rafId);
-      if (resizeObserver) resizeObserver.disconnect();
+      clearTimeout(resizeTimeout);
+      clearTimeout(initTimeout);
+      window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [fontsLoaded]);
 
   return (
     <div ref={containerRef} className="w-full h-full overflow-hidden relative pointer-events-auto p-4 md:p-6">
@@ -107,10 +111,10 @@ export default function ExpandingHi() {
           maxHeight: "100%",
           lineHeight: 1,
           letterSpacing: "0",
-          // Critical mobile rendering optimizations
+          visibility: fontsLoaded ? "visible" : "hidden",
+          // Arial5's exact rendering properties
           transform: "translateZ(0)",
-          backfaceVisibility: "hidden",
-          willChange: "transform"
+          backfaceVisibility: "hidden"
         }}
       >
         {displayText}
