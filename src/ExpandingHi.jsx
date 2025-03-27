@@ -6,48 +6,78 @@ export default function ExpandingHi() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [displayText, setDisplayText] = useState("");
 
-  // Same font loading logic as Text.jsx
+  // Enhanced font loading with preload check
   useEffect(() => {
     const loadFonts = async () => {
-      await document.fonts.ready;
-      setFontsLoaded(true);
+      try {
+        // Wait for fonts AND an additional frame to ensure layout stability
+        await document.fonts.ready;
+        await new Promise(requestAnimationFrame);
+        setFontsLoaded(true);
+      } catch (e) {
+        console.error("Font loading error:", e);
+        setFontsLoaded(true); // Fallback
+      }
     };
     loadFonts();
   }, []);
 
-  // Identical overflow checking logic from Text.jsx
-  const checkOverflow = (text) => {
-    if (!textRef.current || !containerRef.current) return false;
-    textRef.current.textContent = text;
-    return (
-      textRef.current.scrollWidth > containerRef.current.clientWidth || 
-      textRef.current.scrollHeight > containerRef.current.clientHeight
-    );
-  };
-
-  // Modified preloadExpansion to use "Hiii..." instead of random letters
-  const preloadExpansion = () => {
+  // Sm00ch-style expansion logic with multi-pass checking
+  const calculateMaxText = () => {
+    if (!textRef.current || !containerRef.current) return "H";
+    
+    // Reset to basic text first
+    textRef.current.textContent = "H";
     let text = "H";
-    while (true) {
-      const newText = text + "i";
-      if (checkOverflow(newText)) break;
-      text = newText;
+    
+    // Phase 1: Fast expansion in chunks
+    while (text.length < 1000) { // Safety limit
+      const testText = text + "iiiiiiiiii"; // Add 10 i's at a time
+      textRef.current.textContent = testText;
+      
+      if (textRef.current.scrollWidth > containerRef.current.clientWidth || 
+          textRef.current.scrollHeight > containerRef.current.clientHeight) {
+        break;
+      }
+      text = testText;
     }
+    
+    // Phase 2: Precise single-character adjustment
+    while (true) {
+      const testText = text + "i";
+      textRef.current.textContent = testText;
+      
+      if (textRef.current.scrollWidth > containerRef.current.clientWidth || 
+          textRef.current.scrollHeight > containerRef.current.clientHeight) {
+        textRef.current.textContent = text; // Revert to last good state
+        break;
+      }
+      text = testText;
+    }
+    
     return text;
   };
 
-  // Same resize and font loading behavior as Text.jsx
+  // Enhanced resize handler with debounce
   useEffect(() => {
     if (!fontsLoaded) return;
 
+    let timeoutId;
     const updateText = () => {
-      setDisplayText(preloadExpansion());
+      setDisplayText(calculateMaxText());
     };
 
-    updateText();
-    const resizeHandler = () => updateText();
-    window.addEventListener("resize", resizeHandler);
-    return () => window.removeEventListener("resize", resizeHandler);
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(updateText, 100);
+    };
+
+    updateText(); // Initial calculation
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(timeoutId);
+    };
   }, [fontsLoaded]);
 
   return (
@@ -69,6 +99,10 @@ export default function ExpandingHi() {
           lineHeight: 1,
           letterSpacing: "0",
           visibility: fontsLoaded ? "visible" : "hidden",
+          // Sm00ch-style rendering enhancements
+          willChange: "contents",
+          backfaceVisibility: "hidden",
+          transform: "translate3d(0,0,0)"
         }}
       >
         {displayText}
