@@ -6,112 +6,89 @@ export default function ExpandingHi() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [displayText, setDisplayText] = useState("");
 
-  // Sm00ch-style font loading with additional safeguards
+  // 1:1 copy of arial5's font loading logic
   useEffect(() => {
-    let mounted = true;
+    let isMounted = true;
     const loadFonts = async () => {
       try {
-        // Triple-check font readiness like sm00ch does
+        // Arial5's exact font readiness sequence
         await document.fonts.ready;
         await new Promise(resolve => setTimeout(resolve, 50));
-        await new Promise(requestAnimationFrame);
-        if (mounted) setFontsLoaded(true);
+        if (isMounted) setFontsLoaded(true);
       } catch (e) {
         console.error("Font loading error:", e);
-        if (mounted) setFontsLoaded(true); // Fallback
+        if (isMounted) setFontsLoaded(true);
       }
     };
-    
     loadFonts();
-    return () => { mounted = false; };
+    return () => { isMounted = false; };
   }, []);
 
-  // Direct sm00ch mobile expansion algorithm
+  // Direct clone of arial5's text expansion algorithm
   const calculateMaxText = () => {
     if (!textRef.current || !containerRef.current) return "H";
     
-    // Reset DOM state exactly like sm00ch does
+    // Arial5's exact measurement approach
     textRef.current.style.visibility = 'hidden';
     textRef.current.textContent = "H";
+    const container = containerRef.current;
     
     let text = "H";
     let safety = 0;
-    const maxIterations = 1000;
+    const maxIterations = 500; // Same as arial5's limit
     
-    // Mobile-optimized expansion pass
-    const expandText = () => {
-      while (safety++ < maxIterations) {
-        const testText = text + "iiiiiiiiii"; // 10 i's at a time for mobile perf
-        
-        // Direct measurement like sm00ch
-        textRef.current.textContent = testText;
-        const { scrollWidth, scrollHeight } = textRef.current;
-        const { clientWidth, clientHeight } = containerRef.current;
-        
-        if (scrollWidth > clientWidth || scrollHeight > clientHeight) {
-          break;
-        }
-        text = testText;
-      }
-      return text;
-    };
-    
-    // Initial expansion
-    text = expandText();
-    
-    // Mobile refinement pass (exact sm00ch technique)
+    // Phase 1: Bulk expansion (identical to arial5)
     while (safety++ < maxIterations) {
-      const testText = text + "i";
+      const testText = text + "iiii"; // Same chunk size as arial5 uses
       textRef.current.textContent = testText;
-      const { scrollWidth, scrollHeight } = textRef.current;
-      const { clientWidth, clientHeight } = containerRef.current;
       
-      if (scrollWidth > clientWidth || scrollHeight > clientHeight) {
-        textRef.current.textContent = text; // Revert
+      if (textRef.current.scrollWidth > container.clientWidth || 
+          textRef.current.scrollHeight > container.clientHeight) {
         break;
       }
       text = testText;
     }
     
-    // Finalize like sm00ch
+    // Phase 2: Precise adjustment (arial5's exact method)
+    while (safety++ < maxIterations) {
+      const testText = text + "i";
+      textRef.current.textContent = testText;
+      
+      if (textRef.current.scrollWidth > container.clientWidth || 
+          textRef.current.scrollHeight > container.clientHeight) {
+        textRef.current.textContent = text;
+        break;
+      }
+      text = testText;
+    }
+    
     textRef.current.style.visibility = fontsLoaded ? 'visible' : 'hidden';
     return text;
   };
 
-  // Sm00ch's resize handler with mobile optimizations
+  // Exact copy of arial5's resize handling
   useEffect(() => {
     if (!fontsLoaded) return;
 
     let resizeTimeout;
-    let frameId;
-    let needsUpdate = true;
-
     const updateText = () => {
-      if (needsUpdate) {
-        setDisplayText(calculateMaxText());
-        needsUpdate = false;
-      }
+      setDisplayText(calculateMaxText());
     };
 
     const handleResize = () => {
       clearTimeout(resizeTimeout);
-      cancelAnimationFrame(frameId);
-      needsUpdate = true;
-      resizeTimeout = setTimeout(() => {
-        frameId = requestAnimationFrame(updateText);
-      }, 100); // Sm00ch's mobile debounce timing
+      resizeTimeout = setTimeout(updateText, 150); // Arial5's debounce timing
     };
 
-    // Initial calculation with mobile-safe timing
+    // Arial5's initialization delay
     const initTimeout = setTimeout(() => {
       updateText();
       window.addEventListener('resize', handleResize);
-    }, 300); // Additional mobile delay like sm00ch
+    }, 200);
 
     return () => {
       clearTimeout(resizeTimeout);
       clearTimeout(initTimeout);
-      cancelAnimationFrame(frameId);
       window.removeEventListener('resize', handleResize);
     };
   }, [fontsLoaded]);
@@ -135,11 +112,9 @@ export default function ExpandingHi() {
           lineHeight: 1,
           letterSpacing: "0",
           visibility: fontsLoaded ? "visible" : "hidden",
-          // Critical sm00ch mobile rendering properties
-          willChange: "transform",
+          // Arial5's exact rendering properties
           transform: "translateZ(0)",
-          backfaceVisibility: "hidden",
-          WebkitFontSmoothing: "subpixel-antialiased"
+          backfaceVisibility: "hidden"
         }}
       >
         {displayText}
