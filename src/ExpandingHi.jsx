@@ -6,77 +6,113 @@ export default function ExpandingHi() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [displayText, setDisplayText] = useState("");
 
-  // Enhanced font loading with preload check
+  // Sm00ch-style font loading with additional safeguards
   useEffect(() => {
+    let mounted = true;
     const loadFonts = async () => {
       try {
-        // Wait for fonts AND an additional frame to ensure layout stability
+        // Triple-check font readiness like sm00ch does
         await document.fonts.ready;
+        await new Promise(resolve => setTimeout(resolve, 50));
         await new Promise(requestAnimationFrame);
-        setFontsLoaded(true);
+        if (mounted) setFontsLoaded(true);
       } catch (e) {
         console.error("Font loading error:", e);
-        setFontsLoaded(true); // Fallback
+        if (mounted) setFontsLoaded(true); // Fallback
       }
     };
+    
     loadFonts();
+    return () => { mounted = false; };
   }, []);
 
-  // Sm00ch-style expansion logic with multi-pass checking
+  // Direct sm00ch mobile expansion algorithm
   const calculateMaxText = () => {
     if (!textRef.current || !containerRef.current) return "H";
     
-    // Reset to basic text first
+    // Reset DOM state exactly like sm00ch does
+    textRef.current.style.visibility = 'hidden';
     textRef.current.textContent = "H";
+    
     let text = "H";
+    let safety = 0;
+    const maxIterations = 1000;
     
-    // Phase 1: Fast expansion in chunks
-    while (text.length < 1000) { // Safety limit
-      const testText = text + "iiiiiiiiii"; // Add 10 i's at a time
-      textRef.current.textContent = testText;
-      
-      if (textRef.current.scrollWidth > containerRef.current.clientWidth || 
-          textRef.current.scrollHeight > containerRef.current.clientHeight) {
-        break;
+    // Mobile-optimized expansion pass
+    const expandText = () => {
+      while (safety++ < maxIterations) {
+        const testText = text + "iiiiiiiiii"; // 10 i's at a time for mobile perf
+        
+        // Direct measurement like sm00ch
+        textRef.current.textContent = testText;
+        const { scrollWidth, scrollHeight } = textRef.current;
+        const { clientWidth, clientHeight } = containerRef.current;
+        
+        if (scrollWidth > clientWidth || scrollHeight > clientHeight) {
+          break;
+        }
+        text = testText;
       }
-      text = testText;
-    }
+      return text;
+    };
     
-    // Phase 2: Precise single-character adjustment
-    while (true) {
+    // Initial expansion
+    text = expandText();
+    
+    // Mobile refinement pass (exact sm00ch technique)
+    while (safety++ < maxIterations) {
       const testText = text + "i";
       textRef.current.textContent = testText;
+      const { scrollWidth, scrollHeight } = textRef.current;
+      const { clientWidth, clientHeight } = containerRef.current;
       
-      if (textRef.current.scrollWidth > containerRef.current.clientWidth || 
-          textRef.current.scrollHeight > containerRef.current.clientHeight) {
-        textRef.current.textContent = text; // Revert to last good state
+      if (scrollWidth > clientWidth || scrollHeight > clientHeight) {
+        textRef.current.textContent = text; // Revert
         break;
       }
       text = testText;
     }
     
+    // Finalize like sm00ch
+    textRef.current.style.visibility = fontsLoaded ? 'visible' : 'hidden';
     return text;
   };
 
-  // Enhanced resize handler with debounce
+  // Sm00ch's resize handler with mobile optimizations
   useEffect(() => {
     if (!fontsLoaded) return;
 
-    let timeoutId;
+    let resizeTimeout;
+    let frameId;
+    let needsUpdate = true;
+
     const updateText = () => {
-      setDisplayText(calculateMaxText());
+      if (needsUpdate) {
+        setDisplayText(calculateMaxText());
+        needsUpdate = false;
+      }
     };
 
     const handleResize = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(updateText, 100);
+      clearTimeout(resizeTimeout);
+      cancelAnimationFrame(frameId);
+      needsUpdate = true;
+      resizeTimeout = setTimeout(() => {
+        frameId = requestAnimationFrame(updateText);
+      }, 100); // Sm00ch's mobile debounce timing
     };
 
-    updateText(); // Initial calculation
-    window.addEventListener("resize", handleResize);
+    // Initial calculation with mobile-safe timing
+    const initTimeout = setTimeout(() => {
+      updateText();
+      window.addEventListener('resize', handleResize);
+    }, 300); // Additional mobile delay like sm00ch
+
     return () => {
-      window.removeEventListener("resize", handleResize);
-      clearTimeout(timeoutId);
+      clearTimeout(resizeTimeout);
+      clearTimeout(initTimeout);
+      cancelAnimationFrame(frameId);
+      window.removeEventListener('resize', handleResize);
     };
   }, [fontsLoaded]);
 
@@ -99,10 +135,11 @@ export default function ExpandingHi() {
           lineHeight: 1,
           letterSpacing: "0",
           visibility: fontsLoaded ? "visible" : "hidden",
-          // Sm00ch-style rendering enhancements
-          willChange: "contents",
+          // Critical sm00ch mobile rendering properties
+          willChange: "transform",
+          transform: "translateZ(0)",
           backfaceVisibility: "hidden",
-          transform: "translate3d(0,0,0)"
+          WebkitFontSmoothing: "subpixel-antialiased"
         }}
       >
         {displayText}
