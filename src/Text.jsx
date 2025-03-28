@@ -175,7 +175,7 @@ export default function Text({ activeFont, onInteraction }) {
           <p 
             key={index} 
             ref={ref} 
-            className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${
+            className={`text-[10vw] sm:text-[7vw] font-bold leading-none text-left break-words z-0 ${
               showAboutText ? "font-arial" : fonts.triple[index]
             }`}
             style={{
@@ -184,7 +184,7 @@ export default function Text({ activeFont, onInteraction }) {
               left: "1.6rem",
               right: "1.6rem",
               bottom: "1.6rem",
-                wordBreak: "break-all",
+              wordBreak: "break-all",
               overflowWrap: "normal",
               whiteSpace: "pre-wrap",
               maxWidth: "100%",
@@ -202,7 +202,7 @@ export default function Text({ activeFont, onInteraction }) {
       ) : (
         <p 
           ref={textRefs[0]}
-          className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${
+          className={`text-[10vw] sm:text-[7vw] font-bold leading-none text-left break-words z-0 ${
             showAboutText ? "font-arial" : fonts[fontStyle]
           }`}
           style={{
@@ -211,8 +211,8 @@ export default function Text({ activeFont, onInteraction }) {
             left: "1.6rem",
             right: "1.6rem",
             bottom: "1.6rem",
-            wordBreak: "break-word",
-            overflowWrap: "break-word",
+            wordBreak: "break-all",
+            overflowWrap: "normal",
             whiteSpace: "pre-wrap",
             maxWidth: "100%",
             maxHeight: "100%",
