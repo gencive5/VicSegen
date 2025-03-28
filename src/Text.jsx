@@ -14,6 +14,22 @@ export default function Text({ activeFont, onInteraction }) {
     sm00ch: "font-sm00ch",
   };
 
+  // Font to website link mapping
+  const fontLinks = {
+    arial5: {
+      text: 'visit gencive5.com',
+      url: 'https://gencive5.com/'
+    },
+    triple: {
+      text: 'visit ratfaggotking.fr',
+      url: 'https://ratfaggotking.fr/'
+    },
+    sm00ch: {
+      text: 'visit sm00ch.xyz',
+      url: 'https://sm00ch.xyz/'
+    }
+  };
+
   const getRandomLetter = () => {
     if (fontStyle === "arial5") {
       return ["5", "s", "S"][Math.floor(Math.random() * 3)];
@@ -108,6 +124,20 @@ export default function Text({ activeFont, onInteraction }) {
           style={{ width: "400px", height: "200px" }}
         />
       </div>
+
+      {/* New website link button */}
+      {fontStyle && (
+        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-50">
+          <a 
+            href={fontLinks[fontStyle].url} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="bg-white text-black px-6 py-2 rounded-md hover:bg-gray-200 transition-colors text-sm sm:text-base"
+          >
+            {fontLinks[fontStyle].text}
+          </a>
+        </div>
+      )}
 
       {fontStyle && (fontStyle === "triple" ? (
         textRefs.map((ref, index) => (
