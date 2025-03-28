@@ -156,9 +156,9 @@ export default function Text({ activeFont, onInteraction }) {
         />
       </div>
       
-      {/* Visit site button - shows only the relevant one */}
+   {/* Visit site button - centered and larger */}
 {fontStyle && (
-  <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-50">
+  <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 z-50 w-full flex justify-center">
     <a 
       href={fontLinks[fontStyle].url} 
       target="_blank" 
@@ -168,7 +168,11 @@ export default function Text({ activeFont, onInteraction }) {
         fontStyle === "triple" ? "vbg-triple-button" :
         "vbg-sm00ch-button"
       }`}
-      style={{ width: "120px", height: "40px", display: "block" }}
+      style={{ 
+        width: "300px", 
+        height: "100px",
+        display: "block" 
+      }}
       aria-label={`Visit ${fontLinks[fontStyle].text}`}
     />
   </div>
