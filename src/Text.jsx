@@ -155,20 +155,24 @@ export default function Text({ activeFont, onInteraction }) {
           style={{ width: "400px", height: "200px" }}
         />
       </div>
-
-      {/* Website link button - only show when not in about mode */}
-      {fontStyle && (
-        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-50">
-          <a 
-            href={fontLinks[fontStyle].url} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="bg-white text-black px-6 py-2 rounded-md hover:bg-gray-200 transition-colors text-sm sm:text-base"
-          >
-            {fontLinks[fontStyle].text}
-          </a>
-        </div>
-      )}
+      
+      {/* Visit site button - shows only the relevant one */}
+{fontStyle && (
+  <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-50">
+    <a 
+      href={fontLinks[fontStyle].url} 
+      target="_blank" 
+      rel="noopener noreferrer"
+      className={`bg-cover bg-no-repeat bg-center hover:opacity-90 transition-opacity ${
+        fontStyle === "arial5" ? "vbg-arial5-button" :
+        fontStyle === "triple" ? "vbg-triple-button" :
+        "vbg-sm00ch-button"
+      }`}
+      style={{ width: "120px", height: "40px", display: "block" }}
+      aria-label={`Visit ${fontLinks[fontStyle].text}`}
+    />
+  </div>
+)}
 
       {(fontStyle || showAboutText) && (fontStyle === "triple" ? (
         textRefs.map((ref, index) => (

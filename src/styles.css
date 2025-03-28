@@ -147,6 +147,27 @@ div{
   background-image: url('/src/assets/sm00chbtnL.png'); /* Path to your PNG */
 }
 
+.vbg-arial5-button {
+  background-image: url('/src/assets/ButtonvisitG.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.vbg-triple-button {
+  background-image: url('/src/assets/ButtonvisitR.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.vbg-sm00ch-button {
+  background-image: url('/src/assets/ButtonvisitS.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 .button-text {
   position: absolute;
   top: 50%;
