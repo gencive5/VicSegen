@@ -5,6 +5,7 @@ export default function Text({ activeFont, onInteraction }) {
   const [fontStyle, setFontStyle] = useState(null);
   const [matrixEffect, setMatrixEffect] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [showAboutText, setShowAboutText] = useState(false);
   const containerRef = useRef(null);
   const textRefs = [useRef(null), useRef(null), useRef(null)];
 
@@ -30,7 +31,14 @@ export default function Text({ activeFont, onInteraction }) {
     }
   };
 
+  const aboutText = "My name is Vic Segen I live in Paris I specialize in webdesign, front end development, typography, graphic design, contact me.";
+
   const getRandomLetter = () => {
+    if (showAboutText) {
+      // For about text, use regular letters
+      const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ";
+      return alphabet[Math.floor(Math.random() * alphabet.length)];
+    }
     if (fontStyle === "arial5") {
       return ["5", "s", "S"][Math.floor(Math.random() * 3)];
     } else if (fontStyle === "triple") {
@@ -50,6 +58,10 @@ export default function Text({ activeFont, onInteraction }) {
   };
 
   const preloadExpansion = () => {
+    if (showAboutText) {
+      return aboutText; // Return the full about text immediately
+    }
+    
     let text = "";
     while (true) {
       const newText = text + getRandomLetter();
@@ -60,17 +72,26 @@ export default function Text({ activeFont, onInteraction }) {
   };
 
   const handleButtonClick = (font) => {
+    setShowAboutText(false);
     setFontStyle(font);
     onInteraction(font);
   };
 
   const handleSm00chClick = () => {
+    setShowAboutText(false);
     setFontStyle("sm00ch");
     onInteraction("sm00ch");
   };
 
+  const handleAboutClick = () => {
+    setShowAboutText(true);
+    setFontStyle(null);
+    onInteraction(null);
+  };
+
   useEffect(() => {
     if (activeFont) {
+      setShowAboutText(false);
       setFontStyle(activeFont);
       setDisplayText(preloadExpansion());
     }
@@ -78,7 +99,7 @@ export default function Text({ activeFont, onInteraction }) {
 
   useEffect(() => {
     let interval;
-    if (matrixEffect && fontStyle) {
+    if (matrixEffect && (fontStyle || showAboutText)) {
       interval = setInterval(() => {
         setDisplayText((prevText) => {
           const textArray = prevText.split("");
@@ -88,10 +109,10 @@ export default function Text({ activeFont, onInteraction }) {
       }, 600);
     }
     return () => clearInterval(interval);
-  }, [matrixEffect, fontStyle]);
+  }, [matrixEffect, fontStyle, showAboutText]);
 
   useEffect(() => {
-    if (!fontStyle) return;
+    if (!fontStyle && !showAboutText) return;
     
     const loadFontsAndSetText = async () => {
       await document.fonts.ready;
@@ -103,10 +124,19 @@ export default function Text({ activeFont, onInteraction }) {
     const resizeHandler = () => setDisplayText(preloadExpansion());
     window.addEventListener("resize", resizeHandler);
     return () => window.removeEventListener("resize", resizeHandler);
-  }, [fontStyle]);
+  }, [fontStyle, showAboutText]);
 
   return (
     <div ref={containerRef} className="w-full h-full overflow-hidden relative pointer-events-auto p-4 md:p-6">
+      {/* About button at the top */}
+      <button 
+        onClick={handleAboutClick}
+        className="absolute top-4 left-1/2 transform -translate-x-1/2 z-50 bg-white text-black px-6 py-2 rounded-md hover:bg-gray-200 transition-colors"
+      >
+        About
+      </button>
+
+      {/* Text buttons at the bottom */}
       <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex flex-row gap-1 z-50 sm:bottom-5 sm:gap-4">
         <button 
           onClick={() => handleButtonClick("arial5")} 
@@ -125,7 +155,7 @@ export default function Text({ activeFont, onInteraction }) {
         />
       </div>
 
-      {/* New website link button */}
+      {/* Website link button - only show when not in about mode */}
       {fontStyle && (
         <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-50">
           <a 
@@ -139,12 +169,14 @@ export default function Text({ activeFont, onInteraction }) {
         </div>
       )}
 
-      {fontStyle && (fontStyle === "triple" ? (
+      {(fontStyle || showAboutText) && (fontStyle === "triple" ? (
         textRefs.map((ref, index) => (
           <p 
             key={index} 
             ref={ref} 
-            className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${fonts.triple[index]}`}
+            className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${
+              showAboutText ? "" : fonts.triple[index]
+            }`}
             style={{
               position: "absolute",
               top: "1.6rem",
@@ -160,7 +192,7 @@ export default function Text({ activeFont, onInteraction }) {
               letterSpacing: "0",
               opacity: 1,
               visibility: fontsLoaded ? "visible" : "hidden",
-              transform: index === 0 ? "scaleX(-1)" : "none"
+              transform: index === 0 && !showAboutText ? "scaleX(-1)" : "none"
             }}
           >
             {displayText}
@@ -169,7 +201,9 @@ export default function Text({ activeFont, onInteraction }) {
       ) : (
         <p 
           ref={textRefs[0]}
-          className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${fonts[fontStyle]}`}
+          className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${
+            showAboutText ? "" : fonts[fontStyle]
+          }`}
           style={{
             position: "absolute",
             top: "1.6rem",
