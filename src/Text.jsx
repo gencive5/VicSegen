@@ -13,6 +13,7 @@ export default function Text({ activeFont, onInteraction }) {
     triple: ["font-myriad", "font-mutlu", "font-sword"],
     arial5: "font-arial5",
     sm00ch: "font-sm00ch",
+    arial: "font-arial"
   };
 
   // Font to website link mapping
@@ -31,7 +32,7 @@ export default function Text({ activeFont, onInteraction }) {
     }
   };
 
-  const aboutText = "My name is Vic Segen I live in Paris I specialize in webdesign, front end development, typography, graphic design, contact me.";
+  const aboutText = "My name is Vic Segen I live in Paris I specialize in webdesign, front-end development, typography, graphic design. Contact me.";
 
   const getRandomLetter = () => {
     if (showAboutText) {
@@ -175,7 +176,7 @@ export default function Text({ activeFont, onInteraction }) {
             key={index} 
             ref={ref} 
             className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${
-              showAboutText ? "" : fonts.triple[index]
+              showAboutText ? "font-arial" : fonts.triple[index]
             }`}
             style={{
               position: "absolute",
@@ -183,8 +184,8 @@ export default function Text({ activeFont, onInteraction }) {
               left: "1.6rem",
               right: "1.6rem",
               bottom: "1.6rem",
-              wordBreak: "break-word",
-              overflowWrap: "break-word",
+                wordBreak: "break-all",
+              overflowWrap: "normal",
               whiteSpace: "pre-wrap",
               maxWidth: "100%",
               maxHeight: "100%",
@@ -202,7 +203,7 @@ export default function Text({ activeFont, onInteraction }) {
         <p 
           ref={textRefs[0]}
           className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${
-            showAboutText ? "" : fonts[fontStyle]
+            showAboutText ? "font-arial" : fonts[fontStyle]
           }`}
           style={{
             position: "absolute",
