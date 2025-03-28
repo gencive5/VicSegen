@@ -132,7 +132,7 @@ export default function Text({ activeFont, onInteraction }) {
       {/* About button at the top */}
       <button 
         onClick={handleAboutClick}
-        className="absolute top-4 left-1/2 transform -translate-x-1/2 z-50 bg-white text-black px-6 py-2 rounded-md hover:bg-gray-200 transition-colors"
+        className="absolute top-0 left-1/2 transform -translate-x-1/2 z-50 bg-white text-black px-6 py-2 rounded-md hover:bg-gray-200 transition-colors font-arial"
       >
         About
       </button>

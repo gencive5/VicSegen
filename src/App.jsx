@@ -36,8 +36,8 @@ function Home() {
       </div>
 
       <footer className="fixed bottom-0 left-0 right-0 py-4 text-white text-sm z-100 text-center bg-transparent">
-        <a href="mailto:vic.segen@gmail.com" className="mx-2 hover:underline">Email</a> |
-        <a href="https://instagram.com/gencive5" target="_blank" rel="noopener noreferrer" className="mx-2 hover:underline">Instagram</a>
+        <a href="mailto:vic.segen@gmail.com" className="mx-2 hover:underline font-arial">Email</a> |
+        <a href="https://instagram.com/gencive5" target="_blank" rel="noopener noreferrer" className="mx-2 hover:underline font-arial">Instagram</a>
       </footer>
     </div>
   );
