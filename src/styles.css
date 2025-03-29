@@ -123,7 +123,6 @@ div{
 }
 
 
-
 .custom-button {
   background-size: contain;
   background-repeat: no-repeat; 
@@ -148,21 +147,21 @@ div{
 }
 
 .vbg-arial5-button {
-  background-image: url('/src/assets/ButtonvisitG.png');
+  background-image: url('/src/assets/ButtonvisitGL.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 }
 
 .vbg-triple-button {
-  background-image: url('/src/assets/ButtonvisitR.png');
+  background-image: url('/src/assets/ButtonvisitRL.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 }
 
 .vbg-sm00ch-button {
-  background-image: url('/src/assets/ButtonvisitS.png');
+  background-image: url('/src/assets/ButtonvisitSL.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
