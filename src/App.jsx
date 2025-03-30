@@ -25,7 +25,7 @@ function Home() {
         )}
 
         {/* Text component - initially inactive */}
-        <div className="w-full h-full max-w-[95vw] max-h-[85svh]">
+        <div className="w-full h-full max-w-[95vw] max-h-[80svh]">
           <Suspense fallback={null}>
             <Text 
               activeFont={activeFont}
