@@ -2,7 +2,7 @@ const FontLinks = ({ fontStyle, fontLinks }) => {
     if (!fontStyle) return null;
   
     return (
-        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 z-50 w-full justify-center">
+        <div className="fixed bottom-2 left-0 right-0 flex justify-center z-50">
         <a 
           href={fontLinks[fontStyle].url} 
           target="_blank" 
