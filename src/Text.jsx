@@ -1,4 +1,7 @@
 import { useEffect, useState, useRef } from "react";
+import FontButtons from "./FontButtons";
+import FontLinks from "./FontLinks";
+import TextContent from "./TextContent";
 
 export default function Text({ activeFont, onInteraction }) {
   const [displayText, setDisplayText] = useState("");
@@ -14,7 +17,6 @@ export default function Text({ activeFont, onInteraction }) {
     sm00ch: "font-sm00ch",
   };
 
-  // Font to website link mapping
   const fontLinks = {
     arial5: {
       text: 'visit gencive5.com',
@@ -107,88 +109,18 @@ export default function Text({ activeFont, onInteraction }) {
 
   return (
     <div ref={containerRef} className="w-full h-full overflow-hidden relative pointer-events-auto p-4 md:p-6">
-      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex flex-row gap-1 z-50 sm:bottom-5 sm:gap-4">
-        <button 
-          onClick={() => handleButtonClick("arial5")} 
-          className="custom-button bg-arial5-button hover:opacity-90 transition-opacity" 
-          style={{ width: "400px", height: "200px" }}
-        />
-        <button 
-          onClick={() => handleButtonClick("triple")} 
-          className="custom-button bg-triple-button hover:opacity-90 transition-opacity" 
-          style={{ width: "400px", height: "200px" }}
-        />
-        <button 
-          onClick={handleSm00chClick} 
-          className="custom-button bg-sm00ch-button hover:opacity-90 transition-opacity" 
-          style={{ width: "400px", height: "200px" }}
-        />
-      </div>
-
-      {/* New website link button */}
-      {fontStyle && (
-        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-50">
-          <a 
-            href={fontLinks[fontStyle].url} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="bg-white text-black px-6 py-2 rounded-md hover:bg-gray-200 transition-colors text-sm sm:text-base"
-          >
-            {fontLinks[fontStyle].text}
-          </a>
-        </div>
-      )}
-
-      {fontStyle && (fontStyle === "triple" ? (
-        textRefs.map((ref, index) => (
-          <p 
-            key={index} 
-            ref={ref} 
-            className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${fonts.triple[index]}`}
-            style={{
-              position: "absolute",
-              top: "1.6rem",
-              left: "1.6rem",
-              right: "1.6rem",
-              bottom: "1.6rem",
-              wordBreak: "break-word",
-              overflowWrap: "break-word",
-              whiteSpace: "pre-wrap",
-              maxWidth: "100%",
-              maxHeight: "100%",
-              lineHeight: 1,
-              letterSpacing: "0",
-              opacity: 1,
-              visibility: fontsLoaded ? "visible" : "hidden",
-              transform: index === 0 ? "scaleX(-1)" : "none"
-            }}
-          >
-            {displayText}
-          </p>
-        ))
-      ) : (
-        <p 
-          ref={textRefs[0]}
-          className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${fonts[fontStyle]}`}
-          style={{
-            position: "absolute",
-            top: "1.6rem",
-            left: "1.6rem",
-            right: "1.6rem",
-            bottom: "1.6rem",
-            wordBreak: "break-word",
-            overflowWrap: "break-word",
-            whiteSpace: "pre-wrap",
-            maxWidth: "100%",
-            maxHeight: "100%",
-            lineHeight: 1,
-            letterSpacing: "0",
-            visibility: fontsLoaded ? "visible" : "hidden",
-          }}
-        >
-          {displayText}
-        </p>
-      ))}
+      <FontButtons 
+        handleButtonClick={handleButtonClick} 
+        handleSm00chClick={handleSm00chClick} 
+      />
+      <FontLinks fontStyle={fontStyle} fontLinks={fontLinks} />
+      <TextContent 
+        fontStyle={fontStyle} 
+        fonts={fonts} 
+        displayText={displayText} 
+        fontsLoaded={fontsLoaded} 
+        textRefs={textRefs} 
+      />
     </div>
   );
 }
