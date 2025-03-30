@@ -3,6 +3,8 @@ const TextContent = ({ fontStyle, fonts, displayText, fontsLoaded, textRefs }) =
   
     return fontStyle === "triple" ? (
       textRefs.map((ref, index) => (
+        
+        // rat
         <p 
           key={index} 
           ref={ref} 
@@ -29,7 +31,9 @@ const TextContent = ({ fontStyle, fonts, displayText, fontsLoaded, textRefs }) =
         </p>
       ))
     ) : (
-      <p 
+     
+    // gencive5 & sm00ch    
+        <p 
         ref={textRefs[0]}
         className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${fonts[fontStyle]}`}
         style={{
@@ -45,6 +49,7 @@ const TextContent = ({ fontStyle, fonts, displayText, fontsLoaded, textRefs }) =
           maxHeight: "100%",
           lineHeight: 1,
           letterSpacing: "0",
+          opacity: 1,
           visibility: fontsLoaded ? "visible" : "hidden",
         }}
       >
@@ -53,4 +58,4 @@ const TextContent = ({ fontStyle, fonts, displayText, fontsLoaded, textRefs }) =
     );
   };
   
-  export default TextContent; // Make sure this line exists
+  export default TextContent; 
