@@ -4,8 +4,8 @@ const FontButtons = ({ handleButtonClick, handleSm00chClick, handleAboutClick })
       {/* About button at the top - always visible */}
       <button 
         onClick={handleAboutClick}
-        className="fixed top-[-10px] left-1/2 transform -translate-x-1/2 z-50 bg-about-button bg-no-repeat bg-center bg-contain hover:opacity-90 transition-opacity"
-        style={{ width: '200px', height: '100px' }}
+        className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 bg-about-button bg-no-repeat bg-center bg-contain hover:opacity-90 transition-opacity"
+        style={{ width: '150px', height: '75px' }}
         aria-label="About"
      />
 
