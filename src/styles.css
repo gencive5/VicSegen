@@ -132,15 +132,24 @@ div{
 }
 
 .bg-arial5-button {
-  background-image: url('/src/assets/gencive5btnL.png'); /* Path to your PNG */
+  background-image: url('/src/assets/gencive5btnL.png');
 }
 
 .bg-triple-button {
-  background-image: url('/src/assets/ratbtnL2.png'); /* Path to your PNG */
+  background-image: url('/src/assets/ratbtnL2.png'); 
 }
 
 .bg-sm00ch-button {
-  background-image: url('/src/assets/sm00chbtnL.png'); /* Path to your PNG */
+  background-image: url('/src/assets/sm00chbtnL.png'); 
+}
+
+.bg-about-button {
+  background-image: url('/src/assets/about.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  cursor: pointer;
 }
 
 .vbg-arial5-button {
