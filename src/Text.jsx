@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import FontButtons from "./FontButtons";
-import FontLinks from "./FontLinks";
+// import FontLinks from "./FontLinks";
 import TextContent from "./TextContent";
 
 export default function Text({ activeFont, onInteraction }) {
@@ -113,7 +113,7 @@ export default function Text({ activeFont, onInteraction }) {
         handleButtonClick={handleButtonClick} 
         handleSm00chClick={handleSm00chClick} 
       />
-      <FontLinks fontStyle={fontStyle} fontLinks={fontLinks} />
+      {/* <FontLinks fontStyle={fontStyle} fontLinks={fontLinks} /> */}
       <TextContent 
         fontStyle={fontStyle} 
         fonts={fonts} 
