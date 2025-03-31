@@ -1,30 +1,20 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { lazy, Suspense, useState } from "react";
 import "./styles.css";
-import ExpandingHi from "./ExpandingHi";
 
 const Text = lazy(() => import("./Text"));
 
 function Home() {
-  const [showExpandingHi, setShowExpandingHi] = useState(true);
   const [activeFont, setActiveFont] = useState(null);
 
   const handleInteraction = (font) => {
     setActiveFont(font);
-    setShowExpandingHi(false);
   };
 
   return (
     <div className="relative w-full h-screen overflow-hidden overscroll-none">
       <div className="relative w-full h-[calc(100svh-80px)] flex items-center justify-center p-2">
-        {/* Show ExpandingHi only on first load */}
-        {showExpandingHi && (
-          <div className="w-full h-full max-w-[95vw] max-h-[85svh] absolute top-0 left-0 z-10 pointer-events-none">
-            <ExpandingHi />
-          </div>
-        )}
-
-        {/* Text component - initially inactive */}
+        {/* Text component */}
         <div className="w-full h-full max-w-[95vw] max-h-[85svh]">
           <Suspense fallback={null}>
             <Text 
