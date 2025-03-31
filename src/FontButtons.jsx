@@ -2,7 +2,7 @@ const FontButtons = ({ handleButtonClick, handleSm00chClick }) => {
   return (
     <>
       {/* Mobile - Right Column (hidden on desktop) */}
-      <div className="sm:hidden fixed right-4 bottom-4 flex flex-col gap-3 z-50 items-end">
+      <div className="sm:hidden fixed right-0 top-1/2 transform -translate-y-1/2 flex flex-col gap-3 z-50 items-end">
         <button 
           onClick={() => handleButtonClick("arial5")} 
           className="custom-button bg-arial5-button hover:opacity-90 transition-opacity"
