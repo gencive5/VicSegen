@@ -5,17 +5,17 @@ const FontButtons = ({ handleButtonClick, handleSm00chClick }) => {
       <div className="sm:hidden fixed right-[-50px] top-1/2 transform -translate-y-1/2 flex flex-col gap-3 z-50 items-end opacity-80">
         <button 
           onClick={() => handleButtonClick("arial5")} 
-          className="custom-button bg-arial5-button hover:opacity-90 transition-opacity"
+          className="custom-button bg-arial5-button hover:opacity-80 transition-opacity"
           style={{ width: '300px', height: '150px' }}
         />
         <button 
           onClick={() => handleButtonClick("triple")} 
-          className="custom-button bg-triple-button hover:opacity-90 transition-opacity"
+          className="custom-button bg-triple-button hover:opacity-80 transition-opacity"
           style={{ width: '300px', height: '150px' }}
         />
         <button 
           onClick={handleSm00chClick} 
-          className="custom-button bg-sm00ch-button hover:opacity-90 transition-opacity"
+          className="custom-button bg-sm00ch-button hover:opacity-80 transition-opacity"
           style={{ width: '300px', height: '150px' }}
         />
       </div>

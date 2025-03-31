@@ -7,7 +7,7 @@ const FontLinks = ({ fontStyle, fontLinks }) => {
           href={fontLinks[fontStyle].url} 
           target="_blank" 
           rel="noopener noreferrer"
-          className={`bg-cover bg-no-repeat bg-center hover:opacity-90 transition-opacity ${
+          className={`bg-cover bg-no-repeat bg-center hover:opacity-80 transition-opacity ${
             fontStyle === "arial5" ? "vbg-arial5-button" :
             fontStyle === "triple" ? "vbg-triple-button" :
             "vbg-sm00ch-button"
