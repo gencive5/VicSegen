@@ -1,6 +1,14 @@
-const FontButtons = ({ handleButtonClick, handleSm00chClick }) => {
+const FontButtons = ({ handleButtonClick, handleSm00chClick, handleAboutClick }) => {
   return (
     <>
+      {/* About button at the top - always visible */}
+      <button 
+        onClick={handleAboutClick}
+        className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-white text-black px-6 py-2 rounded-md hover:bg-gray-200 transition-colors font-arial"
+      >
+        About
+      </button>
+
       {/* Mobile - Right Column (hidden on desktop) */}
       <div className="sm:hidden fixed right-[-50px] top-1/2 transform -translate-y-1/2 flex flex-col gap-3 z-50 items-end opacity-80">
         <button 

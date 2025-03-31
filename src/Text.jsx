@@ -8,6 +8,7 @@ export default function Text({ activeFont, onInteraction }) {
   const [fontStyle, setFontStyle] = useState(null);
   const [matrixEffect, setMatrixEffect] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [showAboutText, setShowAboutText] = useState(false);
   const containerRef = useRef(null);
   const textRefs = [useRef(null), useRef(null), useRef(null)];
 
@@ -15,8 +16,10 @@ export default function Text({ activeFont, onInteraction }) {
     triple: ["font-myriad", "font-mutlu", "font-sword"],
     arial5: "font-arial5",
     sm00ch: "font-sm00ch",
+    arial: "font-arial"
   };
 
+  // Font to website link mapping
   const fontLinks = {
     arial5: {
       text: 'visit gencive5.com',
@@ -32,7 +35,14 @@ export default function Text({ activeFont, onInteraction }) {
     }
   };
 
+  const aboutText = "My name is Vic Segen I live in Paris I specialize in webdesign, front-end development, typography, graphic design. Contact me.";
+
   const getRandomLetter = () => {
+    if (showAboutText) {
+      // For about text, use regular letters
+      const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ";
+      return alphabet[Math.floor(Math.random() * alphabet.length)];
+    }
     if (fontStyle === "arial5") {
       return ["5", "s", "S"][Math.floor(Math.random() * 3)];
     } else if (fontStyle === "triple") {
@@ -52,6 +62,10 @@ export default function Text({ activeFont, onInteraction }) {
   };
 
   const preloadExpansion = () => {
+    if (showAboutText) {
+      return aboutText; // Return the full about text immediately
+    }
+    
     let text = "";
     while (true) {
       const newText = text + getRandomLetter();
@@ -62,17 +76,26 @@ export default function Text({ activeFont, onInteraction }) {
   };
 
   const handleButtonClick = (font) => {
+    setShowAboutText(false);
     setFontStyle(font);
     onInteraction(font);
   };
 
   const handleSm00chClick = () => {
+    setShowAboutText(false);
     setFontStyle("sm00ch");
     onInteraction("sm00ch");
   };
 
+  const handleAboutClick = () => {
+    setShowAboutText(true);
+    setFontStyle(null);
+    onInteraction(null);
+  };
+
   useEffect(() => {
     if (activeFont) {
+      setShowAboutText(false);
       setFontStyle(activeFont);
       setDisplayText(preloadExpansion());
     }
@@ -80,7 +103,7 @@ export default function Text({ activeFont, onInteraction }) {
 
   useEffect(() => {
     let interval;
-    if (matrixEffect && fontStyle) {
+    if (matrixEffect && (fontStyle || showAboutText)) {
       interval = setInterval(() => {
         setDisplayText((prevText) => {
           const textArray = prevText.split("");
@@ -90,10 +113,10 @@ export default function Text({ activeFont, onInteraction }) {
       }, 600);
     }
     return () => clearInterval(interval);
-  }, [matrixEffect, fontStyle]);
+  }, [matrixEffect, fontStyle, showAboutText]);
 
   useEffect(() => {
-    if (!fontStyle) return;
+    if (!fontStyle && !showAboutText) return;
     
     const loadFontsAndSetText = async () => {
       await document.fonts.ready;
@@ -105,21 +128,25 @@ export default function Text({ activeFont, onInteraction }) {
     const resizeHandler = () => setDisplayText(preloadExpansion());
     window.addEventListener("resize", resizeHandler);
     return () => window.removeEventListener("resize", resizeHandler);
-  }, [fontStyle]);
+  }, [fontStyle, showAboutText]);
 
   return (
     <div ref={containerRef} className="w-full h-full overflow-hidden relative pointer-events-auto p-4 md:p-6">
       <FontButtons 
         handleButtonClick={handleButtonClick} 
-        handleSm00chClick={handleSm00chClick} 
+        handleSm00chClick={handleSm00chClick}
+        handleAboutClick={handleAboutClick}
       />
+      
       <FontLinks fontStyle={fontStyle} fontLinks={fontLinks} />
+      
       <TextContent 
         fontStyle={fontStyle} 
         fonts={fonts} 
         displayText={displayText} 
         fontsLoaded={fontsLoaded} 
-        textRefs={textRefs} 
+        textRefs={textRefs}
+        showAboutText={showAboutText}
       />
     </div>
   );
