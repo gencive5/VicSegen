@@ -44,7 +44,8 @@ const TextContent = ({ fontStyle, fonts, displayText, fontsLoaded, textRefs, sho
         left: "1.6rem",
         right: "1.6rem",
         bottom: "1.6rem",
-        wordBreak: "break-word",
+        wordBreak: showAboutText ? "break-all" : "break-word",
+        
         overflowWrap: "break-word",
         whiteSpace: "pre-wrap",
         maxWidth: "100%",
