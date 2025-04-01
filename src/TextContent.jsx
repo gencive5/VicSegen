@@ -3,7 +3,7 @@ const TextContent = ({ fontStyle, fonts, displayText, fontsLoaded, textRefs, sho
   if (!fontStyle && !showAboutText) return null;
 
   // Use Arial font when in about mode
-  const textClassName = showAboutText ? "font-arial" : fonts[fontStyle];
+  const textClassName = showAboutText ? "font-arial font-normal" : fonts[fontStyle];
 
   return fontStyle === "triple" && !showAboutText ? (
     textRefs.map((ref, index) => (
@@ -37,7 +37,7 @@ const TextContent = ({ fontStyle, fonts, displayText, fontsLoaded, textRefs, sho
     // gencive5, sm00ch, or about text    
     <p 
       ref={textRefs[0]}
-      className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${textClassName}`}
+      className={`text-[12vw] sm:text-[9vw] ${showAboutText ? '' : 'font-bold'} leading-none text-left break-words z-0 ${textClassName}`}
       style={{
         position: "absolute",
         top: "1.6rem",
