@@ -16,8 +16,8 @@ export default function Text({ activeFont, onInteraction }) {
     triple: ["font-myriad", "font-mutlu", "font-sword"],
     arial5: "font-arial5",
     sm00ch: "font-sm00ch",
-    arial: "font-arial",
-    hiiii: "font-arial"
+    arial: "font-arial5",
+    hiiii: "font-arial5"
   };
 
   const fontLinks = {
