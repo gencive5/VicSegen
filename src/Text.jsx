@@ -4,8 +4,8 @@ import FontLinks from "./FontLinks";
 import TextContent from "./TextContent";
 
 export default function Text({ activeFont, onInteraction }) {
-  const [displayText, setDisplayText] = useState("");
-  const [fontStyle, setFontStyle] = useState(null);
+  const [displayText, setDisplayText] = useState("H");
+  const [fontStyle, setFontStyle] = useState("hiiii");
   const [matrixEffect, setMatrixEffect] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [showAboutText, setShowAboutText] = useState(false);
@@ -16,10 +16,10 @@ export default function Text({ activeFont, onInteraction }) {
     triple: ["font-myriad", "font-mutlu", "font-sword"],
     arial5: "font-arial5",
     sm00ch: "font-sm00ch",
-    arial: "font-arial"
+    arial: "font-arial",
+    hiiii: "font-arial"
   };
 
-  // Font to website link mapping
   const fontLinks = {
     arial5: {
       text: 'visit gencive5.com',
@@ -32,14 +32,14 @@ export default function Text({ activeFont, onInteraction }) {
     sm00ch: {
       text: 'visit sm00ch.xyz',
       url: 'https://sm00ch.xyz/'
-    }
+    },
+    hiiii: null
   };
 
   const aboutText = "My name is Vic Segen I live in Paris I specialize in webdesign, front-end development, typography, graphic design. Contact me.";
 
   const getRandomLetter = () => {
     if (showAboutText) {
-      // For about text, use regular letters
       const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ";
       return alphabet[Math.floor(Math.random() * alphabet.length)];
     }
@@ -48,6 +48,8 @@ export default function Text({ activeFont, onInteraction }) {
     } else if (fontStyle === "triple") {
       const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
       return alphabet[Math.floor(Math.random() * alphabet.length)];
+    } else if (fontStyle === "hiiii") {
+      return "i";
     } else {
       const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       return alphabet[Math.floor(Math.random() * alphabet.length)];
@@ -63,10 +65,10 @@ export default function Text({ activeFont, onInteraction }) {
 
   const preloadExpansion = () => {
     if (showAboutText) {
-      return aboutText; // Return the full about text immediately
+      return aboutText;
     }
     
-    let text = "";
+    let text = fontStyle === "hiiii" ? "H" : "";
     while (true) {
       const newText = text + getRandomLetter();
       if (checkOverflow(newText)) break;

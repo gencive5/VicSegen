@@ -5,7 +5,7 @@ import "./styles.css";
 const Text = lazy(() => import("./Text"));
 
 function Home() {
-  const [activeFont, setActiveFont] = useState(null);
+  const [activeFont, setActiveFont] = useState("hiiii"); // Default to "hiiii" panel
 
   const handleInteraction = (font) => {
     setActiveFont(font);
@@ -14,7 +14,6 @@ function Home() {
   return (
     <div className="relative w-full h-screen overflow-hidden overscroll-none">
       <div className="relative w-full h-[calc(100svh-80px)] flex items-center justify-center p-2">
-        {/* Text component */}
         <div className="w-full h-full max-w-[95vw] max-h-[85svh]">
           <Suspense fallback={null}>
             <Text 
