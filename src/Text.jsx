@@ -36,7 +36,18 @@ export default function Text({ activeFont, onInteraction }) {
     hiiii: null
   };
 
-  const aboutText = "Paris-based designer & developer specializing in web design, front-end development, typography, and graphic design. Contact me via Instagram or Email.";
+  const aboutText = (
+    <>
+      Paris-based designer & developer specializing in web design, front-end development, typography, and graphic design. Contact me via{" "}
+      <a href="https://instagram.com/gencive5" className="text-blue-500 hover:underline" target="_blank" rel="noopener noreferrer">
+        Instagram
+      </a>{" "}
+      or{" "}
+      <a href="mailto:vic.segen@gmail.com" className="text-blue-500 hover:underline">
+        Email
+      </a>.
+    </>
+  );
 
   const getRandomLetter = () => {
     if (showAboutText) {
