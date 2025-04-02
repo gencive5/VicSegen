@@ -6,26 +6,31 @@ const TextContent = ({ fontStyle, fonts, displayText, fontsLoaded, textRefs, sho
   const textClassName = showAboutText ? "font-arial font-normal" : fonts[fontStyle];
 
   // About text with links
-  const aboutText = (
+  const aboutText = showAboutText ? (
     <>
       Paris-based designer & developer specializing in web design, front-end development, typography, and graphic design. Contact me via{" "}
-      <a 
-        href="https://instagram.com/gencive5" 
-        className="text-blue-500 hover:underline" 
-        target="_blank" 
-        rel="noopener noreferrer"
+      <span 
+        onClick={(e) => {
+          e.stopPropagation();
+          window.open('https://instagram.com/gencive5', '_blank');
+        }}
+        className="text-blue-500 hover:underline cursor-pointer"
       >
         Instagram
-      </a>{" "}
+      </span>{" "}
       or{" "}
-      <a 
-        href="mailto:vic.segen@gmail.com" 
-        className="text-blue-500 hover:underline"
+      <span 
+        onClick={(e) => {
+          e.stopPropagation();
+          window.location.href = 'mailto:vic.segen@gmail.com';
+        }}
+        className="text-blue-500 hover:underline cursor-pointer"
       >
         Email
-      </a>.
+      </span>.
     </>
-  );
+  ) : displayText;
+
 
   return fontStyle === "triple" && !showAboutText ? (
     textRefs.map((ref, index) => (
