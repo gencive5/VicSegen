@@ -37,7 +37,7 @@ const TextContent = ({ fontStyle, fonts, displayText, fontsLoaded, textRefs, sho
     // gencive5, sm00ch, or about text    
     <p 
       ref={textRefs[0]}
-      className={`text-[12vw] sm:text-[9vw] ${showAboutText ? 'text-[7vw] sm:text-[4.5vw] md:text-[7vw]' : 'font-bold'} leading-none text-left break-words z-0 ${textClassName}`}
+      className={`text-[12vw] sm:text-[9vw] ${showAboutText ? 'xs:text-[10vw] max-sm:text-[11vw] sm:text-[5vw] md:text-[6.5vw]' : 'font-bold'} leading-none text-left break-words z-0 ${textClassName}`}
       style={{
         position: "absolute",
         top: "1.6rem",

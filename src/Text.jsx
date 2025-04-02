@@ -36,7 +36,7 @@ export default function Text({ activeFont, onInteraction }) {
     hiiii: null
   };
 
-  const aboutText = "My name is Vic Segen I live in Paris I specialize in webdesign, front-end development, typography, graphic design. Contact me.";
+  const aboutText = "Paris-based designer & developer specializing in web design, front-end development, typography, and graphic design. Contact me via Instagram or Email.";
 
   const getRandomLetter = () => {
     if (showAboutText) {
