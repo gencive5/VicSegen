@@ -1,11 +1,16 @@
+import AboutText from "./AboutText";
+
 const TextContent = ({ fontStyle, fonts, displayText, fontsLoaded, textRefs, showAboutText }) => {
   // Show nothing if no font style is selected and not in about mode
   if (!fontStyle && !showAboutText) return null;
 
-  // Use Arial font when in about mode
-  const textClassName = showAboutText ? "font-arial font-normal" : fonts[fontStyle];
+  if (showAboutText) {
+    return <AboutText displayText={displayText} fontsLoaded={fontsLoaded} textRefs={textRefs} />;
+  }
 
-  return fontStyle === "triple" && !showAboutText ? (
+  const textClassName = fonts[fontStyle];
+
+  return fontStyle === "triple" ? (
     textRefs.map((ref, index) => (
       // rat
       <p 
@@ -34,19 +39,17 @@ const TextContent = ({ fontStyle, fonts, displayText, fontsLoaded, textRefs, sho
       </p>
     ))
   ) : (
-    // gencive5, sm00ch, or about text    
+    // gencive5 or sm00ch    
     <p 
       ref={textRefs[0]}
-      
-      className={`text-[12vw] sm:text-[9vw] ${showAboutText ? 'xs:text-[10vw] max-sm:text-[11vw] sm:text-[5vw] md:text-[6.5vw]' : 'font-bold'} leading-none text-left break-words z-0 ${textClassName}`}
+      className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${textClassName}`}
       style={{
         position: "absolute",
         top: "1.6rem",
         left: "1.6rem",
         right: "1.6rem",
         bottom: "1.6rem",
-        wordBreak: showAboutText ? "break-all" : "break-word",
-        
+        wordBreak: "break-word",
         overflowWrap: "break-word",
         whiteSpace: "pre-wrap",
         maxWidth: "100%",
