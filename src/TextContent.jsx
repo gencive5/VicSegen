@@ -5,35 +5,9 @@ const TextContent = ({ fontStyle, fonts, displayText, fontsLoaded, textRefs, sho
   // Use Arial font when in about mode
   const textClassName = showAboutText ? "font-arial font-normal" : fonts[fontStyle];
 
-  // About text with links
-  const aboutText = showAboutText ? (
-    <>
-      Paris-based designer & developer specializing in web design, front-end development, typography, and graphic design. Contact me via{" "}
-      <span 
-        onClick={(e) => {
-          e.stopPropagation();
-          window.open('https://instagram.com/gencive5', '_blank');
-        }}
-        className="text-blue-500 hover:underline cursor-pointer"
-      >
-        Instagram
-      </span>{" "}
-      or{" "}
-      <span 
-        onClick={(e) => {
-          e.stopPropagation();
-          window.location.href = 'mailto:vic.segen@gmail.com';
-        }}
-        className="text-blue-500 hover:underline cursor-pointer"
-      >
-        Email
-      </span>.
-    </>
-  ) : displayText;
-
-
   return fontStyle === "triple" && !showAboutText ? (
     textRefs.map((ref, index) => (
+      // rat
       <p 
         key={index} 
         ref={ref} 
@@ -60,11 +34,11 @@ const TextContent = ({ fontStyle, fonts, displayText, fontsLoaded, textRefs, sho
       </p>
     ))
   ) : (
+    // gencive5, sm00ch, or about text    
     <p 
       ref={textRefs[0]}
-      className={`text-[12vw] sm:text-[9vw] ${
-        showAboutText ? 'xs:text-[10vw] max-sm:text-[11vw] sm:text-[5vw] md:text-[6.5vw]' : 'font-bold'
-      } leading-none text-left break-words z-0 ${textClassName}`}
+      
+      className={`text-[12vw] sm:text-[9vw] ${showAboutText ? 'xs:text-[10vw] max-sm:text-[11vw] sm:text-[5vw] md:text-[6.5vw]' : 'font-bold'} leading-none text-left break-words z-0 ${textClassName}`}
       style={{
         position: "absolute",
         top: "1.6rem",
@@ -72,6 +46,7 @@ const TextContent = ({ fontStyle, fonts, displayText, fontsLoaded, textRefs, sho
         right: "1.6rem",
         bottom: "1.6rem",
         wordBreak: showAboutText ? "break-all" : "break-word",
+        
         overflowWrap: "break-word",
         whiteSpace: "pre-wrap",
         maxWidth: "100%",
@@ -82,7 +57,7 @@ const TextContent = ({ fontStyle, fonts, displayText, fontsLoaded, textRefs, sho
         visibility: fontsLoaded ? "visible" : "hidden",
       }}
     >
-      {showAboutText ? aboutText : displayText}
+      {displayText}
     </p>
   );
 };
