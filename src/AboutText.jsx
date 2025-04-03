@@ -20,7 +20,31 @@ const AboutText = ({ displayText, fontsLoaded, textRefs }) => {
           visibility: fontsLoaded ? "visible" : "hidden",
         }}
       >
-        Paris-based designer & developer specializing in web design, front-end development, typography, and graphic design. Contact me via <a href="https://instagram.com/gencive5" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-500">Instagram</a> or <a href="mailto:vic.segen@gmail.com" className="underline hover:text-blue-500">Email</a>.
+        Paris-based designer & developer specializing in web design, front-end development, typography, and graphic design. Contact me via{' '}
+        <a 
+          href="https://instagram.com/gencive5" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="underline hover:opacity-80 transition-opacity"
+          style={{
+            background: 'linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D, #F56040, #F77737, #FCAF45, #FFDC80)',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            color: 'transparent',
+          }}
+        >
+          Instagram
+        </a>{' '}
+        or{' '}
+        <a 
+          href="mailto:vic.segen@gmail.com" 
+          className="underline hover:opacity-80 transition-opacity"
+          style={{
+            color: '#1A73E8', // Google/Gmail blue
+          }}
+        >
+          Email
+        </a>.
       </p>
     );
   };
