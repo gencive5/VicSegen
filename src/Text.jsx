@@ -134,7 +134,7 @@ export default function Text({ activeFont, onInteraction }) {
   }, [fontStyle, showAboutText]);
 
   return (
-    <div ref={containerRef} className="w-full h-full overflow-hidden relative pointer-events-auto p-4 md:p-6">
+    <div ref={containerRef} className="w-full h-full overflow-hidden absolute pointer-events-auto p-4 md:p-6">
       <FontButtons 
         handleButtonClick={handleButtonClick} 
         handleSm00chClick={handleSm00chClick}
