@@ -135,7 +135,7 @@ export default function Text({ activeFont, onInteraction }) {
   return (
     <div 
       ref={containerRef} 
-      className="w-full h-full overflow-hidden relative pointer-events-auto p-4 md:p-6 flex flex-col gap-4"
+      className="w-full h-full overflow-visible relative pointer-events-auto p-4 md:p-6 flex flex-col gap-4"
     >
       {/* Top section - buttons */}
       <div className="flex-none">
