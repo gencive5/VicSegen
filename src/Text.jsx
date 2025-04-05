@@ -36,7 +36,6 @@ export default function Text({ activeFont, onInteraction }) {
     hiiii: null
   };
 
-  
   const aboutText = "Paris-based designer & developer specializing in web design, front-end development, typography, and graphic design. Contact me via Instagram or Email.";
 
   const getRandomLetter = () => {
@@ -134,23 +133,35 @@ export default function Text({ activeFont, onInteraction }) {
   }, [fontStyle, showAboutText]);
 
   return (
-    <div ref={containerRef} className="w-full h-full overflow-hidden relative pointer-events-auto p-4 md:p-6">
-      <FontButtons 
-        handleButtonClick={handleButtonClick} 
-        handleSm00chClick={handleSm00chClick}
-        handleAboutClick={handleAboutClick}
-      />
+    <div 
+      ref={containerRef} 
+      className="w-full h-full overflow-hidden relative pointer-events-auto p-4 md:p-6 flex flex-col gap-4"
+    >
+      {/* Top section - buttons */}
+      <div className="flex-none">
+        <FontButtons 
+          handleButtonClick={handleButtonClick} 
+          handleSm00chClick={handleSm00chClick}
+          handleAboutClick={handleAboutClick}
+        />
+      </div>
       
-      <FontLinks fontStyle={fontStyle} fontLinks={fontLinks} />
+      {/* Middle section - main content (flex-grow with min-h-0 for proper scrolling) */}
+      <div className="flex-grow min-h-0 relative">
+        <TextContent 
+          fontStyle={fontStyle} 
+          fonts={fonts} 
+          displayText={displayText} 
+          fontsLoaded={fontsLoaded} 
+          textRefs={textRefs}
+          showAboutText={showAboutText}
+        />
+      </div>
       
-      <TextContent 
-        fontStyle={fontStyle} 
-        fonts={fonts} 
-        displayText={displayText} 
-        fontsLoaded={fontsLoaded} 
-        textRefs={textRefs}
-        showAboutText={showAboutText}
-      />
+      {/* Bottom section - links */}
+      <div className="flex-none">
+        <FontLinks fontStyle={fontStyle} fontLinks={fontLinks} />
+      </div>
     </div>
   );
 }
