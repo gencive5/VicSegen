@@ -14,7 +14,7 @@ const FontButtons = ({ handleButtonClick, handleSm00chClick, handleAboutClick })
         <button 
           onClick={() => handleButtonClick("arial5")} 
           className="custom-button bg-arial5-button hover:opacity-80 transition-opacity"
-          style={{ width: '260px', height: '130px' }}
+          style={{ width: '270px', height: '140px' }}
           aria-label="Select gencive5"
         />
         <button 
@@ -36,7 +36,7 @@ const FontButtons = ({ handleButtonClick, handleSm00chClick, handleAboutClick })
         <button 
           onClick={() => handleButtonClick("arial5")} 
           className="custom-button bg-arial5-button hover:opacity-90 transition-opacity"
-          style={{ width: '260px', height: '130px' }}
+          style={{ width: '270px', height: '140px' }}
           aria-label="Select gencive5"
         />
         <button 
