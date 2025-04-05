@@ -15,16 +15,19 @@ const FontButtons = ({ handleButtonClick, handleSm00chClick, handleAboutClick })
           onClick={() => handleButtonClick("arial5")} 
           className="custom-button bg-arial5-button hover:opacity-80 transition-opacity"
           style={{ width: '260px', height: '130px' }}
+          aria-label="Select gencive5"
         />
         <button 
           onClick={() => handleButtonClick("triple")} 
           className="custom-button bg-triple-button hover:opacity-80 transition-opacity"
           style={{ width: '260px', height: '130px' }}
+          aria-label="Select rat portfolio"
         />
         <button 
           onClick={handleSm00chClick} 
           className="custom-button bg-sm00ch-button hover:opacity-80 transition-opacity"
           style={{ width: '260px', height: '130px' }}
+          aria-label="Select Sm00ch"
         />
       </div>
 
@@ -34,16 +37,19 @@ const FontButtons = ({ handleButtonClick, handleSm00chClick, handleAboutClick })
           onClick={() => handleButtonClick("arial5")} 
           className="custom-button bg-arial5-button hover:opacity-90 transition-opacity"
           style={{ width: '260px', height: '130px' }}
+          aria-label="Select gencive5"
         />
         <button 
           onClick={() => handleButtonClick("triple")} 
           className="custom-button bg-triple-button hover:opacity-90 transition-opacity"
           style={{ width: '260px', height: '130px' }}
+          aria-label="Select rat portfolio"
         />
         <button 
           onClick={handleSm00chClick} 
           className="custom-button bg-sm00ch-button hover:opacity-90 transition-opacity"
           style={{ width: '260px', height: '130px' }}
+          aria-label="Select Sm00ch"
         />
       </div>
     </>

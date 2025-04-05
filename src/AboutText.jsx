@@ -2,7 +2,7 @@ const AboutText = ({ fontsLoaded, textRefs }) => {
     return (
       <p 
         ref={textRefs[0]}
-        className="font-arial font-normal leading-none text-left break-words z-0 text-[11vw] sm:text-[9vw] xs:text-[10vw] max-sm:text-[11vw] sm:text-[5vw] md:text-[6.4vw] "
+        className="font-arial font-normal leading-none text-left break-words z-0 text-[11vw] sm:text-[9vw] xs:text-[10vw] max-sm:text-[11vw] sm:text-[5vw] md:text-[6.4vw]"
         style={{
           position: "absolute",
           top: "1.6rem",
