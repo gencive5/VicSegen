@@ -132,15 +132,15 @@ div{
 }
 
 .bg-arial5-button {
-  background-image: url('/src/assets/Btngencive5.png');
+  background-image: url('/src/assets/Btngencive5.webp');
 }
 
 .bg-triple-button {
-  background-image: url('/src/assets/Btnrat.png'); 
+  background-image: url('/src/assets/Btnrat.webp'); 
 }
 
 .bg-sm00ch-button {
-  background-image: url('/src/assets/Btnsm00ch.png'); 
+  background-image: url('/src/assets/Btnsm00ch.webp'); 
 }
 
 .bg-about-button {
@@ -153,21 +153,21 @@ div{
 }
 
 .vbg-arial5-button {
-  background-image: url('/src/assets/visitg.png');
+  background-image: url('/src/assets/visitg.webp');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 }
 
 .vbg-triple-button {
-  background-image: url('/src/assets/visitr.png');
+  background-image: url('/src/assets/visitr.webp');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 }
 
 .vbg-sm00ch-button {
-  background-image: url('/src/assets/visits.png');
+  background-image: url('/src/assets/visits.webp');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
