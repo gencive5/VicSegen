@@ -136,6 +136,30 @@ export default function Text({ activeFont, onInteraction }) {
     return () => window.removeEventListener("resize", resizeHandler);
   }, [fontStyle, showAboutText]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setDisplayText(preloadExpansion());
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [fontStyle, showAboutText]);
+
+  // Add this to your existing useEffect in Text.jsx
+useEffect(() => {
+  if (!containerRef.current || !fontStyle) return;
+
+  const resizeObserver = new ResizeObserver(() => {
+    setDisplayText(preloadExpansion());
+  });
+
+  resizeObserver.observe(containerRef.current);
+
+  return () => {
+    resizeObserver.disconnect();
+  };
+}, [fontStyle, showAboutText]);
+
   return (
     <div 
       ref={containerRef} 
