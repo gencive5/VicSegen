@@ -9,10 +9,8 @@ export default function Text({ activeFont, onInteraction }) {
   const [fontStyle, setFontStyle] = useState("hiiii");
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [showAboutText, setShowAboutText] = useState(false);
-  const [maxLineCount, setMaxLineCount] = useState(null);
   const containerRef = useRef(null);
   const textRefs = [useRef(null), useRef(null), useRef(null)];
-  const initialized = useRef(false);
 
   const fonts = {
     triple: ["font-myriad", "font-mutlu", "font-sword"],
@@ -40,7 +38,6 @@ export default function Text({ activeFont, onInteraction }) {
 
   const aboutText = "Paris-based designer & developer specializing in web design, front-end development, typography, and graphic design. Contact me via Instagram or Email.";
 
-  // Button click handlers
   const handleButtonClick = (font) => {
     setShowAboutText(false);
     setFontStyle(font);
@@ -98,21 +95,6 @@ export default function Text({ activeFont, onInteraction }) {
     return text;
   };
 
-  const countLines = (element) => {
-    if (!element) return 0;
-    const range = document.createRange();
-    range.selectNodeContents(element);
-    return range.getClientRects().length;
-  };
-
-  useEffect(() => {
-    if (fontsLoaded && textRefs[0].current && !initialized.current) {
-      const lines = countLines(textRefs[0].current);
-      setMaxLineCount(lines);
-      initialized.current = true;
-    }
-  }, [fontsLoaded, displayText]);
-
   useEffect(() => {
     if (activeFont) {
       setShowAboutText(false);
@@ -156,9 +138,6 @@ export default function Text({ activeFont, onInteraction }) {
         text={displayText}
         setText={setDisplayText}
         fontStyle={fontStyle}
-        getRandomLetter={getRandomLetter}
-        textRef={textRefs[0]}
-        maxLineCount={maxLineCount}
       />
       
       <div className="flex-none">
@@ -177,7 +156,6 @@ export default function Text({ activeFont, onInteraction }) {
           fontsLoaded={fontsLoaded} 
           textRefs={textRefs}
           showAboutText={showAboutText}
-          maxLineCount={maxLineCount}
         />
       </div>
       
