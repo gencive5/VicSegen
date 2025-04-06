@@ -3,10 +3,28 @@ import FontButtons from "./FontButtons";
 import FontLinks from "./FontLinks";
 import TextContent from "./TextContent";
 
+function MatrixTextEffect({ text, setText, fontStyle, getRandomLetter }) {
+  useEffect(() => {
+    let interval;
+    if (["sm00ch", "arial5", "triple"].includes(fontStyle)) {
+      interval = setInterval(() => {
+        setText((prevText) => {
+          const textArray = prevText.split("");
+          const randomIndex = Math.floor(Math.random() * textArray.length);
+          textArray[randomIndex] = getRandomLetter();
+          return textArray.join("");
+        });
+      }, 600);
+    }
+    return () => clearInterval(interval);
+  }, [fontStyle, setText, getRandomLetter]);
+
+  return null;
+}
+
 export default function Text({ activeFont, onInteraction }) {
   const [displayText, setDisplayText] = useState("H");
   const [fontStyle, setFontStyle] = useState("hiiii");
-  const [matrixEffect, setMatrixEffect] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [showAboutText, setShowAboutText] = useState(false);
   const containerRef = useRef(null);
@@ -104,20 +122,6 @@ export default function Text({ activeFont, onInteraction }) {
   }, [activeFont]);
 
   useEffect(() => {
-    let interval;
-    if (matrixEffect && (fontStyle || showAboutText)) {
-      interval = setInterval(() => {
-        setDisplayText((prevText) => {
-          const textArray = prevText.split("");
-          textArray[Math.floor(Math.random() * textArray.length)] = getRandomLetter();
-          return textArray.join("");
-        });
-      }, 600);
-    }
-    return () => clearInterval(interval);
-  }, [matrixEffect, fontStyle, showAboutText]);
-
-  useEffect(() => {
     if (!fontStyle && !showAboutText) return;
     
     const loadFontsAndSetText = async () => {
@@ -137,7 +141,13 @@ export default function Text({ activeFont, onInteraction }) {
       ref={containerRef} 
       className="w-full h-full overflow-visible relative pointer-events-auto p-2 md:p-4 flex flex-col gap-1"
     >
-      {/* Top section - buttons */}
+      <MatrixTextEffect 
+        text={displayText}
+        setText={setDisplayText}
+        fontStyle={fontStyle}
+        getRandomLetter={getRandomLetter}
+      />
+      
       <div className="flex-none">
         <FontButtons 
           handleButtonClick={handleButtonClick} 
@@ -146,7 +156,6 @@ export default function Text({ activeFont, onInteraction }) {
         />
       </div>
       
-      {/* Middle section - main content (flex-grow with min-h-0 for proper scrolling) */}
       <div className="flex-grow min-h-0 relative">
         <TextContent 
           fontStyle={fontStyle} 
@@ -158,7 +167,6 @@ export default function Text({ activeFont, onInteraction }) {
         />
       </div>
       
-      {/* Bottom section - links */}
       <div className="flex-none">
         <FontLinks fontStyle={fontStyle} fontLinks={fontLinks} />
       </div>
