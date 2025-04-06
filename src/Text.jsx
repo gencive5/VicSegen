@@ -2,33 +2,17 @@ import { useEffect, useState, useRef } from "react";
 import FontButtons from "./FontButtons";
 import FontLinks from "./FontLinks";
 import TextContent from "./TextContent";
-
-function MatrixTextEffect({ text, setText, fontStyle, getRandomLetter }) {
-  useEffect(() => {
-    let interval;
-    if (["sm00ch", "arial5", "triple"].includes(fontStyle)) {
-      interval = setInterval(() => {
-        setText((prevText) => {
-          const textArray = prevText.split("");
-          const randomIndex = Math.floor(Math.random() * textArray.length);
-          textArray[randomIndex] = getRandomLetter();
-          return textArray.join("");
-        });
-      }, 600);
-    }
-    return () => clearInterval(interval);
-  }, [fontStyle, setText, getRandomLetter]);
-
-  return null;
-}
+import MatrixTextEffect from "./MatrixTextEffect";
 
 export default function Text({ activeFont, onInteraction }) {
   const [displayText, setDisplayText] = useState("H");
   const [fontStyle, setFontStyle] = useState("hiiii");
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [showAboutText, setShowAboutText] = useState(false);
+  const [maxLineCount, setMaxLineCount] = useState(null);
   const containerRef = useRef(null);
   const textRefs = [useRef(null), useRef(null), useRef(null)];
+  const initialized = useRef(false);
 
   const fonts = {
     triple: ["font-myriad", "font-mutlu", "font-sword"],
@@ -55,6 +39,25 @@ export default function Text({ activeFont, onInteraction }) {
   };
 
   const aboutText = "Paris-based designer & developer specializing in web design, front-end development, typography, and graphic design. Contact me via Instagram or Email.";
+
+  // Button click handlers
+  const handleButtonClick = (font) => {
+    setShowAboutText(false);
+    setFontStyle(font);
+    onInteraction(font);
+  };
+
+  const handleSm00chClick = () => {
+    setShowAboutText(false);
+    setFontStyle("sm00ch");
+    onInteraction("sm00ch");
+  };
+
+  const handleAboutClick = () => {
+    setShowAboutText(true);
+    setFontStyle(null);
+    onInteraction(null);
+  };
 
   const getRandomLetter = () => {
     if (showAboutText) {
@@ -95,23 +98,20 @@ export default function Text({ activeFont, onInteraction }) {
     return text;
   };
 
-  const handleButtonClick = (font) => {
-    setShowAboutText(false);
-    setFontStyle(font);
-    onInteraction(font);
+  const countLines = (element) => {
+    if (!element) return 0;
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    return range.getClientRects().length;
   };
 
-  const handleSm00chClick = () => {
-    setShowAboutText(false);
-    setFontStyle("sm00ch");
-    onInteraction("sm00ch");
-  };
-
-  const handleAboutClick = () => {
-    setShowAboutText(true);
-    setFontStyle(null);
-    onInteraction(null);
-  };
+  useEffect(() => {
+    if (fontsLoaded && textRefs[0].current && !initialized.current) {
+      const lines = countLines(textRefs[0].current);
+      setMaxLineCount(lines);
+      initialized.current = true;
+    }
+  }, [fontsLoaded, displayText]);
 
   useEffect(() => {
     if (activeFont) {
@@ -137,28 +137,15 @@ export default function Text({ activeFont, onInteraction }) {
   }, [fontStyle, showAboutText]);
 
   useEffect(() => {
-    const handleResize = () => {
+    if (!containerRef.current || !fontStyle) return;
+
+    const resizeObserver = new ResizeObserver(() => {
       setDisplayText(preloadExpansion());
-    };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    });
+
+    resizeObserver.observe(containerRef.current);
+    return () => resizeObserver.disconnect();
   }, [fontStyle, showAboutText]);
-
-  // Add this to your existing useEffect in Text.jsx
-useEffect(() => {
-  if (!containerRef.current || !fontStyle) return;
-
-  const resizeObserver = new ResizeObserver(() => {
-    setDisplayText(preloadExpansion());
-  });
-
-  resizeObserver.observe(containerRef.current);
-
-  return () => {
-    resizeObserver.disconnect();
-  };
-}, [fontStyle, showAboutText]);
 
   return (
     <div 
@@ -170,6 +157,8 @@ useEffect(() => {
         setText={setDisplayText}
         fontStyle={fontStyle}
         getRandomLetter={getRandomLetter}
+        textRef={textRefs[0]}
+        maxLineCount={maxLineCount}
       />
       
       <div className="flex-none">
@@ -188,6 +177,7 @@ useEffect(() => {
           fontsLoaded={fontsLoaded} 
           textRefs={textRefs}
           showAboutText={showAboutText}
+          maxLineCount={maxLineCount}
         />
       </div>
       

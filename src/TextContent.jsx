@@ -1,48 +1,36 @@
+import { useEffect } from "react";
 import AboutText from "./AboutText";
-import { useEffect, useState } from "react";
 
-const countLines = (element) => {
-  if (!element) return 0;
-  
-  // Temporarily make it visible if hidden
-  const wasHidden = element.style.visibility === 'hidden';
-  if (wasHidden) {
-    element.style.visibility = 'visible';
-  }
-  
-  // Force layout calculation
-  const range = document.createRange();
-  range.selectNodeContents(element);
-  const rects = range.getClientRects();
-  
-  // Restore original visibility
-  if (wasHidden) {
-    element.style.visibility = 'hidden';
-  }
-  
-  return rects.length;
-};
-
-const TextContent = ({ fontStyle, fonts, displayText, fontsLoaded, textRefs, showAboutText }) => {
-  const [lineCounts, setLineCounts] = useState([0, 0, 0]);
-
+const TextContent = ({
+  fontStyle,
+  fonts,
+  displayText,
+  fontsLoaded,
+  textRefs,
+  showAboutText,
+  maxLineCount
+}) => {
   useEffect(() => {
-    if (!fontsLoaded) return;
-
-    const updateLineCounts = () => {
-      if (fontStyle === "triple") {
-        const counts = textRefs.map(ref => countLines(ref.current));
-        setLineCounts(counts);
-      } else if (fontStyle) {
-        setLineCounts([countLines(textRefs[0].current), 0, 0]);
+    if (!fontsLoaded || !textRefs[0].current) return;
+    
+    const updateCounter = () => {
+      const range = document.createRange();
+      range.selectNodeContents(textRefs[0].current);
+      const currentLines = range.getClientRects().length;
+      
+      const counter = textRefs[0].current.parentElement.querySelector('.line-counter');
+      if (counter) {
+        counter.textContent = `${currentLines}${maxLineCount ? `/${maxLineCount}` : ''}`;
+        counter.className = `line-counter absolute bottom-0 right-0 px-2 py-1 text-xs ${
+          currentLines > maxLineCount 
+            ? 'bg-red-500 text-white' 
+            : 'bg-black text-white opacity-75'
+        }`;
       }
     };
 
-    // Use setTimeout to ensure the update happens after rendering
-    const timer = setTimeout(updateLineCounts, 0);
-
-    return () => clearTimeout(timer);
-  }, [displayText, fontsLoaded, fontStyle, textRefs]);
+    updateCounter();
+  }, [displayText, fontsLoaded, maxLineCount]);
 
   if (!fontStyle && !showAboutText) return null;
 
@@ -80,8 +68,8 @@ const TextContent = ({ fontStyle, fonts, displayText, fontsLoaded, textRefs, sho
             {displayText}
           </p>
           {fontsLoaded && (
-            <div className="absolute bottom-0 right-0 bg-black text-white text-xs px-2 py-1 opacity-75">
-              Lines: {lineCounts[index]}
+            <div className="line-counter absolute bottom-0 right-0 bg-black text-white text-xs px-2 py-1 opacity-75">
+              -
             </div>
           )}
         </div>
@@ -112,8 +100,8 @@ const TextContent = ({ fontStyle, fonts, displayText, fontsLoaded, textRefs, sho
         {displayText}
       </p>
       {fontsLoaded && (
-        <div className="absolute bottom-0 right-0 bg-black text-white text-xs px-2 py-1 opacity-75">
-          Lines: {lineCounts[0]}
+        <div className="line-counter absolute bottom-0 right-0 bg-black text-white text-xs px-2 py-1 opacity-75">
+          -
         </div>
       )}
     </div>
