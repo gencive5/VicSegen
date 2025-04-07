@@ -7,11 +7,16 @@ const TextContent = ({
   fontsLoaded,
   textRefs,
   showAboutText,
+  isMobile
 }) => {
   if (!fontStyle && !showAboutText) return null;
   if (showAboutText) return <AboutText displayText={displayText} fontsLoaded={fontsLoaded} textRefs={textRefs} />;
 
   const textClassName = fonts[fontStyle];
+  const mobileStyle = isMobile ? {
+    margin: '0.5rem',
+    padding: '0.5rem'
+  } : {};
 
   return fontStyle === "triple" ? (
     <>
@@ -19,7 +24,7 @@ const TextContent = ({
         <p 
           key={index}
           ref={ref} 
-          className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${fonts.triple[index]}`}
+          className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-10 ${fonts.triple[index]}`}
           style={{
             position: "absolute",
             top: "1.6rem",
@@ -35,7 +40,8 @@ const TextContent = ({
             letterSpacing: "0",
             opacity: 1,
             visibility: fontsLoaded ? "visible" : "hidden",
-            transform: index === 0 ? "scaleX(-1)" : "none"
+            transform: index === 0 ? "scaleX(-1)" : "none",
+            ...mobileStyle
           }}
         >
           {displayText}
@@ -45,7 +51,7 @@ const TextContent = ({
   ) : (
     <p 
       ref={textRefs[0]}
-      className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${textClassName}`}
+      className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-10 ${textClassName}`}
       style={{
         position: "absolute",
         top: "1.6rem",
@@ -61,6 +67,7 @@ const TextContent = ({
         letterSpacing: "0",
         opacity: 1,
         visibility: fontsLoaded ? "visible" : "hidden",
+        ...mobileStyle
       }}
     >
       {displayText}

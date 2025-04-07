@@ -12,6 +12,7 @@ export default function Text({ activeFont, onInteraction }) {
   const containerRef = useRef(null);
   const textRefs = [useRef(null), useRef(null), useRef(null)];
   const isResizingRef = useRef(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const fonts = {
     triple: ["font-myriad", "font-mutlu", "font-sword"],
@@ -73,17 +74,13 @@ export default function Text({ activeFont, onInteraction }) {
       text = newText;
     }
   
-    // Special character removal rules
     if (fontStyle === "sm00ch" && text.length > 2) {
       return text.slice(0, -2);
     } else if (fontStyle === "arial5" && text.length > 1) {
       return text.slice(0, -1);
     } else if (fontStyle === "hiiii") {
-      // For hiiii, we need to be more aggressive with removal to prevent extra line
       const maxHeight = containerRef.current?.clientHeight;
       const textHeight = textRefs[0].current?.scrollHeight;
-      
-      // If we're close to overflowing (within 10% of container height), remove one character
       if (maxHeight && textHeight && textHeight > maxHeight * 0.9) {
         return text.slice(0, -1);
       }
@@ -91,6 +88,15 @@ export default function Text({ activeFont, onInteraction }) {
     
     return text;
   };
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     if (activeFont) {
@@ -133,12 +139,22 @@ export default function Text({ activeFont, onInteraction }) {
   }, [fontStyle, showAboutText]);
 
   return (
-    <div ref={containerRef} className="w-full h-full overflow-visible relative pointer-events-auto p-2 md:p-4 flex flex-col gap-1"  
-    style={{ overflow: fontStyle === "hiiii" ? "hidden" : "visible" }}
+    <div 
+    ref={containerRef} 
+    className="w-full h-full relative pointer-events-auto p-2 md:p-4 flex flex-col gap-1"
+    style={{ 
+      overflow: fontStyle === "hiiii" ? "hidden" : "visible",
+      position: 'relative'
+    }}
   >
+    {/* Mobile-only background container */}
+    {isMobile && (
+      <div className="absolute inset-0 bg-white -m-2 md:m-0 z-0"></div>
+    )}
+      
       <MatrixTextEffect text={displayText} setText={setDisplayText} fontStyle={fontStyle} />
       
-      <div className="flex-none">
+      <div className="flex-none z-60">
         <FontButtons 
           handleButtonClick={handleButtonClick} 
           handleSm00chClick={handleSm00chClick}
@@ -146,7 +162,7 @@ export default function Text({ activeFont, onInteraction }) {
         />
       </div>
       
-      <div className="flex-grow relative">
+      <div className="flex-grow relative z-10">
         <TextContent 
           fontStyle={fontStyle} 
           fonts={fonts} 
@@ -154,10 +170,11 @@ export default function Text({ activeFont, onInteraction }) {
           fontsLoaded={fontsLoaded} 
           textRefs={textRefs}
           showAboutText={showAboutText}
+          isMobile={isMobile}
         />
       </div>
       
-      <div className="flex-grow">
+      <div className="flex-grow z-10">
         <FontLinks fontStyle={fontStyle} fontLinks={fontLinks} />
       </div>
     </div>
