@@ -5,7 +5,7 @@ const FontButtons = ({ handleButtonClick, handleSm00chClick, handleAboutClick })
       <button 
         onClick={handleAboutClick}
         className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 bg-about-button bg-no-repeat bg-center bg-contain hover:opacity-90 transition-opacity"
-        style={{ width: '150px', height: '75px' }}
+        style={{ width: '140px', height: '70px' }}
         aria-label="About"
      />
 
