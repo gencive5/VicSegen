@@ -18,34 +18,30 @@ const TextContent = ({
   return fontStyle === "triple" ? (
     <>
       {textRefs.map((ref, index) => (
-        <div 
+        <p 
           key={index}
-          className={`absolute inset-0 ${isMobile ? 'bg-white -m-2' : ''}`}
+          ref={ref} 
+          className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words z-0 ${fonts.triple[index]}`}
+          style={{
+            position: "absolute",
+            top: "1.6rem",
+            left: "1.6rem",
+            right: "1.6rem",
+            bottom: "1.6rem",
+            wordBreak: "break-word",
+            overflowWrap: "break-word",
+            whiteSpace: "pre-wrap",
+            maxWidth: "100%",
+            maxHeight: "100%",
+            lineHeight: 1,
+            letterSpacing: "0",
+            opacity: 1,
+            visibility: fontsLoaded ? "visible" : "hidden",
+            transform: index === 0 ? "scaleX(-1)" : "none"
+          }}
         >
-          <p 
-            ref={ref}
-            className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words ${fonts.triple[index]}`}
-            style={{
-              position: "absolute",
-              top: padding,
-              left: padding,
-              right: padding,
-              bottom: padding,
-              wordBreak: "break-word",
-              overflowWrap: "break-word",
-              whiteSpace: "pre-wrap",
-              maxWidth: "100%",
-              maxHeight: "100%",
-              lineHeight: 1,
-              letterSpacing: "0",
-              opacity: 1,
-              visibility: fontsLoaded ? "visible" : "hidden",
-              transform: index === 0 ? "scaleX(-1)" : "none"
-            }}
-          >
-            {displayText}
-          </p>
-        </div>
+          {displayText}
+        </p>
       ))}
     </>
   ) : (
