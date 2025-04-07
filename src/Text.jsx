@@ -72,9 +72,11 @@ export default function Text({ activeFont, onInteraction }) {
       text = newText;
     }
   
-    // For arial5 and sm00ch, remove one character if possible
-    if (["arial5", "sm00ch"].includes(fontStyle) && text.length > 1) {
-      return text.slice(0, -1);
+    // Special character removal rules
+    if (fontStyle === "sm00ch" && text.length > 2) {
+      return text.slice(0, -2); // Remove 2 characters for sm00ch
+    } else if (fontStyle === "arial5" && text.length > 1) {
+      return text.slice(0, -1); // Remove 1 character for arial5
     }
     
     return text;
