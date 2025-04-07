@@ -9,10 +9,10 @@ export default function Text({ activeFont, onInteraction }) {
   const [fontStyle, setFontStyle] = useState("hiiii");
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [showAboutText, setShowAboutText] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef(null);
   const textRefs = [useRef(null), useRef(null), useRef(null)];
   const isResizingRef = useRef(false);
-  const [isMobile, setIsMobile] = useState(false);
 
   const fonts = {
     triple: ["font-myriad", "font-mutlu", "font-sword"],
@@ -30,6 +30,14 @@ export default function Text({ activeFont, onInteraction }) {
   };
 
   const aboutText = "Paris-based designer & developer specializing in web design, front-end development, typography, and graphic design. Contact me via Instagram or Email.";
+
+  // Check mobile on mount and resize
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleButtonClick = (font) => {
     setShowAboutText(false);
@@ -90,15 +98,6 @@ export default function Text({ activeFont, onInteraction }) {
   };
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  useEffect(() => {
     if (activeFont) {
       setShowAboutText(false);
       setFontStyle(activeFont);
@@ -140,21 +139,18 @@ export default function Text({ activeFont, onInteraction }) {
 
   return (
     <div 
-    ref={containerRef} 
-    className="w-full h-full relative pointer-events-auto p-2 md:p-4 flex flex-col gap-1"
-    style={{ 
-      overflow: fontStyle === "hiiii" ? "hidden" : "visible",
-      position: 'relative'
-    }}
-  >
-    {/* Mobile-only background container */}
-    {isMobile && (
-      <div className="absolute inset-0 bg-white -m-2 md:m-0 z-0"></div>
-    )}
+      ref={containerRef} 
+      className="w-full h-full relative pointer-events-auto p-2 md:p-4 flex flex-col gap-1"
+      style={{ overflow: fontStyle === "hiiii" ? "hidden" : "visible" }}
+    >
+      {/* Mobile background that stays fixed during transitions */}
+      {isMobile && (
+        <div className="fixed inset-0 bg-white z-0"></div>
+      )}
       
       <MatrixTextEffect text={displayText} setText={setDisplayText} fontStyle={fontStyle} />
       
-      <div className="flex-none z-60">
+      <div className="flex-none">
         <FontButtons 
           handleButtonClick={handleButtonClick} 
           handleSm00chClick={handleSm00chClick}
