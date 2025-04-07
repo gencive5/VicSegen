@@ -51,7 +51,13 @@ export default function Text({ activeFont, onInteraction }) {
     if (showAboutText) return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "[Math.floor(Math.random() * 53)];
     if (fontStyle === "arial5") return ["5", "s", "S"][Math.floor(Math.random() * 3)];
     if (fontStyle === "triple") return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[Math.floor(Math.random() * 52)];
-    if (fontStyle === "hiiii") return "i";
+    if (fontStyle === "hiiii") {
+      // Special handling for hiiii font:
+      // - Returns "i" for normal text building
+      // - Returns "" during overflow check to prevent extra "i"
+      if (!textRefs[0].current?.textContent?.startsWith("H")) return "";
+      return "i";
+    }
     return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.floor(Math.random() * 26)];
   };
 
