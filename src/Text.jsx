@@ -122,7 +122,7 @@ export default function Text({ activeFont, onInteraction }) {
         />
       </div>
       
-      <div className="flex-grow min-h-0 relative">
+      <div className="flex-grow relative">
         <TextContent 
           fontStyle={fontStyle} 
           fonts={fonts} 
@@ -133,7 +133,7 @@ export default function Text({ activeFont, onInteraction }) {
         />
       </div>
       
-      <div className="flex-none">
+      <div className="flex-grow">
         <FontLinks fontStyle={fontStyle} fontLinks={fontLinks} />
       </div>
     </div>
