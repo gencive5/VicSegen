@@ -71,6 +71,12 @@ export default function Text({ activeFont, onInteraction }) {
       if (checkOverflow(newText)) break;
       text = newText;
     }
+  
+    // For arial5 and sm00ch, remove one character if possible
+    if (["arial5", "sm00ch"].includes(fontStyle) && text.length > 1) {
+      return text.slice(0, -1);
+    }
+    
     return text;
   };
 

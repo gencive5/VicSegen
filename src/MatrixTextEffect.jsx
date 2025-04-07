@@ -10,6 +10,7 @@ export default function MatrixTextEffect({
     if (["sm00ch", "arial5", "triple"].includes(fontStyle)) {
       interval = setInterval(() => {
         setText((prevText) => {
+          // Ensure we have at least 2 characters to swap
           if (prevText.length < 2) return prevText;
           
           const textArray = prevText.split("");
