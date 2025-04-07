@@ -21,18 +21,9 @@ export default function Text({ activeFont, onInteraction }) {
   };
 
   const fontLinks = {
-    arial5: {
-      text: 'visit gencive5.com',
-      url: 'https://gencive5.com/'
-    },
-    triple: {
-      text: 'visit ratfaggotking.fr',
-      url: 'https://ratfaggotking.fr/'
-    },
-    sm00ch: {
-      text: 'visit sm00ch.xyz',
-      url: 'https://sm00ch.xyz/'
-    },
+    arial5: { text: 'visit gencive5.com', url: 'https://gencive5.com/' },
+    triple: { text: 'visit ratfaggotking.fr', url: 'https://ratfaggotking.fr/' },
+    sm00ch: { text: 'visit sm00ch.xyz', url: 'https://sm00ch.xyz/' },
     hiiii: null
   };
 
@@ -57,21 +48,11 @@ export default function Text({ activeFont, onInteraction }) {
   };
 
   const getRandomLetter = () => {
-    if (showAboutText) {
-      const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ";
-      return alphabet[Math.floor(Math.random() * alphabet.length)];
-    }
-    if (fontStyle === "arial5") {
-      return ["5", "s", "S"][Math.floor(Math.random() * 3)];
-    } else if (fontStyle === "triple") {
-      const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-      return alphabet[Math.floor(Math.random() * alphabet.length)];
-    } else if (fontStyle === "hiiii") {
-      return "i";
-    } else {
-      const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      return alphabet[Math.floor(Math.random() * alphabet.length)];
-    }
+    if (showAboutText) return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "[Math.floor(Math.random() * 53)];
+    if (fontStyle === "arial5") return ["5", "s", "S"][Math.floor(Math.random() * 3)];
+    if (fontStyle === "triple") return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[Math.floor(Math.random() * 52)];
+    if (fontStyle === "hiiii") return "i";
+    return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.floor(Math.random() * 26)];
   };
 
   const checkOverflow = (text) => {
@@ -82,9 +63,7 @@ export default function Text({ activeFont, onInteraction }) {
   };
 
   const preloadExpansion = () => {
-    if (showAboutText) {
-      return aboutText;
-    }
+    if (showAboutText) return aboutText;
     
     let text = fontStyle === "hiiii" ? "H" : "";
     while (true) {
@@ -120,25 +99,14 @@ export default function Text({ activeFont, onInteraction }) {
 
   useEffect(() => {
     if (!containerRef.current || !fontStyle) return;
-
-    const resizeObserver = new ResizeObserver(() => {
-      setDisplayText(preloadExpansion());
-    });
-
+    const resizeObserver = new ResizeObserver(() => setDisplayText(preloadExpansion()));
     resizeObserver.observe(containerRef.current);
     return () => resizeObserver.disconnect();
   }, [fontStyle, showAboutText]);
 
   return (
-    <div 
-      ref={containerRef} 
-      className="w-full h-full overflow-visible relative pointer-events-auto p-2 md:p-4 flex flex-col gap-1"
-    >
-      <MatrixTextEffect 
-        text={displayText}
-        setText={setDisplayText}
-        fontStyle={fontStyle}
-      />
+    <div ref={containerRef} className="w-full h-full overflow-visible relative pointer-events-auto p-2 md:p-4 flex flex-col gap-1">
+      <MatrixTextEffect text={displayText} setText={setDisplayText} fontStyle={fontStyle} />
       
       <div className="flex-none">
         <FontButtons 
