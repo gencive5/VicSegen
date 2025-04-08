@@ -170,7 +170,7 @@ export default function Text({ activeFont, onInteraction }) {
         />
       </div>
       
-      <div className="flex-grow z-10">
+      <div className="flex-grow z-70">
         <FontLinks fontStyle={fontStyle} fontLinks={fontLinks} />
       </div>
     </div>
