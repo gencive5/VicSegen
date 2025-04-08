@@ -140,7 +140,7 @@ export default function Text({ activeFont, onInteraction }) {
   return (
     <div 
       ref={containerRef} 
-      className="w-full h-full relative pointer-events-auto p-2 md:p-4 flex flex-col gap-1"
+      className="w-full h-full absolute pointer-events-auto p-2 md:p-4 flex flex-col gap-1"
       style={{ overflow: fontStyle === "hiiii" ? "hidden" : "visible" }}
     >
       {/* Mobile background that stays fixed during transitions */}
