@@ -173,15 +173,4 @@ div{
   background-position: center;
 }
 
-.button-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white; /* Adjust text color as needed */
-  font-size: 16px; /* Adjust text size as needed */
-  font-weight: bold;
-  padding: 4rem;
-  white-space: nowrap; 
-}
 
