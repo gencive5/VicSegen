@@ -150,7 +150,7 @@ export default function Text({ activeFont, onInteraction }) {
       
       <MatrixTextEffect text={displayText} setText={setDisplayText} fontStyle={fontStyle} />
       
-      <div className="flex-none">
+      <div className="flex-none z-70">
         <FontButtons 
           handleButtonClick={handleButtonClick} 
           handleSm00chClick={handleSm00chClick}
