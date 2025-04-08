@@ -15,7 +15,6 @@ const TextContent = ({
   const textClassName = fonts[fontStyle];
   const padding = isMobile ? '0.5rem' : '1.6rem';
 
-  // Mobile background container (only for non-triple fonts)
   const MobileBackground = ({ children }) => (
     <div className={`relative h-full w-full ${isMobile ? 'bg-white -m-2' : ''}`}>
       {children}
@@ -29,7 +28,11 @@ const TextContent = ({
           <p 
             key={index}
             ref={ref}
-            className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words ${fonts.triple[index]}`}
+            className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words ${
+              fonts.triple[index]
+            } ${
+              !fontsLoaded ? 'font-arial' : ''
+            }`}
             style={{
               position: "absolute",
               top: padding,
@@ -59,7 +62,11 @@ const TextContent = ({
     <MobileBackground>
       <p 
         ref={textRefs[0]}
-        className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words ${textClassName}`}
+        className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words ${
+          textClassName
+        } ${
+          !fontsLoaded ? 'font-arial' : ''
+        }`}
         style={{
           position: "absolute",
           top: padding,
