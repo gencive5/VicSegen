@@ -13,8 +13,8 @@ const FontLinks = ({ fontStyle, fontLinks }) => {
           "vbg-sm00ch-button"
         }`}
         style={{ 
-          width: "300px", 
-          height: "100px",
+          width: "320px", 
+          height: "110px",
           display: "block" 
         }}
         aria-label={`Visit ${fontLinks[fontStyle].text}`}
