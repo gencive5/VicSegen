@@ -31,7 +31,6 @@ export default function Text({ activeFont, onInteraction }) {
 
   const aboutText = "Paris-based designer & developer specializing in web design, front-end development, typography, and graphic design. Contact me via Instagram or Email.";
 
-  // Check mobile on mount and resize
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
     checkMobile();
@@ -138,27 +137,13 @@ export default function Text({ activeFont, onInteraction }) {
   }, [fontStyle, showAboutText]);
 
   return (
-    <div 
-      ref={containerRef} 
-      className="w-full h-full absolute pointer-events-auto p-2 md:p-4 flex flex-col gap-1"
-      style={{ overflow: fontStyle === "hiiii" ? "hidden" : "visible" }}
-    >
-      {/* Mobile background that stays fixed during transitions */}
-      {isMobile && (
-        <div className="fixed inset-0 bg-white z-0"></div>
-      )}
+    <div ref={containerRef} className="w-full h-full relative">
+      {/* Background */}
+      {isMobile && <div className="fixed inset-0 bg-white z-0" />}
       
-      <MatrixTextEffect text={displayText} setText={setDisplayText} fontStyle={fontStyle} />
-      
-      <div className="flex-none z-70">
-        <FontButtons 
-          handleButtonClick={handleButtonClick} 
-          handleSm00chClick={handleSm00chClick}
-          handleAboutClick={handleAboutClick}
-        />
-      </div>
-      
-      <div className="flex-grow">
+      {/* Content Area */}
+      <div className="absolute inset-0 p-2 md:p-4">
+        <MatrixTextEffect text={displayText} setText={setDisplayText} fontStyle={fontStyle} />
         <TextContent 
           fontStyle={fontStyle} 
           fonts={fonts} 
@@ -170,9 +155,14 @@ export default function Text({ activeFont, onInteraction }) {
         />
       </div>
       
-      <div className="flex-grow z-70">
-        <FontLinks fontStyle={fontStyle} fontLinks={fontLinks} />
-      </div>
+      {/* UI Elements */}
+      <FontButtons 
+        handleButtonClick={handleButtonClick} 
+        handleSm00chClick={handleSm00chClick}
+        handleAboutClick={handleAboutClick}
+      />
+      
+      <FontLinks fontStyle={fontStyle} fontLinks={fontLinks} />
     </div>
   );
 }
