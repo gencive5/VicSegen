@@ -16,14 +16,14 @@ const TextContent = ({
   const padding = isMobile ? '0.5rem' : '1.6rem';
 
   const MobileBackground = ({ children }) => (
-    <div className={`relative h-full w-full ${isMobile ? 'bg-white -m-2' : ''}`}>
+    <div className={`relative h-full w-full ${isMobile ? 'bg-white' : ''}`}>
       {children}
     </div>
   );
 
   if (fontStyle === "triple") {
     return (
-      <div className={`absolute inset-0 ${isMobile ? 'bg-white -m-2' : ''}`}>
+      <div className={`absolute inset-0 ${isMobile ? 'bg-white' : ''}`}>
         {textRefs.map((ref, index) => (
           <p 
             key={index}
