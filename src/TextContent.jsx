@@ -18,7 +18,7 @@ const TextContent = ({
   const TextElement = ({ ref, className, index = 0 }) => (
     <p 
       ref={ref}
-      className={`text-[12vw] sm:text-[9vw] font-bold leading-none text-left break-words ${className} ${
+      className={`text-[12vw] sm:text-[9vw] leading-none text-left break-words ${className} ${
         !fontsLoaded ? 'font-arial' : ''
       }`}
       style={{
