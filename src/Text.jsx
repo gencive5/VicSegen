@@ -158,7 +158,7 @@ export default function Text({ activeFont, onInteraction }) {
         />
       </div>
       
-      <div className="flex-grow z-10">
+      <div className="flex-grow">
         <TextContent 
           fontStyle={fontStyle} 
           fonts={fonts} 
