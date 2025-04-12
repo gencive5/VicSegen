@@ -2,7 +2,7 @@ const FontLinks = ({ fontStyle, fontLinks }) => {
   if (!fontStyle || !fontLinks[fontStyle]) return null;
   
   return (
-    <div className="fixed bottom-[-10px] left-0 right-0 flex justify-center z-50">
+    <div className="fixed bottom-3 left-0 right-0 flex justify-center z-50">
       <a 
         href={fontLinks[fontStyle].url} 
         target="_blank" 
