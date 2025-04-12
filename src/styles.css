@@ -143,14 +143,6 @@ div{
   background-image: url('/src/assets/Btnsm00ch.webp'); 
 }
 
-.bg-about-button {
-  background-image: url('/src/assets/about.svg');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  border: none;
-  cursor: pointer;
-}
 
 .vbg-arial5-button {
   background-image: url('/src/assets/visitg.webp');

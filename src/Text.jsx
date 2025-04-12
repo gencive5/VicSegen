@@ -8,7 +8,6 @@ export default function Text({ activeFont, onInteraction }) {
   const [displayText, setDisplayText] = useState("H");
   const [fontStyle, setFontStyle] = useState("hiiii");
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  const [showAboutText, setShowAboutText] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef(null);
   const textRefs = [useRef(null), useRef(null), useRef(null)];
@@ -29,8 +28,6 @@ export default function Text({ activeFont, onInteraction }) {
     hiiii: null
   };
 
-  const aboutText = "Paris-based designer & developer specializing in web design, front-end development, typography, and graphic design. Contact me via Instagram or Email.";
-
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
     checkMobile();
@@ -39,25 +36,16 @@ export default function Text({ activeFont, onInteraction }) {
   }, []);
 
   const handleButtonClick = (font) => {
-    setShowAboutText(false);
     setFontStyle(font);
     onInteraction(font);
   };
 
   const handleSm00chClick = () => {
-    setShowAboutText(false);
     setFontStyle("sm00ch");
     onInteraction("sm00ch");
   };
 
-  const handleAboutClick = () => {
-    setShowAboutText(true);
-    setFontStyle(null);
-    onInteraction(null);
-  };
-
   const getRandomLetter = () => {
-    if (showAboutText) return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "[Math.floor(Math.random() * 53)];
     if (fontStyle === "arial5") return ["5", "s", "S"][Math.floor(Math.random() * 3)];
     if (fontStyle === "triple") return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[Math.floor(Math.random() * 52)];
     if (fontStyle === "hiiii") return "i";
@@ -72,8 +60,6 @@ export default function Text({ activeFont, onInteraction }) {
   };
 
   const preloadExpansion = () => {
-    if (showAboutText) return aboutText;
-    
     let text = fontStyle === "hiiii" ? "H" : "";
     while (true) {
       const newText = text + getRandomLetter();
@@ -98,14 +84,13 @@ export default function Text({ activeFont, onInteraction }) {
 
   useEffect(() => {
     if (activeFont) {
-      setShowAboutText(false);
       setFontStyle(activeFont);
       setDisplayText(preloadExpansion());
     }
   }, [activeFont]);
 
   useEffect(() => {
-    if (!fontStyle && !showAboutText) return;
+    if (!fontStyle) return;
     
     const loadFontsAndSetText = async () => {
       await document.fonts.ready;
@@ -123,7 +108,7 @@ export default function Text({ activeFont, onInteraction }) {
     
     window.addEventListener("resize", resizeHandler);
     return () => window.removeEventListener("resize", resizeHandler);
-  }, [fontStyle, showAboutText]);
+  }, [fontStyle]);
 
   useEffect(() => {
     if (!containerRef.current || !fontStyle) return;
@@ -134,7 +119,7 @@ export default function Text({ activeFont, onInteraction }) {
     });
     resizeObserver.observe(containerRef.current);
     return () => resizeObserver.disconnect();
-  }, [fontStyle, showAboutText]);
+  }, [fontStyle]);
 
   return (
     <div ref={containerRef} className="w-full h-full relative">
@@ -150,7 +135,6 @@ export default function Text({ activeFont, onInteraction }) {
           displayText={displayText} 
           fontsLoaded={fontsLoaded} 
           textRefs={textRefs}
-          showAboutText={showAboutText}
           isMobile={isMobile}
         />
       </div>
@@ -159,7 +143,6 @@ export default function Text({ activeFont, onInteraction }) {
       <FontButtons 
         handleButtonClick={handleButtonClick} 
         handleSm00chClick={handleSm00chClick}
-        handleAboutClick={handleAboutClick}
       />
       
       <FontLinks fontStyle={fontStyle} fontLinks={fontLinks} />

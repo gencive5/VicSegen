@@ -1,13 +1,7 @@
-const FontButtons = ({ handleButtonClick, handleSm00chClick, handleAboutClick }) => {
+const FontButtons = ({ handleButtonClick, handleSm00chClick}) => {
   return (
     <>
-      {/* About Button */}
-      <button 
-        onClick={handleAboutClick}
-        className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 bg-about-button bg-no-repeat bg-center bg-contain hover:opacity-90 transition-opacity"
-        style={{ width: '140px', height: '70px' }}
-        aria-label="About"
-      />
+     
 
       {/* Mobile Buttons */}
       <div className="sm:hidden fixed right-0 top-1/2 transform -translate-y-1/2 flex flex-col gap-6 z-50 items-end">

@@ -1,6 +1,6 @@
 <p 
         ref={textRefs[0]}
-        className="font-arial leading-none text-left break-words z-0 text-[11vw] sm:text-[6vw]"
+        className="font-arial leading-none text-left break-words z-0 text-[11vw] sm:text-[6vw] fixed top-0 left-1/2 transform -translate-x-1/2 z-50 bg-no-repeat bg-center bg-contain hover:opacity-90 transition-opacity"
         style={{
           position: "absolute",
           top: "1rem",

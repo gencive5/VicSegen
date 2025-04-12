@@ -1,16 +1,12 @@
-import AboutText from "./AboutText";
-
 const TextContent = ({
   fontStyle,
   fonts,
   displayText,
   fontsLoaded,
   textRefs,
-  showAboutText,
   isMobile
 }) => {
-  if (!fontStyle && !showAboutText) return null;
-  if (showAboutText) return <AboutText displayText={displayText} fontsLoaded={fontsLoaded} textRefs={textRefs} />;
+  if (!fontStyle) return null;
 
   const textClassName = fonts[fontStyle];
   const padding = isMobile ? '0.5rem' : '1.6rem';
