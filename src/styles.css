@@ -133,6 +133,7 @@ div{
 
 .bg-arial5-button {
   background-image: url('/src/assets/Btngencive5.webp');
+  background-color: transparent !important;
 }
 
 .bg-triple-button {
