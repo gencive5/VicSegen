@@ -138,10 +138,12 @@ div{
 
 .bg-triple-button {
   background-image: url('/src/assets/Btnrat.webp'); 
+  background-color: transparent !important;
 }
 
 .bg-sm00ch-button {
   background-image: url('/src/assets/Btnsm00ch.webp'); 
+  background-color: transparent !important;
 }
 
 
