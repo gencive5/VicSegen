@@ -1,5 +1,5 @@
 const Contact = () => (
-  <footer className="fixed bottom-0 left-0 right-0 py-4 text-white text-sm z-50 text-center bg-transparent">
+  <footer className="fixed bottom-0 left-0 right-0 py-4 text-white text-base z-50 text-center bg-transparent">
     <a
       href="mailto:vic.segen@gmail.com"
       className="mx-2 underline hover:opacity-80 transition-opacity"
