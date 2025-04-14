@@ -73,8 +73,12 @@ export default function Text({ activeFont, onInteraction }) {
       return text.slice(0, -2);
     } else if (fontStyle === "hiiii") {
       const maxHeight = containerRef.current?.clientHeight;
+      const maxWidth = containerRef.current?.clientWidth;
       const textHeight = textRefs[0].current?.scrollHeight;
-      if (maxHeight && textHeight && textHeight > maxHeight * 0.9) {
+      const textWidth = textRefs[0].current?.scrollWidth;
+      
+      if ((maxHeight && textHeight && textHeight > maxHeight * 0.95) ||
+          (maxWidth && textWidth && textWidth > maxWidth * 0.95)) {
         return text.slice(0, -1);
       }
     }
