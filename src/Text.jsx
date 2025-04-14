@@ -55,8 +55,20 @@ export default function Text({ activeFont, onInteraction }) {
   const checkOverflow = (text) => {
     if (!textRefs[0].current || !containerRef.current) return false;
     textRefs[0].current.textContent = text;
-    return textRefs[0].current.scrollWidth > containerRef.current.clientWidth || 
-           textRefs[0].current.scrollHeight > containerRef.current.clientHeight;
+    
+    if (fontStyle === "hiiii") {
+      // More permissive check for hiiii (allows 10% overflow)
+      return (
+        textRefs[0].current.scrollWidth > containerRef.current.clientWidth * 1.10 || 
+        textRefs[0].current.scrollHeight > containerRef.current.clientHeight * 1.10
+      );
+    }
+    
+    // Standard check for other fonts
+    return (
+      textRefs[0].current.scrollWidth > containerRef.current.clientWidth || 
+      textRefs[0].current.scrollHeight > containerRef.current.clientHeight
+    );
   };
 
   const preloadExpansion = () => {
@@ -66,20 +78,29 @@ export default function Text({ activeFont, onInteraction }) {
       if (checkOverflow(newText)) break;
       text = newText;
     }
-  
+
+    // Preserved original slicing logic
     if (fontStyle === "sm00ch" && text.length > 2) {
       return text.slice(0, -2);
     } else if (fontStyle === "arial5" && text.length > 1) {
       return text.slice(0, -2);
     } else if (fontStyle === "hiiii") {
-      const maxHeight = containerRef.current?.clientHeight;
-      const maxWidth = containerRef.current?.clientWidth;
-      const textHeight = textRefs[0].current?.scrollHeight;
-      const textWidth = textRefs[0].current?.scrollWidth;
+      // Enhanced hiiii expansion
+      const testElement = textRefs[0].current;
+      const container = containerRef.current;
       
-      if ((maxHeight && textHeight && textHeight > maxHeight * 0.95) ||
-          (maxWidth && textWidth && textWidth > maxWidth * 0.95)) {
-        return text.slice(0, -1);
+      if (testElement && container) {
+        testElement.textContent = text;
+        const currentWidth = testElement.scrollWidth;
+        const currentHeight = testElement.scrollHeight;
+        const containerWidth = container.clientWidth;
+        const containerHeight = container.clientHeight;
+        
+        // Allow filling up to 110% of container
+        if (currentWidth < containerWidth * 1.10 && 
+            currentHeight < containerHeight * 1.10) {
+          return text + (text.length < 100 ? getRandomLetter() : "");
+        }
       }
     }
     
@@ -127,10 +148,8 @@ export default function Text({ activeFont, onInteraction }) {
 
   return (
     <div ref={containerRef} className="w-full h-full relative">
-      {/* Background */}
       {isMobile && <div className="fixed inset-0 bg-white z-0" />}
       
-      {/* Content Area */}
       <div className="absolute inset-0 p-2 md:p-4">
         <MatrixTextEffect text={displayText} setText={setDisplayText} fontStyle={fontStyle} />
         <TextContent 
@@ -143,7 +162,6 @@ export default function Text({ activeFont, onInteraction }) {
         />
       </div>
       
-      {/* UI Elements */}
       <FontButtons 
         handleButtonClick={handleButtonClick} 
         handleSm00chClick={handleSm00chClick}
