@@ -12,6 +12,7 @@ export default function Text({ activeFont, onInteraction }) {
   const containerRef = useRef(null);
   const textRefs = [useRef(null), useRef(null), useRef(null)];
   const isResizingRef = useRef(false);
+  const transformIntervalRef = useRef(null);
 
   const fonts = {
     triple: ["font-myriad", "font-mutlu", "font-sword"],
@@ -28,12 +29,45 @@ export default function Text({ activeFont, onInteraction }) {
     hiiii: null
   };
 
+  const transformRandomCharacters = () => {
+    setDisplayText(prevText => {
+      if (prevText.length < 2) return prevText;
+      
+      const textArray = prevText.split('');
+      const randomIndex = Math.floor(Math.random() * (textArray.length - 1)) + 1;
+      
+      if (textArray[randomIndex] === 'i') {
+        textArray[randomIndex] = '!';
+      } else if (textArray[randomIndex] === '!') {
+        textArray[randomIndex] = 'i';
+      }
+      
+      return textArray.join('');
+    });
+  };
+
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  useEffect(() => {
+    if (transformIntervalRef.current) {
+      clearInterval(transformIntervalRef.current);
+    }
+    
+    if (fontStyle === "hiiii") {
+      transformIntervalRef.current = setInterval(transformRandomCharacters, 600);
+    }
+    
+    return () => {
+      if (transformIntervalRef.current) {
+        clearInterval(transformIntervalRef.current);
+      }
+    };
+  }, [fontStyle]);
 
   const handleButtonClick = (font) => {
     setFontStyle(font);
@@ -57,14 +91,12 @@ export default function Text({ activeFont, onInteraction }) {
     textRefs[0].current.textContent = text;
     
     if (fontStyle === "hiiii") {
-      // More permissive check for hiiii (allows 10% overflow)
       return (
         textRefs[0].current.scrollWidth > containerRef.current.clientWidth * 1.10 || 
         textRefs[0].current.scrollHeight > containerRef.current.clientHeight * 1.10
       );
     }
     
-    // Standard check for other fonts
     return (
       textRefs[0].current.scrollWidth > containerRef.current.clientWidth || 
       textRefs[0].current.scrollHeight > containerRef.current.clientHeight
@@ -79,13 +111,11 @@ export default function Text({ activeFont, onInteraction }) {
       text = newText;
     }
 
-    // Preserved original slicing logic
     if (fontStyle === "sm00ch" && text.length > 2) {
       return text.slice(0, -2);
     } else if (fontStyle === "arial5" && text.length > 1) {
       return text.slice(0, -2);
     } else if (fontStyle === "hiiii") {
-      // Enhanced hiiii expansion
       const testElement = textRefs[0].current;
       const container = containerRef.current;
       
@@ -96,7 +126,6 @@ export default function Text({ activeFont, onInteraction }) {
         const containerWidth = container.clientWidth;
         const containerHeight = container.clientHeight;
         
-        // Allow filling up to 110% of container
         if (currentWidth < containerWidth * 1.10 && 
             currentHeight < containerHeight * 1.10) {
           return text + (text.length < 100 ? getRandomLetter() : "");
