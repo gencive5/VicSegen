@@ -7,16 +7,17 @@ const FontLinks = ({ fontStyle, fontLinks }) => {
         href={fontLinks[fontStyle].url} 
         target="_blank" 
         rel="noopener noreferrer"
-        className={`bg-cover bg-no-repeat bg-center hover:opacity-80 transition-opacity md:opacity-100 opacity-90 w-[300px] md:w-[300px] max-w-[240px] md:max-w-none ${
-          fontStyle === "arial5" ? "vbg-arial5-button" :
-          fontStyle === "triple" ? "vbg-triple-button" :
-          "vbg-sm00ch-button"
-        }`}
-        style={{ 
-          width: "340px", 
-          height: "120px",
-          display: "block" 
-        }}
+        className={`
+          bg-cover bg-no-repeat bg-center 
+          hover:opacity-80 transition-opacity 
+          opacity-90 md:opacity-100
+          w-[310px] h-[105px]       /* Mobile size */
+          md:w-[340px] md:h-[120px]  /* Desktop size */
+          max-w-[95vw]              /* Prevent overflow on small screens */
+          ${fontStyle === "arial5" ? "vbg-arial5-button" :
+            fontStyle === "triple" ? "vbg-triple-button" :
+            "vbg-sm00ch-button"}
+        `}
         aria-label={`Visit ${fontLinks[fontStyle].text}`}
       />
     </div>
