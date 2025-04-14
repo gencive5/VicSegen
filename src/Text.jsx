@@ -69,8 +69,15 @@ export default function Text({ activeFont, onInteraction }) {
   
     if (fontStyle === "sm00ch" && text.length > 2) {
       return text.slice(0, -2);
-    } else if (fontStyle === "arial5" && text.length > 1) {
-      return text.slice(0, -1);
+    } else if (fontStyle === "arial5") {
+      // Check if the device is mobile (e.g., screen width <= 768px)
+      const isMobile = window.innerWidth <= 768;
+      
+      if (isMobile && text.length > 2) {
+        return text.slice(0, -2); // Remove 2 chars on mobile
+      } else if (text.length > 1) {
+        return text.slice(0, -1); // Default: remove 1 char on desktop
+      }
     } else if (fontStyle === "hiiii") {
       const maxHeight = containerRef.current?.clientHeight;
       const textHeight = textRefs[0].current?.scrollHeight;
