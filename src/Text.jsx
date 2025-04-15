@@ -176,10 +176,10 @@ export default function Text({ activeFont, onInteraction }) {
   }, [fontStyle]);
 
   return (
-    <div ref={containerRef} className="w-full h-full relative">
+    <div ref={containerRef} className="relative w-full h-full">
       {isMobile && <div className="fixed inset-0 bg-white z-0" />}
       
-      <div className="absolute inset-0 p-2 md:p-4">
+      <div className="absolute inset-0">
         <MatrixTextEffect text={displayText} setText={setDisplayText} fontStyle={fontStyle} />
         <TextContent 
           fontStyle={fontStyle} 
