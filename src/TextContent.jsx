@@ -9,7 +9,7 @@ const TextContent = ({
   if (!fontStyle) return null;
 
   const textClassName = fonts[fontStyle];
-  const padding = isMobile ? '0.5rem' : '1rem';
+  const padding = isMobile ? '0.5rem' : '1.6rem';
 
   const TextElement = ({ ref, className, index = 0 }) => (
     <p 
@@ -41,7 +41,7 @@ const TextContent = ({
 
   if (fontStyle === "triple") {
     return (
-      <div className={`relative h-full w-full ${isMobile ? 'bg-white' : ''}`}>
+      <div className={`absolute inset-0 ${isMobile ? 'bg-white' : ''}`}>
         {textRefs.map((ref, index) => (
           <TextElement 
             key={index}
