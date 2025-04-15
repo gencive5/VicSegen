@@ -11,7 +11,7 @@ const FontLinks = ({ fontStyle, fontLinks }) => {
           bg-cover bg-no-repeat bg-center 
           hover:opacity-80 transition-opacity 
           opacity-90 md:opacity-100
-          w-[310px] h-[105px]       /* Mobile size */
+          w-[308px] h-[104px]       /* Mobile size */
           md:w-[340px] md:h-[120px]  /* Desktop size */
           max-w-[95vw]              /* Prevent overflow on small screens */
           ${fontStyle === "arial5" ? "vbg-arial5-button" :
