@@ -5,7 +5,7 @@ import TextContent from "./TextContent";
 import MatrixTextEffect from "./MatrixTextEffect";
 
 export default function Text({ activeFont, onInteraction }) {
-  const [displayText, setDisplayText] = useState("H");
+  const [displayText, setDisplayText] = useState("Hi"); // Changed initial state to "Hi"
   const [fontStyle, setFontStyle] = useState("hiiii");
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -33,16 +33,20 @@ export default function Text({ activeFont, onInteraction }) {
     setDisplayText(prevText => {
       if (prevText.length < 2) return prevText;
       
-      const textArray = prevText.split('');
-      const randomIndex = Math.floor(Math.random() * (textArray.length - 1)) + 1;
+      // Keep the first two characters as "Hi"
+      const firstTwo = prevText.slice(0, 2);
+      const rest = prevText.slice(2);
       
-      if (textArray[randomIndex] === 'i') {
-        textArray[randomIndex] = '!';
-      } else if (textArray[randomIndex] === '!') {
-        textArray[randomIndex] = 'i';
+      const restArray = rest.split('');
+      const randomIndex = Math.floor(Math.random() * restArray.length);
+      
+      if (restArray[randomIndex] === 'i') {
+        restArray[randomIndex] = '!';
+      } else if (restArray[randomIndex] === '!') {
+        restArray[randomIndex] = 'i';
       }
       
-      return textArray.join('');
+      return firstTwo + restArray.join('');
     });
   };
 
@@ -104,7 +108,7 @@ export default function Text({ activeFont, onInteraction }) {
   };
 
   const preloadExpansion = () => {
-    let text = fontStyle === "hiiii" ? "H" : "";
+    let text = fontStyle === "hiiii" ? "Hi" : ""; // Changed initial text to "Hi"
     while (true) {
       const newText = text + getRandomLetter();
       if (checkOverflow(newText)) break;
@@ -199,4 +203,4 @@ export default function Text({ activeFont, onInteraction }) {
       <FontLinks fontStyle={fontStyle} fontLinks={fontLinks} />
     </div>
   );
-}  
+}
