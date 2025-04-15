@@ -6,7 +6,7 @@ import Contact from "./Contact";
 const Text = lazy(() => import("./Text"));
 
 function Home() {
-  const [activeFont, setActiveFont] = useState("hiiii"); // Default to "hiiii" panel
+  const [activeFont, setActiveFont] = useState("hiiii"); 
 
   const handleInteraction = (font) => {
     setActiveFont(font);

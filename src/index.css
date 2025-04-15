@@ -48,7 +48,7 @@ button {
 }
 
 
-
+/* 
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -60,6 +60,8 @@ button {
   button {
     background-color: #f9f9f9;
   }
-}
+} */
+
+
 
 
