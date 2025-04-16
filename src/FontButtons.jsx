@@ -30,19 +30,19 @@ const FontButtons = ({ handleButtonClick, handleSm00chClick}) => {
         <button 
           onClick={() => handleButtonClick("arial5")} 
           className="custom-button bg-arial5-button hover:opacity-90 transition-opacity"
-          style={{ width: '140px', height: '140px' }}
+          style={{ width: '150px', height: '150px' }}
           aria-label="Select gencive5"
         />
         <button 
           onClick={() => handleButtonClick("triple")} 
           className="custom-button bg-triple-button hover:opacity-90 transition-opacity"
-          style={{ width: '140px', height: '140px' }}
+          style={{ width: '150px', height: '150px' }}
           aria-label="Select rat portfolio"
         />
         <button 
           onClick={handleSm00chClick} 
           className="custom-button bg-sm00ch-button hover:opacity-90 transition-opacity"
-          style={{ width: '140px', height: '140px' }}
+          style={{ width: '150px', height: '150px' }}
           aria-label="Select Sm00ch"
         />
       </div>
