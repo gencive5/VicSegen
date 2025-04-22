@@ -5,7 +5,7 @@ import TextContent from "./TextContent";
 import MatrixTextEffect from "./MatrixTextEffect";
 
 export default function Text({ activeFont, onInteraction }) {
-  const [displayText, setDisplayText] = useState("Hi"); // Changed initial state to "Hi"
+  const [displayText, setDisplayText] = useState("Hi");
   const [fontStyle, setFontStyle] = useState("hiiii");
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -32,11 +32,8 @@ export default function Text({ activeFont, onInteraction }) {
   const transformRandomCharacters = () => {
     setDisplayText(prevText => {
       if (prevText.length < 2) return prevText;
-      
-      // Keep the first two characters as "Hi"
       const firstTwo = prevText.slice(0, 2);
       const rest = prevText.slice(2);
-      
       const restArray = rest.split('');
       const randomIndex = Math.floor(Math.random() * restArray.length);
       
@@ -50,6 +47,7 @@ export default function Text({ activeFont, onInteraction }) {
     });
   };
 
+  // Mobile detection
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
     checkMobile();
@@ -57,19 +55,16 @@ export default function Text({ activeFont, onInteraction }) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Animation effect for hiiii
   useEffect(() => {
-    if (transformIntervalRef.current) {
-      clearInterval(transformIntervalRef.current);
-    }
+    if (transformIntervalRef.current) clearInterval(transformIntervalRef.current);
     
     if (fontStyle === "hiiii") {
       transformIntervalRef.current = setInterval(transformRandomCharacters, 600);
     }
     
     return () => {
-      if (transformIntervalRef.current) {
-        clearInterval(transformIntervalRef.current);
-      }
+      if (transformIntervalRef.current) clearInterval(transformIntervalRef.current);
     };
   }, [fontStyle]);
 
@@ -93,14 +88,6 @@ export default function Text({ activeFont, onInteraction }) {
   const checkOverflow = (text) => {
     if (!textRefs[0].current || !containerRef.current) return false;
     textRefs[0].current.textContent = text;
-    
-    if (fontStyle === "hiiii") {
-      return (
-        textRefs[0].current.scrollWidth > containerRef.current.clientWidth * 1.10 || 
-        textRefs[0].current.scrollHeight > containerRef.current.clientHeight * 1.10
-      );
-    }
-    
     return (
       textRefs[0].current.scrollWidth > containerRef.current.clientWidth || 
       textRefs[0].current.scrollHeight > containerRef.current.clientHeight
@@ -108,38 +95,37 @@ export default function Text({ activeFont, onInteraction }) {
   };
 
   const preloadExpansion = () => {
-    let text = fontStyle === "hiiii" ? "Hi" : ""; // Changed initial text to "Hi"
+    let text = fontStyle === "hiiii" ? "Hi" : "";
+    
+    // Initial expansion
     while (true) {
       const newText = text + getRandomLetter();
       if (checkOverflow(newText)) break;
       text = newText;
     }
 
-    if (fontStyle === "sm00ch" && text.length > 2) {
-      return text.slice(0, -2);
-    } else if (fontStyle === "arial5" && text.length > 1) {
-      return text.slice(0, -2);
-    } else if (fontStyle === "hiiii") {
-      const testElement = textRefs[0].current;
-      const container = containerRef.current;
-      
-      if (testElement && container) {
-        testElement.textContent = text;
-        const currentWidth = testElement.scrollWidth;
-        const currentHeight = testElement.scrollHeight;
-        const containerWidth = container.clientWidth;
-        const containerHeight = container.clientHeight;
-        
-        if (currentWidth < containerWidth * 1.10 && 
-            currentHeight < containerHeight * 1.10) {
-          return text + (text.length < 100 ? getRandomLetter() : "");
-        }
-      }
+    // Precise trimming
+    while (text.length > 0 && checkOverflow(text)) {
+      text = text.slice(0, -1);
     }
-    
+
+    // Font-specific adjustments
+    if (fontStyle === "sm00ch" && text.length > 2) {
+      text = text.slice(0, -2);
+    } 
+    else if (fontStyle === "arial5" && text.length > 1) {
+      text = text.slice(0, -2);
+    }
+
+    // Ensure minimum content
+    if (text.length === 0 && fontStyle !== "hiiii") {
+      text = getRandomLetter();
+    }
+
     return text;
   };
 
+  // Active font change handler
   useEffect(() => {
     if (activeFont) {
       setFontStyle(activeFont);
@@ -147,6 +133,7 @@ export default function Text({ activeFont, onInteraction }) {
     }
   }, [activeFont]);
 
+  // Font loading and resize handlers
   useEffect(() => {
     if (!fontStyle) return;
     
@@ -168,6 +155,7 @@ export default function Text({ activeFont, onInteraction }) {
     return () => window.removeEventListener("resize", resizeHandler);
   }, [fontStyle]);
 
+  // Resize observer
   useEffect(() => {
     if (!containerRef.current || !fontStyle) return;
     const resizeObserver = new ResizeObserver(() => {
