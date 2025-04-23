@@ -5,10 +5,11 @@ import TextContent from "./TextContent";
 import MatrixTextEffect from "./MatrixTextEffect";
 
 export default function Text({ activeFont, onInteraction }) {
-  const [displayText, setDisplayText] = useState("Hi");
-  const [fontStyle, setFontStyle] = useState("hiiii");
+  const [displayText, setDisplayText] = useState(activeFont === "hiiii" ? "Hi" : "");
+  const [fontStyle, setFontStyle] = useState(activeFont || "hiiii");
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [initialMobileLoad, setInitialMobileLoad] = useState(false);
   const containerRef = useRef(null);
   const textRefs = [useRef(null), useRef(null), useRef(null)];
   const isResizingRef = useRef(false);
@@ -29,6 +30,39 @@ export default function Text({ activeFont, onInteraction }) {
     hiiii: null
   };
 
+  // Mobile detection with initial load handling
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobileCheck = window.innerWidth <= 768;
+      setIsMobile(mobileCheck);
+      
+      if (mobileCheck && !initialMobileLoad) {
+        setInitialMobileLoad(true);
+        // Force a resize calculation after everything loads
+        setTimeout(() => {
+          window.dispatchEvent(new Event('resize'));
+        }, 300);
+      }
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, [initialMobileLoad]);
+
+  // Animation effect for hiiii
+  useEffect(() => {
+    if (transformIntervalRef.current) clearInterval(transformIntervalRef.current);
+    
+    if (fontStyle === "hiiii") {
+      transformIntervalRef.current = setInterval(transformRandomCharacters, 600);
+    }
+    
+    return () => {
+      if (transformIntervalRef.current) clearInterval(transformIntervalRef.current);
+    };
+  }, [fontStyle]);
+
   const transformRandomCharacters = () => {
     setDisplayText(prevText => {
       if (prevText.length < 2) return prevText;
@@ -46,27 +80,6 @@ export default function Text({ activeFont, onInteraction }) {
       return firstTwo + restArray.join('');
     });
   };
-
-  // Mobile detection
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  // Animation effect for hiiii
-  useEffect(() => {
-    if (transformIntervalRef.current) clearInterval(transformIntervalRef.current);
-    
-    if (fontStyle === "hiiii") {
-      transformIntervalRef.current = setInterval(transformRandomCharacters, 600);
-    }
-    
-    return () => {
-      if (transformIntervalRef.current) clearInterval(transformIntervalRef.current);
-    };
-  }, [fontStyle]);
 
   const handleButtonClick = (font) => {
     setFontStyle(font);
@@ -97,6 +110,11 @@ export default function Text({ activeFont, onInteraction }) {
   const preloadExpansion = () => {
     let text = fontStyle === "hiiii" ? "Hi" : "";
     
+    // Special handling for initial mobile load
+    if (isMobile && fontStyle === "hiiii" && !initialMobileLoad) {
+      return "Hi"; // Start minimal, let resize handler expand it
+    }
+
     // Initial expansion
     while (true) {
       const newText = text + getRandomLetter();
@@ -116,10 +134,8 @@ export default function Text({ activeFont, onInteraction }) {
     else if (fontStyle === "arial5" && text.length > 1) {
       text = text.slice(0, -2);
     }
-
-    // Ensure minimum content
-    if (text.length === 0 && fontStyle !== "hiiii") {
-      text = getRandomLetter();
+    else if (fontStyle === "hiiii") {
+      text = text.length >= 2 ? text : "Hi";
     }
 
     return text;
@@ -129,7 +145,7 @@ export default function Text({ activeFont, onInteraction }) {
   useEffect(() => {
     if (activeFont) {
       setFontStyle(activeFont);
-      setDisplayText(preloadExpansion());
+      setDisplayText(activeFont === "hiiii" ? "Hi" : preloadExpansion());
     }
   }, [activeFont]);
 
@@ -138,14 +154,28 @@ export default function Text({ activeFont, onInteraction }) {
     if (!fontStyle) return;
     
     const loadFontsAndSetText = async () => {
-      await document.fonts.ready;
-      setFontsLoaded(true);
-      setDisplayText(preloadExpansion());
+      try {
+        await document.fonts.ready;
+        setFontsLoaded(true);
+        
+        // Special timing for mobile initial load
+        if (isMobile && fontStyle === "hiiii") {
+          setTimeout(() => {
+            setDisplayText(preloadExpansion());
+          }, 100);
+        } else {
+          setDisplayText(preloadExpansion());
+        }
+      } catch (error) {
+        console.error("Font loading error:", error);
+        setDisplayText(fontStyle === "hiiii" ? "Hi" : getRandomLetter());
+      }
     };
 
     loadFontsAndSetText();
     
     const resizeHandler = () => {
+      if (isResizingRef.current) return;
       isResizingRef.current = true;
       setDisplayText(preloadExpansion());
       setTimeout(() => isResizingRef.current = false, 100);
@@ -153,7 +183,7 @@ export default function Text({ activeFont, onInteraction }) {
     
     window.addEventListener("resize", resizeHandler);
     return () => window.removeEventListener("resize", resizeHandler);
-  }, [fontStyle]);
+  }, [fontStyle, isMobile]);
 
   // Resize observer
   useEffect(() => {
